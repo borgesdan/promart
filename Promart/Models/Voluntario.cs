@@ -10,16 +10,17 @@ namespace Promart.Models
     {
         public int IdVoluntario { get; set; }
 
-        //------ Dados Escolares ------//
+        //------ Dados Pessoais ------//
 
         public string? NomeCompleto { get; set; }
         public string? RG { get; set; }
         public string? CPF { get; set; }
         public string? Email { get; set; }
-        public string? Contato { get; set; }
+        public string? TelefoneContato1 { get; set; }
+        public string? TelefoneContato2 { get; set; }
         public DateTime DataNascimento { get; set; }
 
-        //------ Dados Familiares ------//
+        //------ Dados Residenciais ------//
 
         public string? EnderecoRua { get; set; }
         public string? EnderecoBairro { get; set; }
@@ -27,6 +28,7 @@ namespace Promart.Models
         public string? EnderecoComplemento { get; set; }
         public string? EnderecoCidade { get; set; }
         public string? EnderecoEstado { get; set; }
+        public string? EnderecoCEP { get; set; }
 
         //---------- Outros ------------//
         public List<Oficina>? Oficinas { get; set; }

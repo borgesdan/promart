@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Promart.Pages;
+using Promart.Windows;
 
 namespace Promart
 {
@@ -28,9 +29,33 @@ namespace Promart
             
             //var page = new CadastroAlunoPage();
             //var page = new ControlePresencaAlunoPage();
-            var page = new CadastroOficinaPage();
+            //var page = new CadastroOficinaPage();
+            var page = new CadastroVoluntarioPage();
 
             ConteudoFrame.NavigationService.Navigate(page);
+
+            CadastrarAlunoBtn.Click += (object sender, RoutedEventArgs e) => { 
+                NovoAlunoWindow novoAlunoWindow = new NovoAlunoWindow();
+
+                PopupBackRectangle.Visibility = Visibility.Visible;
+                novoAlunoWindow.ShowDialog();
+                PopupBackRectangle.Visibility = Visibility.Hidden;
+                CadastrarAlunoBtn_Click(sender, e, string.Empty); 
+            };
+        }
+
+        private void CadastrarAlunoBtn_Click(object sender, RoutedEventArgs e, string tabHeader)
+        {
+            TabItem tabItem = new TabItem();
+            ScrollViewer scrollViewer = new ScrollViewer();
+            Frame frame = new Frame();
+            CadastroAlunoPage page = new CadastroAlunoPage();
+
+            frame.Content = page;
+            scrollViewer.Content = frame;
+            tabItem.Content = scrollViewer;
+
+            TabConteudo.Items.Add(tabItem);
         }
     }
 }

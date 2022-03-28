@@ -10,7 +10,6 @@ namespace Promart.Models
     {
         public int IdOficina { get; set; }
         public string? Nome { get; set; }
-        public bool IsAtivo { get; set; }
         public string? Descricao { get; set; }        
 
         //(     ) Reforço Escolar() Balé() Informática() Libras() Espanhol() Violão

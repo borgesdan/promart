@@ -13,11 +13,28 @@
             <RowDefinition Height="*"  />
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0">
+        <Menu Grid.Row="0" VerticalContentAlignment="Center">
             <MenuItem Header="Arquivo" />
-            <MenuItem Header="Cadastro" />
+            <MenuItem Header="Cadastro">
+                <MenuItem Header="Cadastrar Aluno" />
+                <MenuItem Header="Cadastrar Voluntário" />
+                <MenuItem Header="Cadastrar Oficina" />
+            </MenuItem>
+            <MenuItem Header="Consultar">
+                <MenuItem Header="Consultar Alunos" />
+                <MenuItem Header="Consultar Voluntários" />
+                <MenuItem Header="Consultar Oficinas" />
+            </MenuItem>
         </Menu>
-        <ToolBar x:Name="MenuFerramentas" Grid.Row="1"></ToolBar>
+        <ToolBar x:Name="MenuFerramentas" Grid.Row="1">
+            <Button x:Name="CadastrarAlunoBtn" Width="35" VerticalAlignment="Stretch" Content="+A" />
+            <Button x:Name="CadastrarVoluntárioBtn" Width="35" VerticalAlignment="Stretch" Content="+V" />
+            <Button x:Name="CadastrarOficinaBtn" Width="35" VerticalAlignment="Stretch" Content="+O" />
+            <Separator />
+            <Label Content="Pesquisa Rápida" />
+            <TextBox Width="250" />
+            <Button Width="35" VerticalAlignment="Stretch" Content="Lupa" />
+        </ToolBar>
         <TabControl x:Name="TabConteudo" Grid.Row="2">
             <TabItem Header="Teste">
                 <ScrollViewer>
@@ -26,6 +43,8 @@
                     </Frame>
                 </ScrollViewer>                
             </TabItem>
-        </TabControl>        
+        </TabControl>
+
+        <Rectangle x:Name="PopupBackRectangle" Grid.RowSpan="3" Fill="Black" Opacity=".5" Visibility="Hidden"></Rectangle>
     </Grid>
 </Window>

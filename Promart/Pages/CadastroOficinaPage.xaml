@@ -56,7 +56,8 @@
                     </Grid.RowDefinitions>
 
                     <ToolBar Grid.Row="0">
-                        <Button VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="30"
+                        
+                        <Button x:Name="AdicionarOficinaButton" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="30"
                                 BorderThickness="1" BorderBrush="Black"
                                 FontSize="16" FontFamily="Cascadia Code"
                                 Content="a" Cursor="Hand"></Button>
@@ -130,22 +131,13 @@
                         <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2"
                              HorizontalAlignment="Stretch" TextAlignment="Left" Margin="10" 
                                  AcceptsReturn="True" TextWrapping="WrapWithOverflow"
-                                 FontSize="15" FontFamily="Cascadia Code Light" />
+                                 FontSize="15" FontFamily="Cascadia Code Light" />                       
 
-                        <Label Grid.Row="3" Grid.Column="0" Content="Oficina Ativa?:" 
-                           FontSize="16" FontWeight="Bold" FontFamily="Cascadia Code" 
-                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
-
-                        <CheckBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
-                             HorizontalAlignment="Stretch" Content="Sim, a oficina está sendo ofertada."
-                                  VerticalAlignment="Center" Margin="10,0,0,0"
-                                 FontSize="16" FontFamily="Cascadia Code Light" IsChecked="True" />
-
-                        <Button Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2"
+                        <Button Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2"
                                 Content="ADICIONAR" Margin="20,0,20,0"
                                 FontSize="20" FontFamily="Cascadia Code"></Button>
 
-                        <Button Grid.Row="5" Grid.Column="1"
+                        <Button Grid.Row="4" Grid.Column="1"
                                 Content="Cancelar" Margin="20,5,20,5"
                                 FontSize="20" FontFamily="Cascadia Code Light"></Button>
 

@@ -27,12 +27,18 @@ namespace Promart.Models
         public string? ContatoFamilia2 { get; set; }        
         public bool IsBeneficiario { get; set; }
         public string? TipoCasa { get; set; }
-        //TODO: Implementar Renda
-        //public int Renda { get; set; }
+
+        //[0]Menor que Meio Salário Mínimo
+        //[1]Meio Salário Mínimo
+        //[2]1 Salário Mínimo
+        //[3]1 Salário Mínimo e Meio
+        //[4]2 Salários Mínimos
+        //[5]Maior que 2 Salários Mínimos        
+        public int Renda { get; set; }
 
         //------ Dados Escolares ------//
 
-        public Escola? EscolaNome { get; set; }
+        public string? Escola { get; set; }
         public string? AnoEscolar { get; set; }
         public string? TurnoEscolar { get; set; }        
         
@@ -46,9 +52,13 @@ namespace Promart.Models
         public string? EnderecoEstado { get; set; }
         public string? EnderecoCEP { get; set; }
 
-        //------ Dados Projeto ------//
-        //TODO: Implementar Situação
-        //Situação: Aprovado, Em Espera, Matriculado, Não Aprovado, Desistente
+        //------ Dados Projeto ------//        
+        //[0]Aprovado
+        //[1]Em Espera
+        //[2]Matriculado
+        //[3]Não Aprovado
+        //[4]Desistente
+        public int Situacao { get; set; }
         public string? TurnoProjeto { get; set; }
         public List<Oficina>? Oficinas { get; set; }
         //TODO: Implementar controle de faltas
