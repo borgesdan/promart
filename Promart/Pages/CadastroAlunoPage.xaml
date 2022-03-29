@@ -54,8 +54,8 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
-            
-            <Image Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" IsEnabled="True" Source="/Pages/face-128x128-1410033.png" >                
+
+            <Image Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" IsEnabled="True" Source="/Pages/face-128x128-1410033.png" >
             </Image>
 
             <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4"
@@ -78,40 +78,39 @@
                     <Label Grid.Row="0" Grid.Column="0" Content="Nome Completo:" 
                            FontSize="16" FontFamily="Cascadia Code" 
                            HorizontalAlignment="Right"/>
-                    <TextBox Grid.Row="0" Grid.Column="1"
-                             HorizontalAlignment="Stretch" 
-                             TextAlignment="Left" VerticalAlignment="Center"                                
-                             FontSize="15" />
+                    <TextBox x:Name="NomeAlunoText" Grid.Row="0" Grid.Column="1"
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                             TextAlignment="Left" FontSize="20" />
 
                     <Label Grid.Row="1" Grid.Column="0" Content="Data Nascimento:"
                            FontSize="16" FontFamily="Cascadia Code" 
                            HorizontalAlignment="Right" />
-                    <DatePicker Grid.Row="1" Grid.Column="1"
+                    <DatePicker x:Name="NascimentoDataPicker" Grid.Row="1" Grid.Column="1"
                                 Width="250" HorizontalAlignment="Left" VerticalAlignment="Center"
                                 FontSize="15"  />
                     <Label Grid.Row="1" Grid.Column="1" Content="10 anos"
                            FontSize="14" FontFamily="Cascadia Code" 
                            HorizontalAlignment="Left" Margin="300,0,0,0" />
-                    
+
 
                     <Label Grid.Row="2" Grid.Column="0" Content="RG:"
                            FontSize="16"  FontFamily="Cascadia Code" 
                            HorizontalAlignment="Right" />
-                    <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
-                             HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Center"
-                             FontSize="15" />
+                    <TextBox x:Name="RGAlunoText" Grid.Row="2" Grid.Column="1"
+                             HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Bottom"
+                             FontSize="15" Margin="0,0,0,5" />
 
                     <Label Grid.Row="3" Grid.Column="0" Content="CPF:"
                            FontSize="16"  FontFamily="Cascadia Code" 
                            HorizontalAlignment="Right" />
-                    <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
+                    <TextBox x:Name="CPFAlunoText" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
                              HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Center"
                              FontSize="15" FontFamily="Cascadia Code Light" />
 
                     <Label Grid.Row="4" Grid.Column="0" Content="Certidão de Nascimento:"
                            FontSize="16"  FontFamily="Cascadia Code" 
                            HorizontalAlignment="Right" />
-                    <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"
+                    <TextBox x:Name="CertidaoNascimentoText" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"
                              HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Center"
                              FontSize="15"  />
                 </Grid>
@@ -124,7 +123,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="250" />
-                        <ColumnDefinition />                        
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30" />
@@ -185,12 +184,12 @@
                     <ComboBox Grid.Row="4" Grid.Column="1" Width="350" HorizontalAlignment="Left"
                               VerticalAlignment="Center" SelectedIndex="0" IsEditable="True"
                               FontSize="15"  >
-                        <ComboBoxItem Content="Menor que Meio Salário Mínimo" /> 
-                        <ComboBoxItem Content="Meio Salário Mínimo" /> 
-                        <ComboBoxItem Content="1 Salário Mínimo" /> 
-                        <ComboBoxItem Content="1 Salário Mínimo e Meio" /> 
-                        <ComboBoxItem Content="2 Salários Mínimos" /> 
-                        <ComboBoxItem Content="Maior que 2 Salários Mínimos" /> 
+                        <ComboBoxItem Content="Menor que Meio Salário Mínimo" />
+                        <ComboBoxItem Content="Meio Salário Mínimo" />
+                        <ComboBoxItem Content="1 Salário Mínimo" />
+                        <ComboBoxItem Content="1 Salário Mínimo e Meio" />
+                        <ComboBoxItem Content="2 Salários Mínimos" />
+                        <ComboBoxItem Content="Maior que 2 Salários Mínimos" />
                     </ComboBox>
 
                 </Grid>
@@ -243,7 +242,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150" />
                         <ColumnDefinition />
-                        
+
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30" />
@@ -293,7 +292,7 @@
                         <ComboBoxItem Content="2º Ano Ens. Médio" />
                         <ComboBoxItem Content="3º Ano Ens. Médio" />
                         <ComboBoxItem Content="4º Ano Ens. Médio" />
-                        
+
                     </ComboBox>
                 </Grid>
             </GroupBox>
@@ -351,7 +350,7 @@
 
                     <TextBox Grid.Row="2" Grid.Column="3" Width="200"
                              HorizontalAlignment="Left" TextAlignment="Left" VerticalAlignment="Center"
-                             FontSize="15"  />                   
+                             FontSize="15"  />
                 </Grid>
             </GroupBox>
 
@@ -398,7 +397,7 @@
                         <ComboBoxItem Content="Não Aprovado" />
                         <ComboBoxItem Content="Desistente" />
                     </ComboBox>
-                    
+
                     <Label Grid.Row="1" Grid.Column="1" Content="O aluno se encontra aprovado para matricula" 
                            FontSize="12" HorizontalAlignment="Left"/>
 

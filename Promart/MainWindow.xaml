@@ -9,40 +9,30 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"  />
-            <RowDefinition Height="30"  />
+            <RowDefinition Height="50"  />
             <RowDefinition Height="*"  />
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" VerticalContentAlignment="Center">
             <MenuItem Header="Arquivo" />
             <MenuItem Header="Cadastro">
-                <MenuItem Header="Cadastrar Aluno" />
-                <MenuItem Header="Cadastrar Voluntário" />
-                <MenuItem Header="Cadastrar Oficina" />
-            </MenuItem>
-            <MenuItem Header="Consultar">
-                <MenuItem Header="Consultar Alunos" />
-                <MenuItem Header="Consultar Voluntários" />
-                <MenuItem Header="Consultar Oficinas" />
-            </MenuItem>
+                <MenuItem x:Name="CadastrarAlunoMenu" Header="Cadastrar Aluno" />
+                <MenuItem x:Name="CadastrarVoluntarioMenu" Header="Cadastrar Voluntário" />
+                <MenuItem x:Name="CadastrarOficinaMenu" Header="Cadastrar Oficina" />
+                <Separator />
+                <MenuItem x:Name="ConsultaAvancadaMenu" Header="Consulta Avançada" />
+            </MenuItem>            
         </Menu>
         <ToolBar x:Name="MenuFerramentas" Grid.Row="1">
             <Button x:Name="CadastrarAlunoBtn" Width="35" VerticalAlignment="Stretch" Content="+A" />
-            <Button x:Name="CadastrarVoluntárioBtn" Width="35" VerticalAlignment="Stretch" Content="+V" />
+            <Button x:Name="CadastrarVoluntarioBtn" Width="35" VerticalAlignment="Stretch" Content="+V" />
             <Button x:Name="CadastrarOficinaBtn" Width="35" VerticalAlignment="Stretch" Content="+O" />
             <Separator />
-            <Label Content="Pesquisa Rápida" />
+            <Label Content="Pesquisa Rápida" VerticalAlignment="Center" />
             <TextBox Width="250" />
             <Button Width="35" VerticalAlignment="Stretch" Content="Lupa" />
         </ToolBar>
-        <TabControl x:Name="TabConteudo" Grid.Row="2">
-            <TabItem Header="Teste">
-                <ScrollViewer>
-                    <Frame x:Name="ConteudoFrame">
-
-                    </Frame>
-                </ScrollViewer>                
-            </TabItem>
+        <TabControl x:Name="TabConteudo" Grid.Row="2">            
         </TabControl>
 
         <Rectangle x:Name="PopupBackRectangle" Grid.RowSpan="3" Fill="Black" Opacity=".5" Visibility="Hidden"></Rectangle>

@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Promart.Pages;
 using Promart.Windows;
+using Promart.Models;
+using Promart.Codes;
 
 namespace Promart
 {
@@ -25,37 +27,58 @@ namespace Promart
         public MainWindow()
         {
             InitializeComponent();
-            //NavegadorConteudo.Navigate(new Uri("Pages/CadastrarAlunoPage.xaml", UriKind.Relative) );
-            
+
             //var page = new CadastroAlunoPage();
             //var page = new ControlePresencaAlunoPage();
             //var page = new CadastroOficinaPage();
             var page = new CadastroVoluntarioPage();
 
-            ConteudoFrame.NavigationService.Navigate(page);
-
-            CadastrarAlunoBtn.Click += (object sender, RoutedEventArgs e) => { 
-                NovoAlunoWindow novoAlunoWindow = new NovoAlunoWindow();
-
-                PopupBackRectangle.Visibility = Visibility.Visible;
-                novoAlunoWindow.ShowDialog();
-                PopupBackRectangle.Visibility = Visibility.Hidden;
-                CadastrarAlunoBtn_Click(sender, e, string.Empty); 
-            };
+            CadastrarAlunoBtn.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Aluno", "Digite o nome do aluno"), CadastrarNovoAluno);
+            CadastrarAlunoMenu.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Aluno", "Digite o nome do aluno"), CadastrarNovoAluno);
+            CadastrarVoluntarioBtn.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Voluntário", "Digite o nome do voluntário"), CadastrarNovoVoluntario);
+            CadastrarVoluntarioMenu.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Voluntário", "Digite o nome do voluntário"), CadastrarNovoVoluntario);
+            CadastrarOficinaBtn.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Oficina", "Digite o nome da Oficina"), CadastrarNovaOficina);
+            CadastrarOficinaMenu.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Oficina", "Digite o nome da Oficina"), CadastrarNovaOficina);
         }
 
-        private void CadastrarAlunoBtn_Click(object sender, RoutedEventArgs e, string tabHeader)
+        private void CadastrarNovoAluno(string tabHeader)
         {
-            TabItem tabItem = new TabItem();
-            ScrollViewer scrollViewer = new ScrollViewer();
-            Frame frame = new Frame();
-            CadastroAlunoPage page = new CadastroAlunoPage();
+            Aluno aluno = new();
+            aluno.NomeCompleto = tabHeader;
+            CadastroAlunoPage page = new(aluno);
 
-            frame.Content = page;
-            scrollViewer.Content = frame;
-            tabItem.Content = scrollViewer;
+            Helper.AbrirNovaAba(TabConteudo, tabHeader, page);
+        }
 
-            TabConteudo.Items.Add(tabItem);
+        private void CadastrarNovoVoluntario(string tabHeader)
+        {
+            Voluntario voluntario = new();
+            voluntario.NomeCompleto = tabHeader;
+            CadastroVoluntarioPage page = new(voluntario);
+
+            Helper.AbrirNovaAba(TabConteudo, tabHeader, page);
+        }
+
+        private void CadastrarNovaOficina(string tabHeader)
+        {
+            Oficina oficina = new();
+            oficina.Nome = tabHeader;            
+            CadastroOficinaPage page = new(oficina);
+
+            Helper.AbrirNovaAba(TabConteudo, tabHeader, page);
+        }
+
+        private void InicializarCadastro(NovoCadastroWindow dialogWindow, Action<string> cadastrarAction)
+        {
+            PopupBackRectangle.Visibility = Visibility.Visible;
+            bool? result = dialogWindow.ShowDialog();
+
+            if (result.HasValue && result.Value)
+            {
+                cadastrarAction(dialogWindow.NomeRecebido);
+            }
+
+            PopupBackRectangle.Visibility = Visibility.Hidden;
         }
     }
 }

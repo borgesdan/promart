@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Promart.Models;
 
 namespace Promart.Pages
 {
@@ -20,9 +21,18 @@ namespace Promart.Pages
     /// </summary>
     public partial class CadastroAlunoPage : Page
     {
+        public Aluno? Aluno { get; private set; }
+
         public CadastroAlunoPage()
         {
             InitializeComponent();
+        }
+
+        public CadastroAlunoPage(Aluno aluno)
+        {
+            InitializeComponent();
+            Aluno = aluno;
+            NomeAlunoText.Text = aluno.NomeCompleto;
         }
     }
 }

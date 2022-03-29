@@ -74,7 +74,7 @@
                     <Label Grid.Row="0" Grid.Column="0" Content="Nome Completo:" 
                            FontSize="16" FontFamily="Cascadia Code" 
                            HorizontalAlignment="Right"/>
-                    <TextBox Grid.Row="0" Grid.Column="1"
+                    <TextBox x:Name="NomeVoluntarioText" Grid.Row="0" Grid.Column="1"
                              HorizontalAlignment="Stretch" 
                              TextAlignment="Left" VerticalAlignment="Center"                                
                              FontSize="15" />

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Promart.Models;
 
 namespace Promart.Pages
 {
@@ -20,9 +21,18 @@ namespace Promart.Pages
     /// </summary>
     public partial class CadastroOficinaPage : Page
     {
+        public Oficina? Oficina { get; private set; }
+
         public CadastroOficinaPage()
         {
             InitializeComponent();
+        }
+
+        public CadastroOficinaPage(Oficina oficina)
+        {
+            InitializeComponent();
+
+            Oficina = oficina;
         }
     }
 }
