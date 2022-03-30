@@ -39,7 +39,12 @@ namespace Promart
             CadastrarVoluntarioMenu.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Voluntário", "Digite o nome do voluntário"), CadastrarNovoVoluntario);
             CadastrarOficinaBtn.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Oficina", "Digite o nome da Oficina"), CadastrarNovaOficina);
             CadastrarOficinaMenu.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Oficina", "Digite o nome da Oficina"), CadastrarNovaOficina);
-        }
+            ConsultaAvancadaMenu.Click += (object sender, RoutedEventArgs e) => {
+                PesquisaAvancadaPage page = new();
+                
+                Helper.AbrirNovaAba(TabConteudo, "Pesquisa Avançada", page);
+            };
+        }        
 
         private void CadastrarNovoAluno(string tabHeader)
         {
