@@ -35,6 +35,8 @@ namespace Promart.Windows
             };
 
             PreviewKeyDown += NovoCadastroWindow_PreviewKeyDown;
+
+            NomeAlunoText.Focus();
         }
 
         private void NovoCadastroWindow_PreviewKeyDown(object sender, KeyEventArgs e)

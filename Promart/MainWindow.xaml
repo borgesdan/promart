@@ -32,7 +32,7 @@
             <TextBox Width="250" />
             <Button Width="35" VerticalAlignment="Stretch" Content="Lupa" />
         </ToolBar>
-        <TabControl x:Name="TabConteudo" Grid.Row="2">            
+        <TabControl x:Name="TabConteudo" Grid.Row="2">
         </TabControl>
 
         <Rectangle x:Name="PopupBackRectangle" Grid.RowSpan="3" Fill="Black" Opacity=".5" Visibility="Hidden"></Rectangle>

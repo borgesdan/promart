@@ -1,0 +1,5 @@
+﻿Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;
+Pedro de Alcântara Francisco Antônio João Carlos Xavier de Paula Miguel Rafael Joaquim José Gonzaga Pascoal Cipriano Serafim de Bragança e Bourbon
+1525845870
+04544272556
+45570000

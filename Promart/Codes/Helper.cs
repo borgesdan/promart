@@ -7,22 +7,41 @@ using System.Windows.Controls;
 
 namespace Promart.Codes
 {
-    internal class Helper
+    public class Helper
     {
-        public static void AbrirNovaAba(TabControl tabControl, string tabHeader, Page contentPage)
+        public static class Controles
         {
-            TabItem tabItem = new();
-            ScrollViewer scrollViewer = new();
-            Frame frame = new();
+            public static void AbrirNovaAba(TabControl tabControl, string tabHeader, Page contentPage)
+            {
+                TabItem tabItem = new();
+                ScrollViewer scrollViewer = new();
+                Frame frame = new();
 
-            frame.Content = contentPage;
-            scrollViewer.Content = frame;
-            tabItem.Content = scrollViewer;
+                frame.Content = contentPage;
+                scrollViewer.Content = frame;
+                tabItem.Content = scrollViewer;
 
-            tabItem.Header = tabHeader;
-            tabItem.IsSelected = true;
+                tabItem.Header = tabHeader;
+                tabItem.IsSelected = true;
 
-            tabControl.Items.Add(tabItem);
+                tabControl.Items.Add(tabItem);
+            }
+        }
+        
+        public static class Util
+        {
+            public static int ObterIdade(DateTime nascimento)
+            {
+                DateTime hoje = DateTime.Now;
+                int idade = hoje.Year - nascimento.Year;                
+
+                if (hoje.DayOfYear < nascimento.DayOfYear)
+                {
+                    idade--;
+                }
+
+                return idade;
+            }
         }
     }
 }

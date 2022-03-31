@@ -16,6 +16,7 @@ using Promart.Pages;
 using Promart.Windows;
 using Promart.Models;
 using Promart.Codes;
+using Promart.Data;
 
 namespace Promart
 {
@@ -42,8 +43,11 @@ namespace Promart
             ConsultaAvancadaMenu.Click += (object sender, RoutedEventArgs e) => {
                 PesquisaAvancadaPage page = new();
                 
-                Helper.AbrirNovaAba(TabConteudo, "Pesquisa Avançada", page);
+                Helper.Controles.AbrirNovaAba(TabConteudo, "Pesquisa Avançada", page);
             };
+
+            //var alunos = SqliteDataAccess.GetAlunos();
+            //MessageBox.Show(alunos.Count.ToString());
         }        
 
         private void CadastrarNovoAluno(string tabHeader)
@@ -52,7 +56,7 @@ namespace Promart
             aluno.NomeCompleto = tabHeader;
             CadastroAlunoPage page = new(aluno);
 
-            Helper.AbrirNovaAba(TabConteudo, tabHeader, page);
+            Helper.Controles.AbrirNovaAba(TabConteudo, tabHeader, page);
         }
 
         private void CadastrarNovoVoluntario(string tabHeader)
@@ -61,7 +65,7 @@ namespace Promart
             voluntario.NomeCompleto = tabHeader;
             CadastroVoluntarioPage page = new(voluntario);
 
-            Helper.AbrirNovaAba(TabConteudo, tabHeader, page);
+            Helper.Controles.AbrirNovaAba(TabConteudo, tabHeader, page);
         }
 
         private void CadastrarNovaOficina(string tabHeader)
@@ -70,7 +74,7 @@ namespace Promart
             oficina.Nome = tabHeader;            
             CadastroOficinaPage page = new(oficina);
 
-            Helper.AbrirNovaAba(TabConteudo, tabHeader, page);
+            Helper.Controles.AbrirNovaAba(TabConteudo, tabHeader, page);
         }
 
         private void InicializarCadastro(NovoCadastroWindow dialogWindow, Action<string> cadastrarAction)
