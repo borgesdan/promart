@@ -9,11 +9,12 @@
         ShowInTaskbar="false" ResizeMode="NoResize" >
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="16*" />
+            <ColumnDefinition Width="16*" />
+            <ColumnDefinition Width="16*" />
+            <ColumnDefinition Width="16*" />
             <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="15*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -21,17 +22,17 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
-            <RowDefinition />            
+            <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Label x:Name="mensagemLabel" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" 
+        <Label x:Name="mensagemLabel" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" 
                Content="Digite o nome do aluno:" 
                HorizontalContentAlignment="Center" FontSize="14" FontFamily="Cascadia Code"  />
-        <TextBox x:Name="NomeAlunoText" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" Margin="10,0"
+        <TextBox x:Name="NomeAlunoText" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Margin="10,30,10,0"
                  FontSize="14" FontFamily="Cascadia Code Light" Focusable="True"
-                 VerticalContentAlignment="Center" />
+                 VerticalContentAlignment="Center" Grid.RowSpan="2" />
 
-        <Button x:Name="ConfirmarBtn" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5" Content="Confirmar"
-                Margin="60,0" />
+        <Button x:Name="ConfirmarBtn" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="6" Content="Confirmar"
+                Margin="60,0,60,0" />
     </Grid>
 </Window>

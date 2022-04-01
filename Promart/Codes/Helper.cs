@@ -11,7 +11,7 @@ namespace Promart.Codes
     {
         public static class Controles
         {
-            public static void AbrirNovaAba(TabControl tabControl, string tabHeader, Page contentPage)
+            public static TabItem AbrirNovaAba(TabControl tabControl, string tabHeader, Page contentPage)
             {
                 TabItem tabItem = new();
                 ScrollViewer scrollViewer = new();
@@ -25,6 +25,7 @@ namespace Promart.Codes
                 tabItem.IsSelected = true;
 
                 tabControl.Items.Add(tabItem);
+                return tabItem;
             }
         }
         

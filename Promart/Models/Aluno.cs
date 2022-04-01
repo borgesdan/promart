@@ -91,11 +91,12 @@ namespace Promart.Models
 
         //------ Dados Projeto ------//        
         /// <summary>
-        /// [0] Aprovado
-        /// [1] Em Espera
-        /// [2] Matriculado
-        /// [3] Não Aprovado
-        /// [4] Desistente
+        /// [0] Inscrito
+        /// [1] Aprovado
+        /// [2] Em Espera
+        /// [3] Matriculado
+        /// [4] Não Aprovado
+        /// [5] Desistente
         /// </summary>
         public int SituacaoProjeto { get; set; }
         public string? TurnoProjeto { get; set; }

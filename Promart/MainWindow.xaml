@@ -35,6 +35,6 @@
         <TabControl x:Name="TabConteudo" Grid.Row="2">
         </TabControl>
 
-        <Rectangle x:Name="PopupBackRectangle" Grid.RowSpan="3" Fill="Black" Opacity=".5" Visibility="Hidden"></Rectangle>
+        <Rectangle x:Name="BlackScreen" Grid.RowSpan="3" Fill="Black" Opacity=".5" Visibility="Hidden"></Rectangle>
     </Grid>
 </Window>

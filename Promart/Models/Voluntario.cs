@@ -16,9 +16,9 @@ namespace Promart.Models
         public string? RG { get; set; }
         public string? CPF { get; set; }
         public string? Email { get; set; }
-        public string? TelefoneContato1 { get; set; }
-        public string? TelefoneContato2 { get; set; }
-        public DateTime DataNascimento { get; set; }
+        public string? Telefone1 { get; set; }
+        public string? Telefone2 { get; set; }
+        public DateTime? DataNascimento { get; set; }
 
         //------ Dados Residenciais ------//
 

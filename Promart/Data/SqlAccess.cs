@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using Dapper;
+using Dapper.Contrib;
 using Dapper.Contrib.Extensions;
 
 namespace Promart.Data
@@ -52,9 +53,38 @@ namespace Promart.Data
         public static bool Atualizar<T>(T dado) where T : class
         {
             using SqlConnection conn = new SqlConnection(GetConnectionString());
-            conn.Open();
-
+            conn.Open();            
+            
             return conn.Update(dado);
         }
+
+        public static bool Deletar<T>(T dado) where T : class
+        {
+            using SqlConnection conn = new SqlConnection(GetConnectionString());
+            conn.Open();
+            
+            return conn.Delete(dado);
+        }
+
+        public static bool DeletarTudo<T>() where T : class
+        {
+            using SqlConnection conn = new SqlConnection(GetConnectionString());
+            conn.Open();
+
+            return conn.DeleteAll<T>();
+        }
+
+        public static class TAlunoOficinas
+        {
+            public static void Deletar(Aluno aluno)
+            {
+                using SqlConnection conn = new SqlConnection(GetConnectionString());
+                conn.Open();                
+
+                conn.Query(@"DELETE FROM AlunoOficinas 
+                            WHERE IdAluno = @Id", aluno);
+            }            
+        }
+        
     }
 }

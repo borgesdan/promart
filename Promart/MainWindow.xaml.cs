@@ -25,6 +25,14 @@ namespace Promart
     /// </summary>
     public partial class MainWindow : Window
     {
+        public void TrocarVisibilidadeTelaPreta()
+        {
+            if (BlackScreen.Visibility == Visibility.Visible)
+                BlackScreen.Visibility = Visibility.Hidden;
+            else
+                BlackScreen.Visibility = Visibility.Visible;
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -56,7 +64,7 @@ namespace Promart
             aluno.NomeCompleto = tabHeader;
             CadastroAlunoPage page = new(aluno);
 
-            Helper.Controles.AbrirNovaAba(TabConteudo, tabHeader, page);
+            page.AlunoTab = Helper.Controles.AbrirNovaAba(TabConteudo, tabHeader, page);
         }
 
         private void CadastrarNovoVoluntario(string tabHeader)
@@ -79,7 +87,7 @@ namespace Promart
 
         private void InicializarCadastro(NovoCadastroWindow dialogWindow, Action<string> cadastrarAction)
         {
-            PopupBackRectangle.Visibility = Visibility.Visible;
+            BlackScreen.Visibility = Visibility.Visible;
             bool? result = dialogWindow.ShowDialog();
 
             if (result.HasValue && result.Value)
@@ -87,7 +95,7 @@ namespace Promart
                 cadastrarAction(dialogWindow.NomeRecebido);
             }
 
-            PopupBackRectangle.Visibility = Visibility.Hidden;
+            BlackScreen.Visibility = Visibility.Hidden;
         }
     }
 }

@@ -46,6 +46,11 @@ namespace Promart.Windows
                 NomeRecebido = NomeAlunoText.Text;
                 DialogResult = true;
             }
+
+            if (e.Key == Key.Escape)
+            {
+                DialogResult = false;
+            }
         }
     }
 }
