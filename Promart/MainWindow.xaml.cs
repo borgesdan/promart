@@ -35,28 +35,37 @@ namespace Promart
 
         public MainWindow()
         {
-            InitializeComponent();
-
-            //var page = new CadastroAlunoPage();
-            //var page = new ControlePresencaAlunoPage();
-            //var page = new CadastroOficinaPage();
+            InitializeComponent();            
             var page = new CadastroVoluntarioPage();
 
             CadastrarAlunoBtn.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Aluno", "Digite o nome do aluno"), CadastrarNovoAluno);
             CadastrarAlunoMenu.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Aluno", "Digite o nome do aluno"), CadastrarNovoAluno);
             CadastrarVoluntarioBtn.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Voluntário", "Digite o nome do voluntário"), CadastrarNovoVoluntario);
-            CadastrarVoluntarioMenu.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Voluntário", "Digite o nome do voluntário"), CadastrarNovoVoluntario);
-            CadastrarOficinaBtn.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Oficina", "Digite o nome da Oficina"), CadastrarNovaOficina);
+            CadastrarVoluntarioMenu.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Voluntário", "Digite o nome do voluntário"), CadastrarNovoVoluntario);            
             CadastrarOficinaMenu.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Oficina", "Digite o nome da Oficina"), CadastrarNovaOficina);
+            CopiarAlunoBtn.IsEnabledChanged += CopiarAlunoBtn_IsEnabledChanged;            
+
             ConsultaAvancadaMenu.Click += (object sender, RoutedEventArgs e) => {
                 PesquisaAvancadaPage page = new();
                 
                 Helper.Controles.AbrirNovaAba(TabConteudo, "Pesquisa Avançada", page);
             };
-
-            //var alunos = SqliteDataAccess.GetAlunos();
-            //MessageBox.Show(alunos.Count.ToString());
         }        
+
+        private void CopiarAlunoBtn_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if(sender != null && sender is Button bt)
+            {
+                if (bt.IsEnabled)
+                {
+                    bt.Opacity = 1;
+                }
+                else
+                {
+                    bt.Opacity = 0.2;
+                }
+            }
+        }
 
         private void CadastrarNovoAluno(string tabHeader)
         {
@@ -96,6 +105,11 @@ namespace Promart
             }
 
             BlackScreen.Visibility = Visibility.Hidden;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            CopiarAlunoBtn.IsEnabled = false;
         }
     }
 }

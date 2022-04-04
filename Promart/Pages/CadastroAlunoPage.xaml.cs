@@ -27,6 +27,7 @@ namespace Promart.Pages
         bool dadosAlterados = false;
         public Aluno Aluno { get; private set; }
         public TabItem? AlunoTab { get; set; }
+        public MainWindow? MainWindow { get; set; }
 
         public CadastroAlunoPage() : this(new Aluno())
         {
@@ -35,11 +36,15 @@ namespace Promart.Pages
         public CadastroAlunoPage(Aluno aluno)
         {
             InitializeComponent();
+
             Aluno = aluno;
+            MainWindow = Window.GetWindow(this) as MainWindow;
+
             ConfirmarButton.Click += (object sender, RoutedEventArgs e) => ConfirmarPagina();
             CancelarButton.Click += CancelarButton_Click;
             NascimentoData.SelectedDateChanged += NascimentoData_SelectedDateChanged;
             SituacaoProjetoCombo.SelectionChanged += SituacaoProjetoCombo_SelectionChanged;
+            TipoTurnoEscolarCombo.SelectionChanged += TipoTurnoEscolarCombo_SelectionChanged;
 
             //Eventos para confirmar alterações de dados ao sair da tela
             NomeText.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
@@ -63,9 +68,25 @@ namespace Promart.Pages
             TipoAnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => dadosAlterados = true;
             SituacaoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => dadosAlterados = true;
             TipoTurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => dadosAlterados = true;
+            TipoTurnoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => dadosAlterados = true;
             BeneficiarioCheck.Click += (object sender, RoutedEventArgs e) => dadosAlterados = true;
         }
-        
+
+        private void TipoTurnoEscolarCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender != null && sender is ComboBox cb)
+            {
+                if (cb.SelectedIndex == 0)
+                {
+                    TipoTurnoProjetoCombo.SelectedIndex = 1;
+                }
+                else
+                {
+                    TipoTurnoProjetoCombo.SelectedIndex = 0;
+                }
+            }
+        }
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             //Carrega o nome do aluno
@@ -74,18 +95,18 @@ namespace Promart.Pages
             NomeText.CaretIndex = NomeText.Text != null ? NomeText.Text.Length : 0;
 
             //Popula a lista de oficinas
-            var oficinas = SqlAccess.GetDados<Oficina>();
-            List<CheckBox> checkBoxes = new();
+            //var oficinas = SqlAccess.GetDados<Oficina>();
+            //List<CheckBox> checkBoxes = new();
 
-            foreach (var o in oficinas)
-            {
-                CheckBox checkBox = new();
-                checkBox.Content = o;
-                checkBox.Click += (object sender, RoutedEventArgs e) => dadosAlterados = true;
-                checkBoxes.Add(checkBox);
-            }
-
-            TipoOficinasList.ItemsSource = checkBoxes;
+            //foreach (var o in oficinas)
+            //{
+            //    CheckBox checkBox = new();
+            //    checkBox.Content = o;
+            //    checkBox.Click += (object sender, RoutedEventArgs e) => dadosAlterados = true;
+            //    checkBoxes.Add(checkBox);
+            //}
+            //TipoOficinasList.ItemsSource = checkBoxes;
+            Helper.Controles.PopularOficinasList(TipoOficinasList, (object sender, RoutedEventArgs e) => dadosAlterados = true);
         }
 
         private void NomeText_TextChanged(object sender, TextChangedEventArgs e)
@@ -152,14 +173,13 @@ namespace Promart.Pages
             {
                 if (dadosAlterados)
                 {
-                    MainWindow? window = Window.GetWindow(this) as MainWindow;
-                    window?.TrocarVisibilidadeTelaPreta();
-                    
+                    MainWindow?.TrocarVisibilidadeTelaPreta();
+
                     MessageBoxResult result = MessageBox.Show("Alguns dados foram alterados, deseja sair sem confirma-los?", "Aviso", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    window?.TrocarVisibilidadeTelaPreta();
+                    MainWindow?.TrocarVisibilidadeTelaPreta();
 
                     if (result == MessageBoxResult.No)
-                    {                        
+                    {
                         return;
                     }
                 }

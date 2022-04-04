@@ -264,12 +264,10 @@
                            HorizontalAlignment="Right" />
 
                     <ComboBox x:Name="TipoTurnoEscolarCombo" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"
-                              VerticalAlignment="Center" SelectedIndex="0"
+                              VerticalAlignment="Center" SelectedIndex="0" Width="200"
                               FontSize="15"  >
                         <ComboBoxItem Content="Matutino" />
                         <ComboBoxItem Content="Vespertino" />
-                        <ComboBoxItem Content="Noturno" />
-                        <ComboBoxItem Content="Integral" />
                     </ComboBox>
 
                     <Label Grid.Row="2" Grid.Column="0" Content="Ano Escolar:" 
@@ -402,9 +400,9 @@
                            FontSize="16"  FontFamily="Cascadia Code" 
                            HorizontalAlignment="Right" />
 
-                    <ComboBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"
-                              VerticalAlignment="Center" SelectedIndex="0" IsEditable="True"
-                              FontSize="15"  >
+                    <ComboBox x:Name="TipoTurnoProjetoCombo" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"
+                              VerticalAlignment="Center" SelectedIndex="1"
+                              FontSize="15"  Width="200" >
                         <ComboBoxItem Content="Matutino" />
                         <ComboBoxItem Content="Vespertino" />
                     </ComboBox>

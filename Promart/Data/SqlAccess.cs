@@ -20,6 +20,12 @@ namespace Promart.Data
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;
         }
 
+        static T Conectar<T>(Func<SqlConnection, T> action)
+        {
+            using SqlConnection connection = new SqlConnection(GetConnectionString());
+            return action.Invoke(connection);
+        }
+
         public static List<T> GetDados<T>() where T : class
         {
             using SqlConnection conn = new SqlConnection(GetConnectionString());
@@ -84,6 +90,18 @@ namespace Promart.Data
                 conn.Query(@"DELETE FROM AlunoOficinas 
                             WHERE IdAluno = @Id", aluno);
             }            
+        }
+
+        public static class TVoluntarioOficinas
+        {
+            public static void Deletar(Voluntario voluntario)
+            {
+                using SqlConnection conn = new SqlConnection(GetConnectionString());
+                conn.Open();
+
+                conn.Query(@"DELETE FROM VoluntarioOficinas 
+                            WHERE IdVoluntario = @Id", voluntario);
+            }
         }
         
     }
