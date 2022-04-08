@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Promart.Windows"
         mc:Ignorable="d"
         Title="Cadastrar Novo Aluno" Height="200" Width="400" WindowStartupLocation="CenterScreen"
-        ShowInTaskbar="false" ResizeMode="NoResize" >
+        ShowInTaskbar="false" ResizeMode="NoResize" Topmost="True" >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="16*" />
@@ -30,7 +30,7 @@
                HorizontalContentAlignment="Center" FontSize="14" FontFamily="Cascadia Code"  />
         <TextBox x:Name="NomeAlunoText" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Margin="10,30,10,0"
                  FontSize="14" FontFamily="Cascadia Code Light" Focusable="True"
-                 VerticalContentAlignment="Center" Grid.RowSpan="2" />
+                 VerticalContentAlignment="Center" Grid.RowSpan="2" MaxLength="148" />
 
         <Button x:Name="ConfirmarBtn" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="6" Content="Confirmar"
                 Margin="60,0,60,0" />

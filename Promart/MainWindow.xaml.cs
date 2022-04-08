@@ -25,91 +25,53 @@ namespace Promart
     /// </summary>
     public partial class MainWindow : Window
     {
-        public void TrocarVisibilidadeTelaPreta()
-        {
-            if (BlackScreen.Visibility == Visibility.Visible)
-                BlackScreen.Visibility = Visibility.Hidden;
-            else
-                BlackScreen.Visibility = Visibility.Visible;
-        }
+        TabItem? OficinasTab = null;
+        public static MainWindow? Instance { get; private set; }        
 
         public MainWindow()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            Instance = this;
             var page = new CadastroVoluntarioPage();
 
-            CadastrarAlunoBtn.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Aluno", "Digite o nome do aluno"), CadastrarNovoAluno);
-            CadastrarAlunoMenu.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Aluno", "Digite o nome do aluno"), CadastrarNovoAluno);
-            CadastrarVoluntarioBtn.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Voluntário", "Digite o nome do voluntário"), CadastrarNovoVoluntario);
-            CadastrarVoluntarioMenu.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Voluntário", "Digite o nome do voluntário"), CadastrarNovoVoluntario);            
-            CadastrarOficinaMenu.Click += (object sender, RoutedEventArgs e) => InicializarCadastro(new NovoCadastroWindow("Cadastrar Oficina", "Digite o nome da Oficina"), CadastrarNovaOficina);
-            CopiarAlunoBtn.IsEnabledChanged += CopiarAlunoBtn_IsEnabledChanged;            
-
+            CadastrarAlunoBtn.Click += (object sender, RoutedEventArgs e) => CadastrarAluno();
+            CadastrarAlunoMenu.Click += (object sender, RoutedEventArgs e) => CadastrarAluno();
+            CadastrarVoluntarioBtn.Click += (object sender, RoutedEventArgs e) => CadastrarVoluntario();
+            CadastrarVoluntarioMenu.Click += (object sender, RoutedEventArgs e) => CadastrarVoluntario();
+            CadastrarOficinaMenu.Click += (object sender, RoutedEventArgs e) =>
+            {
+                if(OficinasTab == null)
+                {
+                    CadastroOficinaPage page = new();
+                    OficinasTab = Helper.Controles.AbrirNovaAba(TabConteudo, "Oficinas", page);
+                }
+                else
+                {
+                    OficinasTab.IsSelected = true;
+                }
+            };
             ConsultaAvancadaMenu.Click += (object sender, RoutedEventArgs e) => {
                 PesquisaAvancadaPage page = new();
                 
                 Helper.Controles.AbrirNovaAba(TabConteudo, "Pesquisa Avançada", page);
             };
-        }        
-
-        private void CopiarAlunoBtn_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if(sender != null && sender is Button bt)
+            AbrirTabelaDadosButton.Click += (object sender, RoutedEventArgs e) =>
             {
-                if (bt.IsEnabled)
-                {
-                    bt.Opacity = 1;
-                }
-                else
-                {
-                    bt.Opacity = 0.2;
-                }
-            }
+                TabelaDadosPage page = new();
+                Helper.Controles.AbrirNovaAba(TabConteudo, "Visualização de Dados", page);
+            };
         }
 
-        private void CadastrarNovoAluno(string tabHeader)
+        private void CadastrarAluno()
         {
-            Aluno aluno = new();
-            aluno.NomeCompleto = tabHeader;
-            CadastroAlunoPage page = new(aluno);
-
-            page.AlunoTab = Helper.Controles.AbrirNovaAba(TabConteudo, tabHeader, page);
+            CadastroAlunoPage page = new CadastroAlunoPage(new Aluno());
+            page.Tab = Helper.Controles.AbrirNovaAba(TabConteudo, "Novo Aluno", page);
         }
 
-        private void CadastrarNovoVoluntario(string tabHeader)
+        private void CadastrarVoluntario()
         {
-            Voluntario voluntario = new();
-            voluntario.NomeCompleto = tabHeader;
-            CadastroVoluntarioPage page = new(voluntario);
-
-            Helper.Controles.AbrirNovaAba(TabConteudo, tabHeader, page);
-        }
-
-        private void CadastrarNovaOficina(string tabHeader)
-        {
-            Oficina oficina = new();
-            oficina.Nome = tabHeader;            
-            CadastroOficinaPage page = new(oficina);
-
-            Helper.Controles.AbrirNovaAba(TabConteudo, tabHeader, page);
-        }
-
-        private void InicializarCadastro(NovoCadastroWindow dialogWindow, Action<string> cadastrarAction)
-        {
-            BlackScreen.Visibility = Visibility.Visible;
-            bool? result = dialogWindow.ShowDialog();
-
-            if (result.HasValue && result.Value)
-            {
-                cadastrarAction(dialogWindow.NomeRecebido);
-            }
-
-            BlackScreen.Visibility = Visibility.Hidden;
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            CopiarAlunoBtn.IsEnabled = false;
+            CadastroVoluntarioPage page = new CadastroVoluntarioPage(new Voluntario());
+            page.Tab = Helper.Controles.AbrirNovaAba(TabConteudo, "Novo Voluntário", page);
         }
     }
 }

@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using Promart.Models;
 using Promart.Data;
 using Promart.Codes;
+using Promart.Windows;
 using System.Text.RegularExpressions;
 
 namespace Promart.Pages
@@ -26,8 +27,7 @@ namespace Promart.Pages
     {
         bool dadosAlterados = false;
         public Aluno Aluno { get; private set; }
-        public TabItem? AlunoTab { get; set; }
-        public MainWindow? MainWindow { get; set; }
+        public TabItem? Tab { get; set; }
 
         public CadastroAlunoPage() : this(new Aluno())
         {
@@ -36,111 +36,27 @@ namespace Promart.Pages
         public CadastroAlunoPage(Aluno aluno)
         {
             InitializeComponent();
-
             Aluno = aluno;
-            MainWindow = Window.GetWindow(this) as MainWindow;
 
-            ConfirmarButton.Click += (object sender, RoutedEventArgs e) => ConfirmarPagina();
+            //Eventos necessários dos controles
+            ConfirmarButton.Click += (object sender, RoutedEventArgs e) => ConfirmarPaginaAsync();
             CancelarButton.Click += CancelarButton_Click;
-            NascimentoData.SelectedDateChanged += NascimentoData_SelectedDateChanged;
-            SituacaoProjetoCombo.SelectionChanged += SituacaoProjetoCombo_SelectionChanged;
-            TipoTurnoEscolarCombo.SelectionChanged += TipoTurnoEscolarCombo_SelectionChanged;
-
-            //Eventos para confirmar alterações de dados ao sair da tela
-            NomeText.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
-            RGText.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
-            CPFText.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
-            CertidaoText.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
-            Telefone1Text.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
-            Telefone2Text.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
-            NomeEscolaText.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
-            RuaText.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
-            BairroText.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
-            NumeroText.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
-            ComplementoText.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
-            NomeResponsavelText.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
-            ObservacoesText.TextChanged += (object sender, TextChangedEventArgs e) => dadosAlterados = true;
-            NascimentoData.SelectedDateChanged += (object? sender, SelectionChangedEventArgs e) => dadosAlterados = true;
-            TipoVinculoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => dadosAlterados = true;
-            TipoMoradiaCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => dadosAlterados = true;
-            TipoRendaCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => dadosAlterados = true;
-            TipoTurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => dadosAlterados = true;
-            TipoAnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => dadosAlterados = true;
-            SituacaoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => dadosAlterados = true;
-            TipoTurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => dadosAlterados = true;
-            TipoTurnoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => dadosAlterados = true;
-            BeneficiarioCheck.Click += (object sender, RoutedEventArgs e) => dadosAlterados = true;
-        }
-
-        private void TipoTurnoEscolarCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (sender != null && sender is ComboBox cb)
+            NascimentoData.SelectedDateChanged += (object? sender, SelectionChangedEventArgs e) =>
             {
-                if (cb.SelectedIndex == 0)
+                if (NascimentoData.SelectedDate.HasValue)
                 {
-                    TipoTurnoProjetoCombo.SelectedIndex = 1;
+                    DateTime nascimento = NascimentoData.SelectedDate.Value;
+                    IdadeLabel.Content = string.Concat(Helper.Util.ObterIdade(nascimento), " anos");
+                    IdadeLabel.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    TipoTurnoProjetoCombo.SelectedIndex = 0;
+                    IdadeLabel.Visibility = Visibility.Hidden;
                 }
-            }
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            //Carrega o nome do aluno
-            NomeText.Text = Aluno.NomeCompleto;
-            NomeText.Focus();
-            NomeText.CaretIndex = NomeText.Text != null ? NomeText.Text.Length : 0;
-
-            //Popula a lista de oficinas
-            //var oficinas = SqlAccess.GetDados<Oficina>();
-            //List<CheckBox> checkBoxes = new();
-
-            //foreach (var o in oficinas)
-            //{
-            //    CheckBox checkBox = new();
-            //    checkBox.Content = o;
-            //    checkBox.Click += (object sender, RoutedEventArgs e) => dadosAlterados = true;
-            //    checkBoxes.Add(checkBox);
-            //}
-            //TipoOficinasList.ItemsSource = checkBoxes;
-            Helper.Controles.PopularOficinasList(TipoOficinasList, (object sender, RoutedEventArgs e) => dadosAlterados = true);
-        }
-
-        private void NomeText_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            dadosAlterados = true;
-        }
-
-        private void NascimentoData_SelectedDateChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if (sender != null)
+            };
+            SituacaoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) =>
             {
-                DatePicker date = ((DatePicker)sender);
-
-                if (date.SelectedDate != null && date.SelectedDate.HasValue)
-                {
-                    DateTime nascimento = date.SelectedDate.Value;
-                    IdadeLabel.Content = string.Concat(Helper.Util.ObterIdade(nascimento), " anos");
-
-                    IdadeLabel.Visibility = Visibility.Visible;
-                }
-            }
-            else
-            {
-                IdadeLabel.Visibility = Visibility.Hidden;
-            }
-        }
-
-        private void SituacaoProjetoCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBox? combo = sender as ComboBox;
-
-            if (combo != null)
-            {
-                switch (combo.SelectedIndex)
+                switch (SituacaoProjetoCombo.SelectedIndex)
                 {
                     case 0:
                         SituacaoExpLabel.Content = "O aluno está inscrito e solicita aprovação.";
@@ -164,35 +80,81 @@ namespace Promart.Pages
                         SituacaoExpLabel.Content = "O índice da seleção está fora dos limites.";
                         break;
                 }
-            }
+            };
+            TipoTurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => { TipoTurnoProjetoCombo.SelectedIndex = TipoTurnoEscolarCombo.SelectedIndex == 0 ? 1 : 0; };
+            NomeText.TextChanged += (object sender, TextChangedEventArgs e) => { if (Tab != null) Tab.Header = NomeText.Text; };
+            ComposicaoDataGrid.ItemsSource = new List<AlunoVinculo>();
+
+            //TODO: Desabilitado pois a tecla TAB não funciona corretamente
+            //CPFText.PreviewKeyDown += (sender, e) => { if (!Helper.Util.VerificarSomenteNumero(e.Key)) e.Handled = true; };
+            //CPFText.PreviewTextInput += (sender, e) => Helper.Util.FormatarCPF(CPFText);
+
+
+            //Eventos para confirmar alterações de dados ao sair da tela
+            NomeText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            RGText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            CPFText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            CertidaoText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            Telefone1Text.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            Telefone2Text.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            NomeEscolaText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            RuaText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            BairroText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            NumeroText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            ComplementoText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            NomeResponsavelText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            ObservacoesText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            NascimentoData.SelectedDateChanged += (object? sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            TipoVinculoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            TipoMoradiaCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            TipoRendaCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            TipoTurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            TipoAnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            SituacaoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            TipoTurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            TipoTurnoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            BeneficiarioCheck.Click += (object sender, RoutedEventArgs e) => DefinirAlteracaoDados();
+
+            //Vai para o evento Page_Loaded.
         }
+
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Carrega o nome do aluno e coloca o cursor para o fim do nome.
+            NomeText.Text = Aluno.NomeCompleto;
+            NomeText.Focus();
+            NomeText.CaretIndex = NomeText.Text != null ? NomeText.Text.Length : 0;
+
+            //Tenta popular a lista de oficinas       
+            await Helper.Controles.PopularOficinasListComCheckBoxAsync(TipoOficinasList, (object sender, RoutedEventArgs e) => DefinirAlteracaoDados());
+        }
+
+        private void DefinirAlteracaoDados()
+        {
+            dadosAlterados = true;
+            ConfirmarButton.IsEnabled = true;
+        }        
 
         private void CancelarButton_Click(object sender, RoutedEventArgs e)
         {
-            if (AlunoTab != null && AlunoTab.Parent is TabControl)
+            if (dadosAlterados)
             {
-                if (dadosAlterados)
-                {
-                    MainWindow?.TrocarVisibilidadeTelaPreta();
-
-                    MessageBoxResult result = MessageBox.Show("Alguns dados foram alterados, deseja sair sem confirma-los?", "Aviso", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    MainWindow?.TrocarVisibilidadeTelaPreta();
-
-                    if (result == MessageBoxResult.No)
-                    {
-                        return;
-                    }
-                }
-
-                TabControl? tabControl = AlunoTab.Parent as TabControl;
-                tabControl?.Items.Remove(AlunoTab);
+                if (!Helper.Controles.DadosAlteradosAviso())
+                    return;
             }
+
+            Helper.Controles.RemoverAba(Tab);
         }
 
-
-        public void ConfirmarPagina()
+        public async void ConfirmarPaginaAsync()
         {
             Aluno.NomeCompleto = NomeText.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(Aluno.NomeCompleto))
+            {
+                MessageBox.Show("Digite o nome o aluno antes de confirmar os dados.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+
             Aluno.DataNascimento = NascimentoData.SelectedDate;
             Aluno.RG = RGText.Text;
             Aluno.CPF = CPFText.Text;
@@ -213,30 +175,41 @@ namespace Promart.Pages
             Aluno.EnderecoComplemento = ComplementoText.Text;
             Aluno.EnderecoCidade = "Ipiaú";
             Aluno.EnderecoEstado = "Bahia";
-            Aluno.EnderecoCEP = 45570000;
+            Aluno.EnderecoCEP = "45570-000";
             Aluno.SituacaoProjeto = SituacaoProjetoCombo.SelectedIndex;
             Aluno.TurnoProjeto = TipoTurnoEscolarCombo.Text;
             Aluno.Observacoes = ObservacoesText.Text;
 
             if (Aluno.Id == 0)
             {
-                SqlAccess.Inserir(Aluno);
-                InserirAlunoOficina();
+                long result = await SqlAccess.InserirAsync(Aluno);
+
+                if (result != -1)
+                {
+                    await InserirAlunoOficinaAsync();
+                }
             }
             else
             {
-                SqlAccess.Atualizar(Aluno);
-                InserirAlunoOficina(true);
+                bool result = await SqlAccess.AtualizarAsync(Aluno);
+
+                if (result)
+                {
+                    await InserirAlunoOficinaAsync(true);
+                }                    
             }
 
             ConfirmarButton.IsEnabled = false;
         }
 
-        private void InserirAlunoOficina(bool atualizar = false)
+        private async Task InserirAlunoOficinaAsync(bool atualizar = false)
         {
             if (atualizar)
             {
-                SqlAccess.TAlunoOficinas.Deletar(Aluno);
+                var result = await SqlAccess.TAlunoOficinas.DeletarAsync(Aluno);
+
+                if (result == null)
+                    return;
             }
 
             foreach (var checkBox in TipoOficinasList.ItemsSource)
@@ -255,7 +228,7 @@ namespace Promart.Pages
                         alunoOficina.IdAluno = Aluno.Id;
                         alunoOficina.IdOficina = oficina.Id;
 
-                        SqlAccess.Inserir(alunoOficina);
+                        await SqlAccess.InserirAsync(alunoOficina);
                     }
                 }
             }

@@ -31,7 +31,7 @@ namespace Promart.Models
         public string? EnderecoComplemento { get; set; }
         public string? EnderecoCidade { get; set; }
         public string? EnderecoEstado { get; set; }
-        public int EnderecoCEP { get; set; }
+        public string? EnderecoCEP { get; set; }
 
         //---------- Outros ------------//Id
         public string? Observacoes { get; set; }

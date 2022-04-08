@@ -10,97 +10,211 @@ using System.Configuration;
 using Dapper;
 using Dapper.Contrib;
 using Dapper.Contrib.Extensions;
+using System.Windows;
 
 namespace Promart.Data
 {
     public class SqlAccess
     {
+        static void MostrarErro(string mensagem, Exception ex)
+        {
+            string texto = string.Concat(mensagem, Environment.NewLine, Environment.NewLine, $"Erro: {ex.Message}");
+            MessageBox.Show(texto, "Erro no Banco de Dados", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
         static string GetConnectionString(string id = "Default")
         {
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;
-        }
+        }        
 
-        static T Conectar<T>(Func<SqlConnection, T> action)
+        public static List<T>? GetDados<T>() where T : class
         {
-            using SqlConnection connection = new SqlConnection(GetConnectionString());
-            return action.Invoke(connection);
-        }
+            try
+            {
+                using SqlConnection conn = new SqlConnection(GetConnectionString());
+                conn.Open();
+                return conn.GetAll<T>().ToList();
+            }
+            catch(Exception ex)
+            {
+                MostrarErro("Ocorreu um erro ao receber as informações do banco de dados", ex);
+            }
 
-        public static List<T> GetDados<T>() where T : class
+            return null;
+        }
+        
+        public static T? GetDado<T>(int id) where T : class
         {
-            using SqlConnection conn = new SqlConnection(GetConnectionString());
-            conn.Open();
+            try
+            {
+                using SqlConnection conn = new SqlConnection(GetConnectionString());
+                conn.Open();
 
-            return conn.GetAll<T>().ToList();
-        }
+                return conn.Get<T>(id);
+            }
+            catch (Exception ex)
+            {
+                MostrarErro("Ocorreu um erro ao receber as informações do banco de dados", ex);
+            }
 
-        public static T GetDado<T>(int id) where T : class
-        {
-            using SqlConnection conn = new SqlConnection(GetConnectionString());
-            conn.Open();
+            return null;
+        }        
 
-            return conn.Get<T>(id);
-        }
-
-        /// <summary>
-        /// Insere e retorna o ID ou a quantidade de linhas afetadas.
-        /// </summary>
         public static long Inserir<T>(T dado) where T : class
         {
-            using SqlConnection conn = new SqlConnection(GetConnectionString());
-            conn.Open();
+            try
+            {
+                using SqlConnection conn = new SqlConnection(GetConnectionString());
+                conn.Open();
+                return conn.Insert(dado);
+            }
+            catch (Exception ex)
+            {
+                MostrarErro("Ocorreu um erro ao inserir as informações no banco de dados", ex);
+            }
 
-            return conn.Insert(dado);
+            return -1;            
         }
-
-        /// <summary>
-        /// Atualiza e retorna se houve sucesso.
-        /// </summary>
+        
         public static bool Atualizar<T>(T dado) where T : class
         {
-            using SqlConnection conn = new SqlConnection(GetConnectionString());
-            conn.Open();            
-            
-            return conn.Update(dado);
-        }
+            try
+            {
+                using SqlConnection conn = new SqlConnection(GetConnectionString());
+                conn.Open();
 
+                return conn.Update(dado);
+            }
+            catch (Exception ex)
+            {
+                MostrarErro("Ocorreu um erro ao atualizar as informações no banco de dados", ex);
+            }
+
+            return false;
+        }
+        
         public static bool Deletar<T>(T dado) where T : class
         {
-            using SqlConnection conn = new SqlConnection(GetConnectionString());
-            conn.Open();
-            
-            return conn.Delete(dado);
-        }
+            try
+            {
+                using SqlConnection conn = new SqlConnection(GetConnectionString());
+                conn.Open();
 
+                return conn.Delete(dado);
+            }
+            catch (Exception ex)
+            {
+                MostrarErro("Ocorreu um erro ao deletar as informações no banco de dados", ex);
+            }
+
+            return false;
+        }
+        
         public static bool DeletarTudo<T>() where T : class
         {
-            using SqlConnection conn = new SqlConnection(GetConnectionString());
-            conn.Open();
+            try
+            {
+                using SqlConnection conn = new SqlConnection(GetConnectionString());
+                conn.Open();
 
-            return conn.DeleteAll<T>();
+                return conn.DeleteAll<T>();
+            }
+            catch (Exception ex)
+            {
+                MostrarErro("Ocorreu um erro ao deletar as informações no banco de dados", ex);
+            }
+
+            return false;
+        }
+        
+        public static async Task<IEnumerable<T>?> GetDadosAsync<T>() where T : class
+        {
+            try
+            {
+                using SqlConnection conn = new SqlConnection(GetConnectionString());
+                await conn.OpenAsync();
+                return await conn.GetAllAsync<T>();
+            }
+            catch(Exception ex)
+            {
+                MostrarErro("Ocorreu um erro ao receber informações do Banco de Dados", ex);
+            }
+
+            return null;
+        }
+        
+        public static async Task<long> InserirAsync<T>(T dado) where T : class
+        {
+            try
+            {
+                using SqlConnection conn = new SqlConnection(GetConnectionString());
+                await conn.OpenAsync();
+                return await conn.InsertAsync(dado);
+            }
+            catch (Exception ex)
+            {
+                MostrarErro("Ocorreu um erro ao inserir as informações no banco de dados", ex);
+            }
+
+            return -1;
+        }
+
+        public static async Task<bool> AtualizarAsync<T>(T dado) where T: class
+        {
+            try
+            {
+                using SqlConnection conn = new SqlConnection(GetConnectionString());
+                await conn.OpenAsync();
+
+                return await conn.UpdateAsync(dado);
+            }    
+            catch (Exception ex)
+            {
+                MostrarErro("Ocorreu um erro ao atualizar as informações no banco de dados", ex);
+            }
+
+            return false;
         }
 
         public static class TAlunoOficinas
         {
-            public static void Deletar(Aluno aluno)
+            public static async Task<IEnumerable<dynamic>?> DeletarAsync(Aluno aluno)
             {
-                using SqlConnection conn = new SqlConnection(GetConnectionString());
-                conn.Open();                
+                try
+                {
+                    using SqlConnection conn = new SqlConnection(GetConnectionString());
+                    await conn.OpenAsync();
 
-                conn.Query(@"DELETE FROM AlunoOficinas 
+                    return await conn.QueryAsync(@"DELETE FROM AlunoOficinas 
                             WHERE IdAluno = @Id", aluno);
+                }
+                catch(Exception ex)
+                {
+                    MostrarErro("Ocorreu um erro ao deletar as informações no banco de dados", ex);
+                }
+
+                return null;
             }            
         }
 
         public static class TVoluntarioOficinas
         {
-            public static void Deletar(Voluntario voluntario)
+            public static async Task<IEnumerable<dynamic>?> DeletarAsync(Voluntario voluntario)
             {
-                using SqlConnection conn = new SqlConnection(GetConnectionString());
-                conn.Open();
+                try
+                {
+                    using SqlConnection conn = new SqlConnection(GetConnectionString());
+                    await conn.OpenAsync();
 
-                conn.Query(@"DELETE FROM VoluntarioOficinas 
+                    return await conn.QueryAsync(@"DELETE FROM VoluntarioOficinas 
                             WHERE IdVoluntario = @Id", voluntario);
+                }
+                catch (Exception ex)
+                {
+                    MostrarErro("Ocorreu um erro ao deletar as informações no banco de dados", ex);
+                }
+
+                return null;
             }
         }
         

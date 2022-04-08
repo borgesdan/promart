@@ -87,7 +87,7 @@ namespace Promart.Models
         public string? EnderecoComplemento { get; set; }
         public string? EnderecoCidade { get; set; }
         public string? EnderecoEstado { get; set; }
-        public int EnderecoCEP { get; set; }
+        public string? EnderecoCEP { get; set; }
 
         //------ Dados Projeto ------//        
         /// <summary>
@@ -97,6 +97,7 @@ namespace Promart.Models
         /// [3] Matriculado
         /// [4] Não Aprovado
         /// [5] Desistente
+        /// [6] Não Especificado
         /// </summary>
         public int SituacaoProjeto { get; set; }
         public string? TurnoProjeto { get; set; }

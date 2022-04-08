@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Promart"
         mc:Ignorable="d"
-        Title="MainWindow" MinWidth="1280" MinHeight="720" WindowState="Maximized" FontFamily="Cascadia Code Light" 
-        Loaded="Window_Loaded">
+        Title="MainWindow" MinWidth="1280" MinHeight="720" WindowState="Maximized" FontFamily="Cascadia Code Light" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"  />
@@ -17,9 +16,9 @@
         <Menu Grid.Row="0" VerticalContentAlignment="Center">
             <MenuItem Header="Arquivo" />
             <MenuItem Header="Cadastro">
-                <MenuItem x:Name="CadastrarAlunoMenu" Header="Cadastrar Aluno" />
-                <MenuItem x:Name="CadastrarVoluntarioMenu" Header="Cadastrar Voluntário" />
-                <MenuItem x:Name="CadastrarOficinaMenu" Header="Cadastrar Oficina" />
+                <MenuItem x:Name="CadastrarAlunoMenu" Header="Alunos" />
+                <MenuItem x:Name="CadastrarVoluntarioMenu" Header="Voluntários" />
+                <MenuItem x:Name="CadastrarOficinaMenu" Header="Oficinas" />
                 <Separator />
                 <MenuItem x:Name="ConsultaAvancadaMenu" Header="Consulta Avançada" />
             </MenuItem>            
@@ -47,28 +46,28 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            <Separator />
-            <Button x:Name="CopiarAlunoBtn" Width="35" VerticalAlignment="Stretch" Content="cA"
-                    Margin="10,5" BorderBrush="Gray" BorderThickness="1" 
+            <Button x:Name="OficinasBtn" Width="35" VerticalAlignment="Stretch" Content="O"
+                    Margin="5,5" BorderBrush="Gray" BorderThickness="1" 
                     FontFamily="Cascadia Code SemiBold" FontSize="18"
-                    ToolTip="Cadastrar Aluno" >
+                    ToolTip="Cadastrar Aluno">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" Opacity="0.5">
                         <GradientStop Color="White"/>
-                        <GradientStop Color="#FF545454" Offset="1"/>
+                        <GradientStop Color="#FF00BCFB" Offset="1"/>
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            <Separator />
-            <Label Content="Pesquisa Rápida" VerticalAlignment="Center" />
+            <Separator Margin="20,0" />
+            <Label Content="Pesquisa Rápida" VerticalAlignment="Center" Margin="0,0"/>
             <TextBox Width="250" />
             <Button Width="35" VerticalAlignment="Stretch" Content="Lupa" 
+                    Margin="5,5" 
+                    BorderBrush="Gray" BorderThickness="1" />
+            <Button x:Name="AbrirTabelaDadosButton" Width="35" VerticalAlignment="Stretch" Content="Lupa" 
                     Margin="5,5" 
                     BorderBrush="Gray" BorderThickness="1" />
         </ToolBar>
         <TabControl x:Name="TabConteudo" Grid.Row="2">
         </TabControl>
-
-        <Rectangle x:Name="BlackScreen" Grid.RowSpan="3" Fill="Black" Opacity=".5" Visibility="Hidden"></Rectangle>
     </Grid>
 </Window>

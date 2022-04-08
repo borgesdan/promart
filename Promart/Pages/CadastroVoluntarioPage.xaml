@@ -102,7 +102,7 @@
                            HorizontalAlignment="Right" />
                     <TextBox x:Name="CPFText" Grid.Row="3" Grid.Column="1"
                              HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Bottom"
-                             FontSize="15" FontFamily="Cascadia Code Light" Margin="0,0,0,5" />
+                             FontSize="15" FontFamily="Cascadia Code Light" Margin="0,0,0,5" MaxLength="14" />
 
                     <Label Grid.Row="4" Grid.Column="0" Content="Profissão:"
                            FontSize="16"  FontFamily="Cascadia Code" 
@@ -138,7 +138,7 @@
                     <TextBox x:Name="Telefone1Text" Grid.Row="1" Grid.Column="1" 
                              HorizontalAlignment="Stretch"
                              TextAlignment="Left" VerticalAlignment="Center"
-                             FontSize="15"  />
+                             FontSize="15" Margin="0,0,50,0"  />
 
                     <Label Grid.Row="2" Grid.Column="0" Content="Telefone 2:" 
                            FontSize="16"  FontFamily="Cascadia Code" 
@@ -147,7 +147,7 @@
                     <TextBox x:Name="Telefone2Text" Grid.Row="2" Grid.Column="1"
                              HorizontalAlignment="Stretch"
                              TextAlignment="Left" VerticalAlignment="Center"
-                             FontSize="15"  />
+                             FontSize="15" Margin="0,0,50,0"  />
 
                     <Label Grid.Row="3" Grid.Column="0" Content="Email:" 
                            FontSize="16"  FontFamily="Cascadia Code" 
