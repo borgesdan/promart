@@ -156,6 +156,7 @@ namespace Promart.Pages
             }
 
             Aluno.DataNascimento = NascimentoData.SelectedDate;
+            Aluno.Sexo = TipoSexoCombo.SelectedIndex;
             Aluno.RG = RGText.Text;
             Aluno.CPF = CPFText.Text;
             Aluno.Certidao = CertidaoText.Text;

@@ -16,6 +16,12 @@ namespace Promart.Models
 
         public string? NomeCompleto { get; set; }
         public DateTime? DataNascimento { get; set; }
+        //TODO: Implementar sexo
+        /// <summary>
+        /// [0] Masculino
+        /// [1] Feminino
+        /// </summary>
+        public int Sexo { get; set; }
         public string? Profissao { get; set; }
         public string? RG { get; set; }
         public string? CPF { get; set; }

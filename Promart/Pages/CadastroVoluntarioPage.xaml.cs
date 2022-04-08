@@ -103,7 +103,14 @@ namespace Promart.Pages
         public async void ConfirmarPagina()
         {
             Voluntario.NomeCompleto = NomeText.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(Voluntario.NomeCompleto))
+            {
+                MessageBox.Show("Digite o nome o voluntário antes de confirmar os dados.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+
             Voluntario.DataNascimento = NascimentoData.SelectedDate;
+            Voluntario.Sexo = TipoSexoCombo.SelectedIndex;
             Voluntario.Profissao = ProfissaoText.Text;
             Voluntario.RG = RGText.Text;
             Voluntario.CPF = CPFText.Text;
@@ -116,7 +123,7 @@ namespace Promart.Pages
             Voluntario.EnderecoComplemento = ComplementoText.Text;
             Voluntario.EnderecoCidade = CidadeText.Text;
             Voluntario.EnderecoEstado = "Bahia";
-            Voluntario.EnderecoCEP = "45570-000";
+            Voluntario.EnderecoCEP = CEPText.Text;
             Voluntario.Observacoes = ObservacoesText.Text;
 
             if (Voluntario.Id == 0)

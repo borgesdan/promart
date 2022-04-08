@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Promart.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="1400" d:DesignWidth="1280"
+      d:DesignHeight="1500" d:DesignWidth="1280"
       Title="CadastrarAlunoPage" FontFamily="Cascadia Code" Loaded="Page_Loaded">
 
     <Grid Background="White">
@@ -57,12 +57,14 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
             </Grid.RowDefinitions>
 
             <Image Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" IsEnabled="True" Source="/assets/images/avatars/png-128/add-128x128-1410058.png" >
             </Image>
 
-            <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4"
+            <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="5"
                       Margin="10,0,10,0" Padding="5" Header="Dados Pessoais"
                       FontSize="20" FontFamily="Cascadia Code ExtraLight" >
                 <Grid>
@@ -71,6 +73,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
@@ -98,31 +101,41 @@
                            FontSize="14" FontFamily="Cascadia Code" Visibility="Hidden"
                            HorizontalAlignment="Left" Margin="230,0,0,0" />
 
+                    <Label Grid.Row="2" Grid.Column="0" Content="Sexo:"
+                           FontSize="16" FontFamily="Cascadia Code" 
+                           HorizontalAlignment="Right" />
+                    <ComboBox x:Name="TipoSexoCombo" Grid.Row="2" Grid.Column="1"
+                              FontSize="16" FontFamily="Cascadia Code"
+                              Width="300" HorizontalAlignment="Left" SelectedIndex="0">
+                        <ComboBoxItem Content="0 - Masculino" />
+                        <ComboBoxItem Content="1 - Feminino" />
+                    </ComboBox>
 
-                    <Label Grid.Row="2" Grid.Column="0" Content="RG:"
+
+                    <Label Grid.Row="3" Grid.Column="0" Content="RG:"
                            FontSize="16"  FontFamily="Cascadia Code" 
                            HorizontalAlignment="Right" />
-                    <TextBox x:Name="RGText" Grid.Row="2" Grid.Column="1"
+                    <TextBox x:Name="RGText" Grid.Row="3" Grid.Column="1"
                              HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Bottom"
                              FontSize="15" Margin="0,0,0,5" MaxLength="20"/>
 
-                    <Label Grid.Row="3" Grid.Column="0" Content="CPF:"
+                    <Label Grid.Row="4" Grid.Column="0" Content="CPF:"
                            FontSize="16"  FontFamily="Cascadia Code" 
                            HorizontalAlignment="Right" />
-                    <TextBox x:Name="CPFText" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
+                    <TextBox x:Name="CPFText" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"
                              HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Center"                             
                              FontSize="15" FontFamily="Cascadia Code Light" MaxLength="14" />
 
-                    <Label Grid.Row="4" Grid.Column="0" Content="Certidão de Nascimento:"
+                    <Label Grid.Row="5" Grid.Column="0" Content="Certidão de Nascimento:"
                            FontSize="16"  FontFamily="Cascadia Code" 
                            HorizontalAlignment="Right" />
-                    <TextBox x:Name="CertidaoText" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"
+                    <TextBox x:Name="CertidaoText" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3"
                              HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Center"
                              FontSize="15" MaxLength="50" />
                 </Grid>
             </GroupBox>
 
-            <GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="9"
+            <GroupBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="9"
                        Margin="10,0,10,0" Padding="5" Header="Família"
                       FontSize="20" FontFamily="Cascadia Code ExtraLight">
 
@@ -266,7 +279,7 @@
 
             </GroupBox>            
 
-            <GroupBox Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="3"
+            <GroupBox Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="3"
                        Margin="10,0,220,0" Padding="5" Header="Dados Escolares"
                       FontSize="20" FontFamily="Cascadia Code ExtraLight" >
 
@@ -327,7 +340,7 @@
                 </Grid>
             </GroupBox>
 
-            <GroupBox Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="3"
+            <GroupBox Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="3"
                        Margin="200,0,10,0" Padding="5" Header="Endereço"
                       FontSize="20" FontFamily="Cascadia Code ExtraLight" >
 
@@ -378,7 +391,7 @@
                 </Grid>
             </GroupBox>
 
-            <GroupBox Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="10"
+            <GroupBox Grid.Row="17" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="10"
                        Margin="10,0,10,0" Padding="5" Header="Dados do Projeto"
                       FontSize="20" FontFamily="Cascadia Code ExtraLight" >
 
