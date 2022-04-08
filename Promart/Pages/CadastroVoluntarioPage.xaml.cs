@@ -51,6 +51,7 @@ namespace Promart.Pages
                 }
             };
             CancelarButton.Click += CancelarButton_Click;
+            ConfirmarButton.Click += (s, e) => ConfirmarPagina();
 
             //TODO: Desabilitado pois a tecla TAB não funciona corretamente
             //CPFText.PreviewKeyDown += (sender, e) => { if (!Helper.Util.VerificarSomenteNumero(e.Key)) e.Handled = true; };
@@ -107,6 +108,7 @@ namespace Promart.Pages
             if (string.IsNullOrWhiteSpace(Voluntario.NomeCompleto))
             {
                 MessageBox.Show("Digite o nome o voluntário antes de confirmar os dados.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
             }
 
             Voluntario.DataNascimento = NascimentoData.SelectedDate;
@@ -130,7 +132,7 @@ namespace Promart.Pages
             {
                 var result = await SqlAccess.InserirAsync(Voluntario);
 
-                if (result == -1)
+                if (result != -1)
                 {
                     await InserirVoluntarioOficinaAsync();
                 }

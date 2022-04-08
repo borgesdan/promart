@@ -153,6 +153,7 @@ namespace Promart.Pages
             if (string.IsNullOrWhiteSpace(Aluno.NomeCompleto))
             {
                 MessageBox.Show("Digite o nome o aluno antes de confirmar os dados.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
             }
 
             Aluno.DataNascimento = NascimentoData.SelectedDate;

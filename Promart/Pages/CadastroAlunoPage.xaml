@@ -262,16 +262,16 @@
                     <GroupBox Header="Composição Familiar" Grid.Row="7" Grid.Column="0"
                               Grid.RowSpan="6" Grid.ColumnSpan="4" Margin="10,0,10,0" Padding="5">
                         <Grid>
-                            <DataGrid x:Name="ComposicaoDataGrid" FontSize="16" CanUserAddRows="True" CanUserDeleteRows="True" AutoGenerateColumns="False">
+                            <DataGrid x:Name="ComposicaoDataGrid" FontSize="16" CanUserAddRows="True" CanUserDeleteRows="True" AutoGenerateColumns="False" CanUserReorderColumns="True"
+                                      Margin="10,5">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Binding="{Binding NomeFamiliar}" Header="Nome" Width="400" />
-                                    <DataGridTextColumn Binding="{Binding Idade}" Header="Idade" Width="100"/>                                    
+                                    <DataGridTextColumn Binding="{Binding NomeFamiliar}" Header="Nome" Width="350" />
+                                    <DataGridTextColumn Binding="{Binding Idade}" Header="Idade" Width="70"/>                                    
                                     <DataGridTextColumn Binding="{Binding Parentesco}" Header="Parentesco" Width="*" />
                                     <DataGridTextColumn Binding="{Binding Ocupacao}" Header="Ocupação" Width="*"/>
                                     <DataGridTextColumn Binding="{Binding Escolaridade}" Header="Escolaridade" Width="*"/>
-                                    <DataGridTextColumn Binding="{Binding Renda}" Header="Renda" Width="*"/>
+                                    <DataGridTextColumn Binding="{Binding Renda}" Header="Renda" Width="120" />
                                 </DataGrid.Columns>
-                                
                             </DataGrid>
                         </Grid>
                     </GroupBox>
@@ -391,7 +391,7 @@
                 </Grid>
             </GroupBox>
 
-            <GroupBox Grid.Row="17" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="10"
+            <GroupBox Grid.Row="17" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="8"
                        Margin="10,0,10,0" Padding="5" Header="Dados do Projeto"
                       FontSize="20" FontFamily="Cascadia Code ExtraLight" >
 
@@ -473,19 +473,20 @@
                                Margin="10,10,10,0" FontSize="16"  
                              AcceptsReturn="True" TextWrapping="WrapWithOverflow" MaxLength="1000"/>
 
-                    <Button x:Name="ConfirmarButton" Grid.Row="13" Grid.Column="3"  Grid.RowSpan="2"
-                             Content="Confirmar"
-                             HorizontalAlignment="Right" Width="200" Margin="0,0,10,5"
-                             FontSize="15"  FontFamily="Cascadia Code" 
-                             />
-
-                    <Button x:Name="CancelarButton"   Grid.Row="13" Grid.Column="3"  Grid.RowSpan="2"
-                             Content="Descartar" HorizontalAlignment="Left"
-                             Width="150" Margin="40,10,0,5"
-                             FontSize="15"  FontFamily="Cascadia Code" 
-                             />
+                    
                 </Grid>                
             </GroupBox>
+
+            <Button x:Name="ConfirmarButton" Grid.Row="25" Grid.Column="2" Grid.RowSpan="2"
+                             Content="Confirmar"
+                             HorizontalAlignment="Right" Width="200" Margin="0,20,20,10"
+                             FontSize="15"  FontFamily="Cascadia Code"                              />
+
+            <Button x:Name="CancelarButton"   Grid.Row="26" Grid.Column="2"
+                             Content="Descartar" HorizontalAlignment="Right"
+                             Width="150" Margin="0,0,240,10"
+                             FontSize="15"  FontFamily="Cascadia Code" 
+                             />
         </Grid>
     </Grid>
 </Page>

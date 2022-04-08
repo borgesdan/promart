@@ -26,6 +26,9 @@
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
                 <RowDefinition />
                 <RowDefinition Height="30" />
             </Grid.RowDefinitions>
@@ -41,9 +44,19 @@
             <ComboBox x:Name="TipoTabelaCombo" Grid.Row="0" Grid.Column="1" SelectedIndex="0" FontSize="16">
                 <ComboBoxItem Content="0 - Alunos" />
                 <ComboBoxItem Content="1 - Voluntários" />
-            </ComboBox>
-            <Button x:Name="SelecionarButton" Grid.Row="0" Grid.Column="2" Content="Selecionar" FontSize="16" Margin="10,0,50,0" />
-            <DataGrid x:Name="DadosDataGrid" Grid.Row="1" Grid.ColumnSpan="4" Margin="10" IsReadOnly="True"></DataGrid>
+            </ComboBox>            
+            <Button x:Name="SelecionarButton" Grid.Row="0" Grid.Column="2" 
+                    Content="Selecionar" FontSize="16" Margin="10,0,50,0" />
+
+            <Label Grid.Row="1" Grid.Column="0" Content="Filtrar por:"
+               FontSize="16" FontWeight="Bold" HorizontalAlignment="Right" />
+            <ListBox Grid.Row="1" Grid.Column="1" Grid.RowSpan="3"
+                       Margin="0, 5, 0, 0"/>
+            <Button x:Name="AddFiltroButton" Grid.Row="3" Grid.Column="2" 
+                    Content="+" FontSize="16" HorizontalAlignment="Left" Width="50" />
+
+            <DataGrid x:Name="DadosDataGrid" Grid.Row="4" Grid.ColumnSpan="4" Margin="10" 
+                      IsReadOnly="True" CanUserReorderColumns="True" CanUserResizeColumns="True" CanUserSortColumns="True"></DataGrid>
         </Grid>
     </Grid>
 </Page>
