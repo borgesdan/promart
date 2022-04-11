@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
+using Promart.Codes;
+using System.Reflection;
 
 namespace Promart.Models
 {
@@ -16,12 +18,43 @@ namespace Promart.Models
 
         public string? NomeCompleto { get; set; }    
         public DateTime? DataNascimento { get; set; }
-        //TODO: Implementar sexo
+        
+        [NotMapped] 
+        [Dapper.Contrib.Extensions.Write(false)]
+        public DateOnly? DataNascimentoValue 
+        { 
+            get
+            {
+                if (DataNascimento.HasValue)
+                {
+                    return DateOnly.FromDateTime(DataNascimento.Value);
+                }
+
+                return null;
+            }
+        }
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public int IdadeValue
+        {
+            get
+            {
+                if (DataNascimento.HasValue)
+                {
+                    return Helper.Util.ObterIdade(DataNascimento.Value);
+                }
+
+                return 0;
+            }
+        }
         /// <summary>
         /// [0] Masculino
         /// [1] Feminino
         /// </summary>
         public int Sexo { get; set; }
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public string? SexoValue { get => ComboBoxTipos.TipoSexoNaoNumerado[Sexo]; }
         public string? RG { get; set; }
         public string? CPF { get; set; }
         public string? Certidao { get; set; }
@@ -40,10 +73,12 @@ namespace Promart.Models
         /// [7] Outro
         /// </summary>
         public int VinculoFamiliar { get; set; }
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public string? VinculoFamiliarValue { get => ComboBoxTipos.TipoVinculoFamiliarNaoNumerado[VinculoFamiliar]; }
         public string? Contato1 { get; set; }
         public string? Contato2 { get; set; }        
-        public bool IsBeneficiario { get; set; }
-        //Própria, Alugada, Cedida, Outra
+        public bool IsBeneficiario { get; set; }        
         /// <summary>
         /// [0] Própria
         /// [1] Alugada
@@ -53,6 +88,9 @@ namespace Promart.Models
         /// [5] Outro tipo
         /// </summary>
         public int TipoCasa { get; set; }
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public string? TipoCasaValue { get => ComboBoxTipos.TipoMoradiaNaoNumerado[TipoCasa]; }
         /// <summary>
         /// [0] Menor que 1/2 Salário Mínimo
         /// [1] 1/2 SM
@@ -62,6 +100,9 @@ namespace Promart.Models
         /// [5] Maior que 2 SM
         /// </summary>      
         public int Renda { get; set; }
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public string? RendaValue { get => ComboBoxTipos.TipoRendaNaoNumerado[Renda]; }
 
         //------ Dados Escolares ------//
 
@@ -83,6 +124,9 @@ namespace Promart.Models
         /// [13] 4º Ano Ensino Médio
         /// </summary>      
         public int AnoEscolar { get; set; }
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public string? AnoEscolarValue { get => ComboBoxTipos.TipoAnoEscolarNaoNumerado[AnoEscolar]; }
         public string? TurnoEscolar { get; set; }        
         
         //---------- Endereço ----------//
@@ -106,15 +150,17 @@ namespace Promart.Models
         /// [6] Não Especificado
         /// </summary>
         public int SituacaoProjeto { get; set; }
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public string? SituacaoProjetoValue { get => ComboBoxTipos.TipoAlunoSituacaoNaoNumerado[SituacaoProjeto]; }
         public string? TurnoProjeto { get; set; }
-        //TODO: Implementar controle de faltas
-        //public int NumeroFaltas { get; set; }                       
+        //TODO: Implementar controle de faltas                   
         public string? Observacoes { get; set; }
         public string? FotoUrl { get; set; }
 
         public override string ToString()
         {
             return NomeCompleto ?? string.Empty;
-        }
+        }  
     }    
 }

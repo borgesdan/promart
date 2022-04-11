@@ -48,15 +48,20 @@
             <Button x:Name="SelecionarButton" Grid.Row="0" Grid.Column="2" 
                     Content="Selecionar" FontSize="16" Margin="10,0,50,0" />
 
-            <Label Grid.Row="1" Grid.Column="0" Content="Filtrar por:"
+            <Label Grid.Row="2" Grid.Column="0" Content="Filtrar por:"
                FontSize="16" FontWeight="Bold" HorizontalAlignment="Right" />
-            <ListBox Grid.Row="1" Grid.Column="1" Grid.RowSpan="3"
-                       Margin="0, 5, 0, 0"/>
-            <Button x:Name="AddFiltroButton" Grid.Row="3" Grid.Column="2" 
-                    Content="+" FontSize="16" HorizontalAlignment="Left" Width="50" />
+            <ComboBox x:Name="FiltroSelecaoCombo" Grid.Row="2" Grid.Column="1"></ComboBox>
+            <TextBox x:Name="TextoValor" Grid.Row="2" Grid.Column="2" Margin="10,0,10,0" Visibility="Collapsed"/>
+            <DatePicker x:Name="DataValor" Grid.Row="2" Grid.Column="2" Margin="10,0,10,0" Visibility="Collapsed"/>
+            <ComboBox x:Name="ComboValor" Grid.Row="2" Grid.Column="2" Margin="10,0,10,0" Visibility="Collapsed"/>
+            
+            <Button x:Name="FiltrarButton" Grid.Row="2" Grid.Column="3" 
+                    Content="Filtrar" FontSize="16" Margin="10,0,50,0" />
 
             <DataGrid x:Name="DadosDataGrid" Grid.Row="4" Grid.ColumnSpan="4" Margin="10" 
-                      IsReadOnly="True" CanUserReorderColumns="True" CanUserResizeColumns="True" CanUserSortColumns="True"></DataGrid>
+                      IsReadOnly="True" CanUserReorderColumns="True"
+                      CanUserResizeColumns="True" CanUserSortColumns="True"
+                      AutoGenerateColumns="False"></DataGrid>
         </Grid>
     </Grid>
 </Page>

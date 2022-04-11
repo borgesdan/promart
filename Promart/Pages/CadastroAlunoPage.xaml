@@ -483,8 +483,14 @@
                              FontSize="15"  FontFamily="Cascadia Code"                              />
 
             <Button x:Name="CancelarButton"   Grid.Row="26" Grid.Column="2"
-                             Content="Descartar" HorizontalAlignment="Right"
+                             Content="Fechar" HorizontalAlignment="Right"
                              Width="150" Margin="0,0,240,10"
+                             FontSize="15"  FontFamily="Cascadia Code" 
+                             />
+
+            <Button x:Name="CopiarButton"   Grid.Row="26" Grid.Column="1"
+                             Content="Copiar e Abrir" HorizontalAlignment="Right"
+                             Width="150" Margin="0,0,40,10"
                              FontSize="15"  FontFamily="Cascadia Code" 
                              />
         </Grid>

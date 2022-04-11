@@ -8,7 +8,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using Dapper;
-using Dapper.Contrib;
 using Dapper.Contrib.Extensions;
 using System.Windows;
 
@@ -148,7 +147,7 @@ namespace Promart.Data
             try
             {
                 using SqlConnection conn = new SqlConnection(GetConnectionString());
-                await conn.OpenAsync();
+                await conn.OpenAsync();                
                 return await conn.InsertAsync(dado);
             }
             catch (Exception ex)

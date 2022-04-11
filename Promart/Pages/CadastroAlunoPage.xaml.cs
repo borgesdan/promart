@@ -189,6 +189,8 @@ namespace Promart.Pages
                 if (result != -1)
                 {
                     await InserirAlunoOficinaAsync();
+                    ConfirmarButton.IsEnabled = false;
+                    MessageBox.Show("O aluno foi cadastrado com sucesso", "Aluno cadastrado", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             else
@@ -198,10 +200,10 @@ namespace Promart.Pages
                 if (result)
                 {
                     await InserirAlunoOficinaAsync(true);
+                    ConfirmarButton.IsEnabled = false;
+                    MessageBox.Show("O cadastro do aluno foi atualizado com sucesso", "Cadastro Atualizado", MessageBoxButton.OK, MessageBoxImage.Information);
                 }                    
-            }
-
-            ConfirmarButton.IsEnabled = false;
+            }            
         }
 
         private async Task InserirAlunoOficinaAsync(bool atualizar = false)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Promart.Models
@@ -12,8 +13,7 @@ namespace Promart.Models
     {
         public int Id { get; set; }
 
-        //------ Dados Pessoais ------//
-
+        //------ Dados Pessoais ------//        
         public string? NomeCompleto { get; set; }
         public DateTime? DataNascimento { get; set; }
         //TODO: Implementar sexo
