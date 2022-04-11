@@ -29,7 +29,8 @@
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
-                <RowDefinition />
+                <RowDefinition Height="30" />
+                <RowDefinition />                
                 <RowDefinition Height="30" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -57,11 +58,18 @@
             
             <Button x:Name="FiltrarButton" Grid.Row="2" Grid.Column="3" 
                     Content="Filtrar" FontSize="16" Margin="10,0,50,0" />
-
-            <DataGrid x:Name="DadosDataGrid" Grid.Row="4" Grid.ColumnSpan="4" Margin="10" 
-                      IsReadOnly="True" CanUserReorderColumns="True"
+            
+            <ComboBox x:Name="ExportarCombo" Grid.Row="4" Grid.Column="3"
+                    FontSize="16" Margin="10,0,50,0" SelectedIndex="0">
+                <ComboBoxItem Content="Exportar..." />
+                <ComboBoxItem Content="Excel / CSV" />
+            </ComboBox>
+            
+            <DataGrid x:Name="DadosDataGrid" Grid.Row="5" Grid.ColumnSpan="4" Margin="10"
+                      IsReadOnly="True" CanUserDeleteRows="True" CanUserReorderColumns="True"
                       CanUserResizeColumns="True" CanUserSortColumns="True"
-                      AutoGenerateColumns="False"></DataGrid>
+                      AutoGenerateColumns="False"></DataGrid>           
+
         </Grid>
     </Grid>
 </Page>

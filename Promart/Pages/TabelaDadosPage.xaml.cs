@@ -13,11 +13,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 using Promart.Codes;
 using Promart.Data;
 using Promart.Windows;
 using Promart.Models;
-using Promart.Codes;
+using System.IO;
 
 namespace Promart.Pages
 {
@@ -27,8 +28,8 @@ namespace Promart.Pages
     public partial class TabelaDadosPage : Page
     {
         int selectedIndex = -1;
-        IEnumerable<Aluno>? alunos;
-        IEnumerable<Voluntario>? voluntarios;
+        IEnumerable<Aluno>? alunos = new List<Aluno>();
+        IEnumerable<Voluntario>? voluntarios = new List<Voluntario>();
 
         public TabelaDadosPage()
         {
@@ -42,7 +43,6 @@ namespace Promart.Pages
                 {
                     case 0:
                         selectedIndex = TipoTabelaCombo.SelectedIndex;
-                        PopularSelecaoComboPorAluno();
                         alunos = await SqlAccess.GetDadosAsync<Aluno>();
 
                         if (alunos != null)
@@ -52,12 +52,7 @@ namespace Promart.Pages
 
                         break;
                     case 1:
-                        //var voluntarios = await SqlAccess.GetDadosAsync<Voluntario>();
-
-                        //DadosDataGrid.ItemsSource = null;
-                        //DadosDataGrid.ItemsSource = voluntarios;
-                        //colCount = DadosDataGrid.Columns.Count;
-                        //DadosDataGrid.Columns.RemoveAt(colCount - 1); //FotoUrl
+                        
                         break;
                 }
 
@@ -65,8 +60,35 @@ namespace Promart.Pages
                 SelecionarButton.IsEnabled = true;
             };
 
+            PopularSelecaoCombo();
             FiltrarButton.Click += FiltrarButton_Click;
             FiltroSelecaoCombo.SelectionChanged += FiltroSelecaoCombo_SelectionChanged;
+
+            ExportarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) =>
+            {
+                //https://stackoverflow.com/questions/34704314/wpf-datagrid-to-csv-exporting-only-the-visible-values-in-the-grid
+
+                if (ExportarCombo.SelectedIndex == 1)
+                {
+                    DadosDataGrid.SelectAllCells();
+                    DadosDataGrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+
+                    ApplicationCommands.Copy.Execute(null, DadosDataGrid);
+                    DadosDataGrid.UnselectAllCells();
+
+                    string result = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
+                    
+                    SaveFileDialog saveFileDialog = new SaveFileDialog();
+                    saveFileDialog.Filter = "Arquivo CSV (*.csv)|*.csv";
+
+                    if (saveFileDialog.ShowDialog() == true)
+                    {
+                        File.AppendAllText(saveFileDialog.FileName, result, UnicodeEncoding.UTF8);
+                    }                    
+                }           
+                
+                ExportarCombo.SelectedIndex = 0;
+            };
         }
 
         private void FiltroSelecaoCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -76,6 +98,7 @@ namespace Promart.Pages
                 case "Nome":
                 case "Idade":
                 case "Responsável":
+                case "Profissão":
                 case "Escola":
                 case "Rua":
                 case "Bairro":
@@ -97,13 +120,14 @@ namespace Promart.Pages
                 case "Turno no Projeto":
                     AlterarVisibilidadeFiltroValor(ComboValor);
                     PopularComboValor(FiltroSelecaoCombo.SelectedValue);
+                    ComboValor.SelectedIndex = 0;
                     break;
             }
         }
 
         void PopularComboValor(object caso)
         {
-            switch(caso)
+            switch (caso)
             {
                 case "Sexo":
                     ComboValor.ItemsSource = ComboBoxTipos.TipoSexoNaoNumerado;
@@ -144,7 +168,7 @@ namespace Promart.Pages
             controle.Visibility = Visibility.Visible;
         }
 
-        void PopularSelecaoComboPorAluno()
+        void PopularSelecaoCombo()
         {
             FiltroSelecaoCombo.ItemsSource = new List<string>
             {
@@ -152,6 +176,7 @@ namespace Promart.Pages
                 "Nascimento",
                 "Idade",
                 "Sexo",
+                "Profissão",
                 "Responsável",
                 "Vínculo",
                 "Beneficiário",
@@ -165,6 +190,24 @@ namespace Promart.Pages
                 "Situação",
                 "Turno no Projeto",
             };
+
+            if (selectedIndex == 0)
+            {
+                FiltroSelecaoCombo.Items.Remove("Profissão");
+            }
+            if (selectedIndex == 1)
+            {
+                FiltroSelecaoCombo.Items.Remove("Responsável");
+                FiltroSelecaoCombo.Items.Remove("Escola");
+                FiltroSelecaoCombo.Items.Remove("Vínculo");
+                FiltroSelecaoCombo.Items.Remove("Beneficiário");
+                FiltroSelecaoCombo.Items.Remove("Moradia");
+                FiltroSelecaoCombo.Items.Remove("Renda");
+                FiltroSelecaoCombo.Items.Remove("Ano Escolar");
+                FiltroSelecaoCombo.Items.Remove("Turno Escolar");
+                FiltroSelecaoCombo.Items.Remove("Situação");
+                FiltroSelecaoCombo.Items.Remove("Turno no Projeto");
+            }
         }
 
         private void FiltrarButton_Click(object sender, RoutedEventArgs e)
@@ -173,54 +216,70 @@ namespace Promart.Pages
             {
                 IEnumerable<Aluno> resultado = new List<Aluno>();
 
-                if (FiltroSelecaoCombo.SelectedValue.Equals("Nome"))
+                switch (FiltroSelecaoCombo.SelectedValue)
                 {
-                    resultado = alunos.Where(a => a.NomeCompleto != null
-                        && a.NomeCompleto.Contains(TextoValor.Text)
-                    );
-                }
-                else if (FiltroSelecaoCombo.SelectedValue.Equals("Idade"))
-                {
-                    int idade;
-
-                    if (int.TryParse(TextoValor.Text, out idade))
-                    {
-                        resultado = alunos.Where(a => a.IdadeValue == idade);
-                    }
-                }
-                else if (FiltroSelecaoCombo.SelectedValue.Equals("Responsável"))
-                {
-                    resultado = alunos.Where(a => a.NomeResponsavel != null
-                        && a.NomeResponsavel.Contains(TextoValor.Text)
-                    );
-                }
-                else if (FiltroSelecaoCombo.SelectedValue.Equals("Escola"))
-                {
-                    resultado = alunos.Where(a => a.EscolaNome != null
-                        && a.EscolaNome.Contains(TextoValor.Text)
-                    );
-                }
-                else if (FiltroSelecaoCombo.SelectedValue.Equals("Rua"))
-                {
-                    resultado = alunos.Where(a => a.EnderecoRua != null
-                        && a.EnderecoRua.Contains(TextoValor.Text)
-                    );
-                }
-                else if (FiltroSelecaoCombo.SelectedValue.Equals("Bairro"))
-                {
-                    resultado = alunos.Where(a => a.EnderecoRua != null
-                        && a.EnderecoRua.Contains(TextoValor.Text)
-                    );
-                }
-                else if (FiltroSelecaoCombo.SelectedValue.Equals("Data"))
-                {
-                    if (DataValor.SelectedDate != null)
-                    {
-                        resultado = alunos.Where(a => a.DataNascimento != null
-                            && a.DataNascimento == DataValor.SelectedDate.Value
-                        );
-                    }
-                }
+                    case "Nome":
+                        resultado = alunos.Where(a => a.NomeCompleto != null
+                        && a.NomeCompleto.Contains(TextoValor.Text));
+                        break;
+                    case "Idade":
+                        int idade;
+                        if (int.TryParse(TextoValor.Text, out idade))
+                        {
+                            resultado = alunos.Where(a => a.IdadeValue == idade);
+                        }
+                        break;
+                    case "Responsável":
+                        resultado = alunos.Where(a => a.NomeResponsavel != null
+                        && a.NomeResponsavel.Contains(TextoValor.Text));
+                        break;
+                    case "Escola":
+                        resultado = alunos.Where(a => a.EscolaNome != null
+                         && a.EscolaNome.Contains(TextoValor.Text));
+                        break;
+                    case "Rua":
+                        resultado = alunos.Where(a => a.EnderecoRua != null
+                        && a.EnderecoRua.Contains(TextoValor.Text));
+                        break;
+                    case "Bairro":
+                        resultado = alunos.Where(a => a.EnderecoBairro != null
+                        && a.EnderecoBairro.Contains(TextoValor.Text));
+                        break;
+                    case "Nascimento":
+                        if (DataValor.SelectedDate != null)
+                        {
+                            resultado = alunos.Where(a => a.DataNascimento != null
+                                && a.DataNascimento == DataValor.SelectedDate.Value);
+                        }
+                        break;
+                    case "Sexo":
+                        resultado = alunos.Where(a => a.Sexo == ComboValor.SelectedIndex);
+                        break; 
+                    case "Ano Escolar":
+                        resultado = alunos.Where(a => a.AnoEscolar == ComboValor.SelectedIndex);
+                        break; 
+                    case "Turno Escolar":
+                        resultado = alunos.Where(a => a.TurnoEscolar == ComboValor.SelectedValue as string);
+                        break;
+                    case "Turno no Projeto":
+                        resultado = alunos.Where(a => a.TurnoProjeto == ComboValor.SelectedValue as string);
+                        break;
+                    case "Vínculo":
+                        resultado = alunos.Where(a => a.VinculoFamiliar == ComboValor.SelectedIndex);
+                        break;
+                    case "Beneficiário":
+                        resultado = alunos.Where(a => a.IsBeneficiario == (ComboValor.SelectedIndex == 0));
+                        break;
+                    case "Moradia":
+                        resultado = alunos.Where(a => a.TipoCasa == ComboValor.SelectedIndex);
+                        break;
+                    case "Renda":
+                        resultado = alunos.Where(a => a.Renda == ComboValor.SelectedIndex);
+                        break;
+                    case "Situação":
+                        resultado = alunos.Where(a => a.SituacaoProjeto == ComboValor.SelectedIndex);
+                        break;
+                }               
 
                 if (resultado.Any())
                 {

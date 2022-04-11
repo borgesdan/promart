@@ -21,7 +21,7 @@ namespace Promart.Codes
                 tabItem.MinWidth = 300;
                 tabItem.MaxWidth = 300;
                 tabItem.MinHeight = 25;
-                tabItem.Header = tabHeader;
+                tabItem.Header = tabHeader;                
                 
                 ScrollViewer scrollViewer = new();
                 Frame frame = new();
