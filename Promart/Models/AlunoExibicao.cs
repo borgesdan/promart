@@ -53,10 +53,10 @@ namespace Promart.Models
             Contato1 = aluno.Contato1;
             Contato2 = aluno.Contato2;
             IsBeneficiario = aluno.IsBeneficiario;
-            TipoCasa = ComboBoxTipos.TipoMoradiaNaoNumerado[aluno.TipoCasa];
+            TipoCasa = ComboBoxTipos.TipoMoradiaNaoNumerado[aluno.TipoMoradia];
             Renda = ComboBoxTipos.TipoRendaNaoNumerado[aluno.Renda];
             AnoEscolar = ComboBoxTipos.TipoAnoEscolarNaoNumerado[aluno.AnoEscolar];
-            TurnoEscolar = aluno.TurnoEscolar;
+            TurnoEscolar = ComboBoxTipos.TipoTurnoEscolarNaoNumerado[aluno.TurnoEscolar];
             EnderecoRua = aluno.EnderecoRua;
             EnderecoBairro = aluno.EnderecoBairro;
             EnderecoNumero = aluno.EnderecoNumero;

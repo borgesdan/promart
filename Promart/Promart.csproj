@@ -94,6 +94,12 @@
     <None Remove="assets\images\avatars\png-128\woman-128x128-1409978.png" />
     <None Remove="assets\images\avatars\png-128\woman-128x128-1410027.png" />
     <None Remove="assets\images\avatars\png-128\worker-128x128-1409975.png" />
+    <None Remove="assets\images\icons\128\magnifying-glass.png" />
+    <None Remove="assets\images\icons\database.png" />
+    <None Remove="assets\images\icons\folder.png" />
+    <None Remove="assets\images\icons\list.png" />
+    <None Remove="assets\images\icons\photo-camera.png" />
+    <None Remove="assets\images\icons\search.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -362,6 +368,14 @@
     <Resource Include="assets\images\avatars\png-128\worker-128x128-1409975.png">
       <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
+    <Resource Include="assets\images\icons\128\magnifying-glass.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="assets\images\icons\database.png" />
+    <Resource Include="assets\images\icons\folder.png" />
+    <Resource Include="assets\images\icons\list.png" />
+    <Resource Include="assets\images\icons\photo-camera.png" />
+    <Resource Include="assets\images\icons\search.png" />
   </ItemGroup>
 
 </Project>

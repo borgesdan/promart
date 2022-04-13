@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Promart.Codes;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using Promart.Codes;
-using System.Reflection;
 
 namespace Promart.Models
 {
+    //TODO: Implementar controle de faltas
+
     [Table(name: "Alunos")]
     public class Aluno
     {
@@ -17,51 +14,21 @@ namespace Promart.Models
         //------ Dados Pessoais ------//
 
         public string? NomeCompleto { get; set; }    
-        public DateTime? DataNascimento { get; set; }
+        public DateTime? DataNascimento { get; set; }       
         
-        [NotMapped] 
-        [Dapper.Contrib.Extensions.Write(false)]
-        public DateOnly? DataNascimentoValue 
-        { 
-            get
-            {
-                if (DataNascimento.HasValue)
-                {
-                    return DateOnly.FromDateTime(DataNascimento.Value);
-                }
-
-                return null;
-            }
-        }
-        [NotMapped]
-        [Dapper.Contrib.Extensions.Write(false)]
-        public int IdadeValue
-        {
-            get
-            {
-                if (DataNascimento.HasValue)
-                {
-                    return Helper.Util.ObterIdade(DataNascimento.Value);
-                }
-
-                return 0;
-            }
-        }
         /// <summary>
         /// [0] Masculino
         /// [1] Feminino
+        /// [3] Não Informado
         /// </summary>
-        public int Sexo { get; set; }
-        [NotMapped]
-        [Dapper.Contrib.Extensions.Write(false)]
-        public string? SexoValue { get => ComboBoxTipos.TipoSexoNaoNumerado[Sexo]; }
+        public int Sexo { get; set; }        
         public string? RG { get; set; }
         public string? CPF { get; set; }
         public string? Certidao { get; set; }
 
         //------ Dados Familiares ------//
 
-        public string? NomeResponsavel { get; set; }        
+        public string? NomeResponsavel { get; set; }
         /// <summary>
         /// [0] Pais
         /// [1] Avós
@@ -71,14 +38,12 @@ namespace Promart.Models
         /// [5] Pai e Madrasta
         /// [6] Tio
         /// [7] Outro
+        /// [8] Não Informado
         /// </summary>
-        public int VinculoFamiliar { get; set; }
-        [NotMapped]
-        [Dapper.Contrib.Extensions.Write(false)]
-        public string? VinculoFamiliarValue { get => ComboBoxTipos.TipoVinculoFamiliarNaoNumerado[VinculoFamiliar]; }
+        public int VinculoFamiliar { get; set; }        
         public string? Contato1 { get; set; }
         public string? Contato2 { get; set; }        
-        public bool IsBeneficiario { get; set; }        
+        public bool IsBeneficiario { get; set; }
         /// <summary>
         /// [0] Própria
         /// [1] Alugada
@@ -86,11 +51,9 @@ namespace Promart.Models
         /// [3] Cedida pelo empregador
         /// [4] Cedida de outra forma
         /// [5] Outro tipo
+        /// [6] Não Informado
         /// </summary>
-        public int TipoCasa { get; set; }
-        [NotMapped]
-        [Dapper.Contrib.Extensions.Write(false)]
-        public string? TipoCasaValue { get => ComboBoxTipos.TipoMoradiaNaoNumerado[TipoCasa]; }
+        public int TipoMoradia { get; set; }
         /// <summary>
         /// [0] Menor que 1/2 Salário Mínimo
         /// [1] 1/2 SM
@@ -98,11 +61,9 @@ namespace Promart.Models
         /// [3] 1 e 1/2 SM
         /// [4] 2 SM
         /// [5] Maior que 2 SM
+        /// [6] Não Informado
         /// </summary>      
-        public int Renda { get; set; }
-        [NotMapped]
-        [Dapper.Contrib.Extensions.Write(false)]
-        public string? RendaValue { get => ComboBoxTipos.TipoRendaNaoNumerado[Renda]; }
+        public int Renda { get; set; }        
 
         //------ Dados Escolares ------//
 
@@ -122,12 +83,15 @@ namespace Promart.Models
         /// [11] 2º Ano Ensino Médio
         /// [12] 3º Ano Ensino Médio
         /// [13] 4º Ano Ensino Médio
+        /// [14] Não Informado
         /// </summary>      
         public int AnoEscolar { get; set; }
-        [NotMapped]
-        [Dapper.Contrib.Extensions.Write(false)]
-        public string? AnoEscolarValue { get => ComboBoxTipos.TipoAnoEscolarNaoNumerado[AnoEscolar]; }
-        public string? TurnoEscolar { get; set; }        
+        /// <summary>
+        /// [0] Matutino
+        /// [1] Vespertino
+        /// [3] Não Informado
+        /// </summary>
+        public int TurnoEscolar { get; set; }        
         
         //---------- Endereço ----------//
 
@@ -147,16 +111,53 @@ namespace Promart.Models
         /// [3] Matriculado
         /// [4] Não Aprovado
         /// [5] Desistente
-        /// [6] Não Especificado
+        /// [6] Ex-aluno
+        /// [7] Não Especificado
         /// </summary>
         public int SituacaoProjeto { get; set; }
+        /// <summary>
+        /// [0] Matutino
+        /// [1] Vespertino
+        /// [3] Não Informado
+        /// </summary>
+        public int TurnoProjeto { get; set; }        
+        public string? Matricula { get; set; }        
+        public string? Observacoes { get; set; }
+        public string? FotoUrl { get; set; }
+
+        //Propriedades para somente consulta
+
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public DateOnly? DataNascimentoValue { get => DataNascimento.HasValue ? DateOnly.FromDateTime(DataNascimento.Value) : null; }
+        
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)] 
+        public int IdadeValue { get => DataNascimento.HasValue ? Helper.Util.ObterIdade(DataNascimento.Value) : 0; }
+
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public string? SexoValue { get => ComboBoxTipos.TipoSexoNaoNumerado[Sexo]; }
+
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public string? VinculoFamiliarValue { get => ComboBoxTipos.TipoVinculoFamiliarNaoNumerado[VinculoFamiliar]; }
+
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public string? TipoMoradiaValue { get => ComboBoxTipos.TipoMoradiaNaoNumerado[TipoMoradia]; }
+
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public string? RendaValue { get => ComboBoxTipos.TipoRendaNaoNumerado[Renda]; }
+
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public string? AnoEscolarValue { get => ComboBoxTipos.TipoAnoEscolarNaoNumerado[AnoEscolar]; }
+
         [NotMapped]
         [Dapper.Contrib.Extensions.Write(false)]
         public string? SituacaoProjetoValue { get => ComboBoxTipos.TipoAlunoSituacaoNaoNumerado[SituacaoProjeto]; }
-        public string? TurnoProjeto { get; set; }
-        //TODO: Implementar controle de faltas                   
-        public string? Observacoes { get; set; }
-        public string? FotoUrl { get; set; }
 
         public override string ToString()
         {

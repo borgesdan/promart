@@ -8,11 +8,28 @@ using Promart.Data;
 using Promart.Models;
 using System.Windows;
 using System.Windows.Input;
+using Promart.Controls;
+using Microsoft.Win32;
+using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace Promart.Codes
 {
     public class Helper
     {
+        public static class Diretorios 
+        {
+            public static string ATUAL = Environment.CurrentDirectory;
+            public static string SALVOS = ATUAL + "/Salvos";
+            public static string FOTOS = SALVOS + "/Fotos";
+            public static string FOTOS_ALUNOS = SALVOS + "/Fotos/Alunos";
+
+            //Caminhos relativos
+            public static string REL_SALVOS = "/Salvos";
+            public static string REL_FOTOS = REL_SALVOS + "/Fotos";
+            public static string REL_FOTOS_ALUNOS = REL_FOTOS + "/Alunos";
+        }
+
         public static class Controles
         {
             public static TabItem AbrirNovaAba(TabControl tabControl, string tabHeader, Page contentPage)
@@ -21,16 +38,21 @@ namespace Promart.Codes
                 tabItem.MinWidth = 300;
                 tabItem.MaxWidth = 300;
                 tabItem.MinHeight = 25;
-                tabItem.Header = tabHeader;                
+                tabItem.Header = new TabHeaderContentControl(tabHeader, 280, new RoutedEventHandler((o, t) => {
+                    var result = MessageBox.Show("Todos os dados não salvos serão perdidos. Deseja fechar a aba?", "Fechar aba", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    
+                    if(result == MessageBoxResult.Yes)
+                    {
+                        RemoverAba(tabItem);
+                    }                    
+                }));
                 
                 ScrollViewer scrollViewer = new();
                 Frame frame = new();
 
                 frame.Content = contentPage;
                 scrollViewer.Content = frame;
-                tabItem.Content = scrollViewer;
-
-                tabItem.Header = tabHeader;                
+                tabItem.Content = scrollViewer;                
                 tabItem.IsSelected = true;
 
                 tabControl.Items.Add(tabItem);
@@ -83,6 +105,37 @@ namespace Promart.Codes
         
         public static class Util
         {
+            public static string ObterExtensaoArquivo(string nomeArquivoComExtensao)
+            {
+                string[] extensao = nomeArquivoComExtensao.Split('.');
+                return extensao.Length == 2 ? extensao[1] : string.Empty;
+            }
+
+            public static BitmapImage? AbrirSalvarImagem(string diretorioDestino, string nomeImagem)
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Arquivos de Imagem (*.PNG, *.JPG, *.BMP)|*.png;*.jpg;*.bmp";
+                var result = openFileDialog.ShowDialog();
+
+                if (result == true)
+                {
+                    if (!Directory.Exists(diretorioDestino))
+                    {
+                        Directory.CreateDirectory(diretorioDestino);
+                    }
+
+                    string extensao = ObterExtensaoArquivo(openFileDialog.SafeFileName);
+                    string arquivoFoto = $"{nomeImagem}.{extensao[1]}";
+                    string caminhoFinal = $"{diretorioDestino}/{arquivoFoto}";
+
+                    File.Copy(openFileDialog.FileName, caminhoFinal);
+
+                    return new BitmapImage(new Uri(caminhoFinal));
+                }
+
+                return null;
+            }
+
             public static int ObterIdade(DateTime nascimento)
             {
                 DateTime hoje = DateTime.Now;

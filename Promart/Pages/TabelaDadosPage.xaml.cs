@@ -259,10 +259,12 @@ namespace Promart.Pages
                         resultado = alunos.Where(a => a.AnoEscolar == ComboValor.SelectedIndex);
                         break; 
                     case "Turno Escolar":
-                        resultado = alunos.Where(a => a.TurnoEscolar == ComboValor.SelectedValue as string);
+                        //TODO
+                        //resultado = alunos.Where(a => a.TurnoEscolar == ComboValor.SelectedValue as string);
                         break;
                     case "Turno no Projeto":
-                        resultado = alunos.Where(a => a.TurnoProjeto == ComboValor.SelectedValue as string);
+                        //TODO
+                        //resultado = alunos.Where(a => a.TurnoProjeto == ComboValor.SelectedValue as string);
                         break;
                     case "Vínculo":
                         resultado = alunos.Where(a => a.VinculoFamiliar == ComboValor.SelectedIndex);
@@ -271,7 +273,7 @@ namespace Promart.Pages
                         resultado = alunos.Where(a => a.IsBeneficiario == (ComboValor.SelectedIndex == 0));
                         break;
                     case "Moradia":
-                        resultado = alunos.Where(a => a.TipoCasa == ComboValor.SelectedIndex);
+                        resultado = alunos.Where(a => a.TipoMoradia == ComboValor.SelectedIndex);
                         break;
                     case "Renda":
                         resultado = alunos.Where(a => a.Renda == ComboValor.SelectedIndex);

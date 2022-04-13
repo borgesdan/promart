@@ -12,12 +12,14 @@ namespace Promart.Codes
             {
                 "0 - Masculino",
                 "1 - Feminino",
+                "3 - Não Informado",
             };
 
         public static List<string> TipoSexoNaoNumerado { get; } = new List<string>()
             {
                 "Masculino",
                 "Feminino",
+                "Não Informado"
             };
 
         public static List<string> TipoBeneficiarioNumerado { get; } = new List<string>()
@@ -36,12 +38,14 @@ namespace Promart.Codes
             {
                 "0 - Matutino",
                 "1 - Vespertino",
+                "3 - Não Informado",
             };
 
         public static List<string> TipoTurnoEscolarNaoNumerado { get; } = new List<string>()
             {
                 "Matutino",
                 "Vespertino",
+                "Não Informado",
             };
 
         public static List<string> TipoVinculoFamiliarNumerado { get; } = new List<string>()
@@ -54,6 +58,7 @@ namespace Promart.Codes
                 "5 - Pai e Madrasta",
                 "6 - Tio",
                 "7 - Outro",
+                "8 - Não Informado",
             };
 
         public static List<string> TipoVinculoFamiliarNaoNumerado { get; } = new List<string>()
@@ -66,6 +71,7 @@ namespace Promart.Codes
                 "Pai e Madrasta",
                 "Tio",
                 "Outro",
+                "Não Informado",
             };
 
         public static List<string> TipoMoradiaNumerado { get; } = new List<string>()
@@ -76,6 +82,7 @@ namespace Promart.Codes
                 "3 - Cedida pelo empregador",
                 "4 - Cedida de outra forma",
                 "5 - Outro tipo",
+                "6 - Não Informado",
             };
 
 
@@ -87,6 +94,7 @@ namespace Promart.Codes
                 "Cedida pelo empregador",
                 "Cedida de outra forma",
                 "Outro tipo",
+                "Não Informado",
             };
 
         public static List<string> TipoRendaNumerado { get; } = new List<string>()
@@ -97,6 +105,7 @@ namespace Promart.Codes
                 "3 - 1 salário e meio",
                 "4 - 2 Salários",
                 "5 - Maior que 2 Salários Minímos",
+                "6 - Não Informado",
             };
 
         public static List<string> TipoRendaNaoNumerado { get; } = new List<string>()
@@ -107,6 +116,7 @@ namespace Promart.Codes
                 "1 salário e meio",
                 "2 Salários",
                 "Maior que 2 Salários Minímos",
+                "Não Informado",
             };
 
         public static List<string> TipoAnoEscolarNumerado { get; } = new List<string>()
@@ -125,6 +135,7 @@ namespace Promart.Codes
                 "11 - 2º Ano Ensino Médio",
                 "12 - 3º Ano Ensino Médio",
                 "13 - 4º Ano Ensino Médio",
+                "14 - Não Informado",
             };
 
         public static List<string> TipoAnoEscolarNaoNumerado { get; } = new List<string>()
@@ -143,6 +154,7 @@ namespace Promart.Codes
                 "2º Ano Ensino Médio",
                 "3º Ano Ensino Médio",
                 "4º Ano Ensino Médio",
+                "Não Informado",
             };
 
 
@@ -154,7 +166,8 @@ namespace Promart.Codes
                 "3 - Matriculado",
                 "4 - Não Aprovado",
                 "5 - Desistente",
-                "6 - Não Especificado"
+                "6 - Ex-aluno",
+                "7 - Não Especificado"
             };
 
         public static List<string> TipoAlunoSituacaoNaoNumerado { get; } = new List<string>()
@@ -165,6 +178,7 @@ namespace Promart.Codes
                 "Matriculado",
                 "Não Aprovado",
                 "Desistente",
+                "Ex-aluno",
                 "Não Especificado"
             };
     }

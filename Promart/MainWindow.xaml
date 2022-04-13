@@ -5,16 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Promart"
         mc:Ignorable="d"
-        Title="MainWindow" MinWidth="1280" MinHeight="720" WindowState="Maximized" FontFamily="Cascadia Code Light" >
+        Title="MainWindow" MinWidth="1280" MinHeight="720" WindowState="Maximized" >
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"  />
-            <RowDefinition Height="50"  />
+            <RowDefinition Height="25"  />
+            <RowDefinition Height="60"  />
             <RowDefinition Height="*"  />
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0" VerticalContentAlignment="Center">
-            <MenuItem Header="Arquivo" />
+        <Menu Grid.Row="0" VerticalAlignment="Center" FontSize="14">
+            <MenuItem Header="Arquivo">
+                <MenuItem x:Name="FecharProgramaMenu" Header="Fechar Programa" />
+            </MenuItem>
             <MenuItem Header="Cadastro">
                 <MenuItem x:Name="CadastrarAlunoMenu" Header="Alunos" />
                 <MenuItem x:Name="CadastrarVoluntarioMenu" Header="Voluntários" />
@@ -24,48 +26,31 @@
             </MenuItem>            
         </Menu>
         <ToolBar x:Name="MenuFerramentas" Grid.Row="1" FontSize="14">
-            <Button x:Name="CadastrarAlunoBtn" Width="35" VerticalAlignment="Stretch" Content="+A"
-                    Margin="5,5" BorderBrush="Gray" BorderThickness="1" 
-                    FontFamily="Cascadia Code SemiBold" FontSize="18"
-                    ToolTip="Cadastrar Aluno">
-                <Button.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" Opacity="0.5">
-                        <GradientStop Color="White"/>
-                        <GradientStop Color="#FF00BCFB" Offset="1"/>
-                    </LinearGradientBrush>
-                </Button.Background>
+            <Button x:Name="CadastrarAlunoButton" VerticalAlignment="Stretch"
+                   ToolTip="Cadastrar Aluno">
+                <Button.Content>
+                    <Image Source="/assets/images/avatars/png-128/add-128x128-1410058.png" Stretch="Fill" />
+                </Button.Content>
             </Button>
-            <Button x:Name="CadastrarVoluntarioBtn" Width="35" VerticalAlignment="Stretch" Content="+V" 
-                    Margin="5,5" BorderBrush="Gray" BorderThickness="1"  
-                    FontFamily="Cascadia Code SemiBold" FontSize="18" 
-                    ToolTip="Cadastrar Voluntário" >
-                <Button.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" Opacity="0.5">
-                        <GradientStop Color="White"/>
-                        <GradientStop Color="#FFFB0000" Offset="1"/>
-                    </LinearGradientBrush>
-                </Button.Background>
-            </Button>
-            <Button x:Name="OficinasBtn" Width="35" VerticalAlignment="Stretch" Content="O"
-                    Margin="5,5" BorderBrush="Gray" BorderThickness="1" 
-                    FontFamily="Cascadia Code SemiBold" FontSize="18"
-                    ToolTip="Cadastrar Aluno">
-                <Button.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" Opacity="0.5">
-                        <GradientStop Color="White"/>
-                        <GradientStop Color="#FF00BCFB" Offset="1"/>
-                    </LinearGradientBrush>
-                </Button.Background>
+            <Button x:Name="CadastrarVoluntarioBtn" VerticalAlignment="Stretch" ToolTip="Cadastrar Voluntário" >
+                <Button.Content>
+                    <Image Source="/assets/images/avatars/png-128/agreement-128x128-1410057.png" />
+                </Button.Content>
             </Button>
             <Separator Margin="20,0" />
             <Label Content="Pesquisa Rápida" VerticalAlignment="Center" Margin="0,0"/>
             <TextBox Width="250" />
-            <Button Width="35" VerticalAlignment="Stretch" Content="Lupa" 
-                    Margin="5,5" 
-                    BorderBrush="Gray" BorderThickness="1" />
-            <Button x:Name="AbrirTabelaDadosButton" Width="35" VerticalAlignment="Stretch" Content="Lupa" 
-                    Margin="5,5" 
-                    BorderBrush="Gray" BorderThickness="1" />
+            <Button VerticalAlignment="Stretch" ToolTip="Buscar" Width="60" >
+                <Button.Content>
+                    <Image Source="/assets/images/icons/search.png" Width="25" />
+                </Button.Content>
+            </Button>
+            <Separator Margin="20,0" />
+            <Button x:Name="AbrirTabelaDadosButton" Width="60" VerticalAlignment="Stretch" ToolTip="Relatórios">
+                <Button.Content>
+                    <Image Source="/assets/images/icons/database.png" Stretch="Uniform"  />
+                </Button.Content>
+            </Button>
         </ToolBar>
         <TabControl x:Name="TabConteudo" Grid.Row="2">
         </TabControl>

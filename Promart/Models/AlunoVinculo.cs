@@ -17,6 +17,6 @@ namespace Promart.Models
         public string? Parentesco { get; set; }
         public string? Ocupacao { get; set; }
         public string? Escolaridade { get; set; }          
-        public decimal Renda { get; set; }
+        public ushort Renda { get; set; }
     }
 }

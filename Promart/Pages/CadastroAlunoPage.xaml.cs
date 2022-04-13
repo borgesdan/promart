@@ -17,6 +17,9 @@ using Promart.Data;
 using Promart.Codes;
 using Promart.Windows;
 using System.Text.RegularExpressions;
+using Promart.Controls;
+using Microsoft.Win32;
+using System.IO;
 
 namespace Promart.Pages
 {
@@ -28,6 +31,8 @@ namespace Promart.Pages
         bool dadosAlterados = false;
         public Aluno Aluno { get; private set; }
         public TabItem? Tab { get; set; }
+        string arquivoFoto = string.Empty;
+        List<AlunoVinculo> vinculos = new List<AlunoVinculo>();
 
         public CadastroAlunoPage() : this(new Aluno())
         {
@@ -36,61 +41,23 @@ namespace Promart.Pages
         public CadastroAlunoPage(Aluno aluno)
         {
             InitializeComponent();
+            
             Aluno = aluno;
+            ComposicaoDataGrid.ItemsSource = vinculos;
+            PreencherComboBoxes();            
 
             //Eventos necessários dos controles
             ConfirmarButton.Click += (object sender, RoutedEventArgs e) => ConfirmarPaginaAsync();
             CancelarButton.Click += CancelarButton_Click;
-            NascimentoData.SelectedDateChanged += (object? sender, SelectionChangedEventArgs e) =>
-            {
-                if (NascimentoData.SelectedDate.HasValue)
-                {
-                    DateTime nascimento = NascimentoData.SelectedDate.Value;
-                    IdadeLabel.Content = string.Concat(Helper.Util.ObterIdade(nascimento), " anos");
-                    IdadeLabel.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    IdadeLabel.Visibility = Visibility.Hidden;
-                }
-            };
-            SituacaoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) =>
-            {
-                switch (SituacaoProjetoCombo.SelectedIndex)
-                {
-                    case 0:
-                        SituacaoExpLabel.Content = "O aluno está inscrito e solicita aprovação.";
-                        break;
-                    case 1:
-                        SituacaoExpLabel.Content = "O aluno está aprovado para matrícula.";
-                        break;
-                    case 2:
-                        SituacaoExpLabel.Content = "O aluno está na lista de espera.";
-                        break;
-                    case 3:
-                        SituacaoExpLabel.Content = "O aluno está matriculado no projeto.";
-                        break;
-                    case 4:
-                        SituacaoExpLabel.Content = "O aluno foi inscrito mas não aprovado.";
-                        break;
-                    case 5:
-                        SituacaoExpLabel.Content = "O aluno estava matriculado mas desistiu.";
-                        break;
-                    default:
-                        SituacaoExpLabel.Content = "O índice da seleção está fora dos limites.";
-                        break;
-                }
-            };
-            TipoTurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => { TipoTurnoProjetoCombo.SelectedIndex = TipoTurnoEscolarCombo.SelectedIndex == 0 ? 1 : 0; };
-            NomeText.TextChanged += (object sender, TextChangedEventArgs e) => { if (Tab != null) Tab.Header = NomeText.Text; };
-            ComposicaoDataGrid.ItemsSource = new List<AlunoVinculo>();
-
-            //TODO: Desabilitado pois a tecla TAB não funciona corretamente
-            //CPFText.PreviewKeyDown += (sender, e) => { if (!Helper.Util.VerificarSomenteNumero(e.Key)) e.Handled = true; };
-            //CPFText.PreviewTextInput += (sender, e) => Helper.Util.FormatarCPF(CPFText);
-
+            NascimentoData.SelectedDateChanged += (object? sender, SelectionChangedEventArgs e) => ExibirIdade();
+            SituacaoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => ExibirInfoSituacao();
+            TurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => { TurnoProjetoCombo.SelectedIndex = TurnoEscolarCombo.SelectedIndex == 0 ? 1 : 0; };
+            NomeText.TextChanged += (object sender, TextChangedEventArgs e) => AlterarHeaderAba();
+            AbrirImagemButton.Click += (object sender, RoutedEventArgs e) => AbrirImagem();
+            AddMembroButton.Click += (object sender, RoutedEventArgs e) => AbrirCadastroNovoMembro();            
 
             //Eventos para confirmar alterações de dados ao sair da tela
+            FotoImage.Changed += (object? sender, EventArgs e) => DefinirAlteracaoDados();
             NomeText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             RGText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             CPFText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
@@ -105,16 +72,16 @@ namespace Promart.Pages
             NomeResponsavelText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             ObservacoesText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             NascimentoData.SelectedDateChanged += (object? sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
-            TipoVinculoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
-            TipoMoradiaCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
-            TipoRendaCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
-            TipoTurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
-            TipoAnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            VinculoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            MoradiaCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            RendaCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            TurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            AnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
             SituacaoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
-            TipoTurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
-            TipoTurnoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            TurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            TurnoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
             BeneficiarioCheck.Click += (object sender, RoutedEventArgs e) => DefinirAlteracaoDados();
-
+            ComposicaoDataGrid.RowEditEnding += (object? sender, DataGridRowEditEndingEventArgs e) => DefinirAlteracaoDados();
             //Vai para o evento Page_Loaded.
         }
 
@@ -128,12 +95,6 @@ namespace Promart.Pages
             //Tenta popular a lista de oficinas       
             await Helper.Controles.PopularOficinasListComCheckBoxAsync(TipoOficinasList, (object sender, RoutedEventArgs e) => DefinirAlteracaoDados());
         }
-
-        private void DefinirAlteracaoDados()
-        {
-            dadosAlterados = true;
-            ConfirmarButton.IsEnabled = true;
-        }        
 
         private void CancelarButton_Click(object sender, RoutedEventArgs e)
         {
@@ -157,20 +118,20 @@ namespace Promart.Pages
             }
 
             Aluno.DataNascimento = NascimentoData.SelectedDate;
-            Aluno.Sexo = TipoSexoCombo.SelectedIndex;
+            Aluno.Sexo = SexoCombo.SelectedIndex;
             Aluno.RG = RGText.Text;
             Aluno.CPF = CPFText.Text;
             Aluno.Certidao = CertidaoText.Text;
-            Aluno.VinculoFamiliar = TipoVinculoCombo.SelectedIndex;
+            Aluno.VinculoFamiliar = VinculoCombo.SelectedIndex;
             Aluno.NomeResponsavel = NomeResponsavelText.Text;
             Aluno.IsBeneficiario = BeneficiarioCheck.IsChecked ?? false;
-            Aluno.TipoCasa = TipoMoradiaCombo.SelectedIndex;
-            Aluno.Renda = TipoRendaCombo.SelectedIndex;
+            Aluno.TipoMoradia = MoradiaCombo.SelectedIndex;
+            Aluno.Renda = RendaCombo.SelectedIndex;
             Aluno.Contato1 = Telefone1Text.Text;
             Aluno.Contato2 = Telefone2Text.Text;
-            Aluno.EscolaNome = NomeEscolaText.Text;
-            Aluno.TurnoEscolar = TipoTurnoEscolarCombo.Text;
-            Aluno.AnoEscolar = TipoAnoEscolarCombo.SelectedIndex;
+            Aluno.EscolaNome = NomeEscolaText.Text;            
+            Aluno.TurnoEscolar = TurnoEscolarCombo.SelectedIndex;
+            Aluno.AnoEscolar = AnoEscolarCombo.SelectedIndex;
             Aluno.EnderecoRua = RuaText.Text;
             Aluno.EnderecoBairro = BairroText.Text;
             Aluno.EnderecoNumero = NumeroText.Text;
@@ -178,9 +139,10 @@ namespace Promart.Pages
             Aluno.EnderecoCidade = "Ipiaú";
             Aluno.EnderecoEstado = "Bahia";
             Aluno.EnderecoCEP = "45570-000";
-            Aluno.SituacaoProjeto = SituacaoProjetoCombo.SelectedIndex;
-            Aluno.TurnoProjeto = TipoTurnoEscolarCombo.Text;
+            Aluno.SituacaoProjeto = SituacaoProjetoCombo.SelectedIndex;            
+            Aluno.TurnoProjeto = TurnoProjetoCombo.SelectedIndex;
             Aluno.Observacoes = ObservacoesText.Text;
+            Aluno.Matricula = GeradorMatricula.Get();
 
             if (Aluno.Id == 0)
             {
@@ -189,8 +151,11 @@ namespace Promart.Pages
                 if (result != -1)
                 {
                     await InserirAlunoOficinaAsync();
+                    //TODO: Inserir os dados da composição familiar
                     ConfirmarButton.IsEnabled = false;
                     MessageBox.Show("O aluno foi cadastrado com sucesso", "Aluno cadastrado", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MatriculaLabel.Text = Aluno.Matricula;
+                    MatriculaPanel.Visibility = Visibility.Visible;
                 }
             }
             else
@@ -235,6 +200,117 @@ namespace Promart.Pages
                         await SqlAccess.InserirAsync(alunoOficina);
                     }
                 }
+            }
+        }
+        
+        private void DefinirAlteracaoDados()
+        {
+            dadosAlterados = true;
+            ConfirmarButton.IsEnabled = true;
+        }        
+
+        private void PreencherComboBoxes()
+        {
+            SexoCombo.ItemsSource = ComboBoxTipos.TipoSexoNumerado;
+            VinculoCombo.ItemsSource = ComboBoxTipos.TipoVinculoFamiliarNumerado;
+            MoradiaCombo.ItemsSource = ComboBoxTipos.TipoMoradiaNumerado;
+            RendaCombo.ItemsSource = ComboBoxTipos.TipoRendaNumerado;
+            AnoEscolarCombo.ItemsSource = ComboBoxTipos.TipoAnoEscolarNumerado;
+            TurnoEscolarCombo.ItemsSource = ComboBoxTipos.TipoTurnoEscolarNumerado;
+            SituacaoProjetoCombo.ItemsSource = ComboBoxTipos.TipoAlunoSituacaoNumerado;
+            TurnoProjetoCombo.ItemsSource = ComboBoxTipos.TipoTurnoEscolarNumerado;
+        }
+
+        private void ExibirIdade()
+        {
+            if (NascimentoData.SelectedDate != null && NascimentoData.SelectedDate.HasValue)
+            {
+                DateTime nascimento = NascimentoData.SelectedDate.Value;
+                IdadeLabel.Content = string.Concat(Helper.Util.ObterIdade(nascimento), " anos");
+                IdadeLabel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                IdadeLabel.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void ExibirInfoSituacao()
+        {
+            switch (SituacaoProjetoCombo.SelectedIndex)
+            {
+                case 0:
+                    SituacaoExpLabel.Content = "O aluno está inscrito e solicita aprovação.";
+                    break;
+                case 1:
+                    SituacaoExpLabel.Content = "O aluno está aprovado para matrícula.";
+                    break;
+                case 2:
+                    SituacaoExpLabel.Content = "O aluno está na lista de espera.";
+                    break;
+                case 3:
+                    SituacaoExpLabel.Content = "O aluno está matriculado no projeto.";
+                    break;
+                case 4:
+                    SituacaoExpLabel.Content = "O aluno foi inscrito mas não aprovado.";
+                    break;
+                case 5:
+                    SituacaoExpLabel.Content = "O aluno estava matriculado mas desistiu.";
+                    break;
+                default:
+                    SituacaoExpLabel.Content = "O aluno se encontra em outra situação.";
+                    break;
+            }
+        }
+
+        private void AlterarHeaderAba()
+        {
+            if (Tab != null)
+            {
+                if (Tab.Header is string)
+                {
+                    Tab.Header = NomeText.Text;
+                }
+                else if (Tab.Header is TabHeaderContentControl)
+                {
+                    var header = Tab.Header as TabHeaderContentControl;
+
+                    if (header != null)
+                    {
+                        header.HeaderText = NomeText.Text;
+                    }
+                }
+            }
+        }
+
+        private void AbrirImagem()
+        {
+            try {
+                Guid guid = new Guid();
+                var result = Helper.Util.AbrirSalvarImagem(Helper.Diretorios.FOTOS, guid.ToString());
+                
+                if (result != null)
+                {
+                    arquivoFoto = guid.ToString();
+                    FotoImage.ImageSource = result;                    
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocorreu um erro ao carregar a imagem.\n\nErro: {ex.Message}", "Erro de carregamento", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        
+        private void AbrirCadastroNovoMembro()
+        {
+            NovoMembroComposicaoWindow novoMembro = new NovoMembroComposicaoWindow();
+            var result = novoMembro.ShowDialog();
+
+            if(result == true && novoMembro.Vinculo != null)
+            {
+                vinculos.Add(novoMembro.Vinculo);
+                ComposicaoDataGrid.ItemsSource = null;
+                ComposicaoDataGrid.ItemsSource = vinculos;
             }
         }
     }

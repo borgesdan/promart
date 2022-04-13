@@ -17,6 +17,7 @@ using Promart.Windows;
 using Promart.Models;
 using Promart.Codes;
 using Promart.Data;
+using System.ComponentModel;
 
 namespace Promart
 {
@@ -34,22 +35,12 @@ namespace Promart
             Instance = this;
             var page = new CadastroVoluntarioPage();
 
-            CadastrarAlunoBtn.Click += (object sender, RoutedEventArgs e) => CadastrarAluno();
+            FecharProgramaMenu.Click += (sender, e) => this.Close();
+
+            CadastrarAlunoButton.Click += (object sender, RoutedEventArgs e) => CadastrarAluno();
             CadastrarAlunoMenu.Click += (object sender, RoutedEventArgs e) => CadastrarAluno();
             CadastrarVoluntarioBtn.Click += (object sender, RoutedEventArgs e) => CadastrarVoluntario();
-            CadastrarVoluntarioMenu.Click += (object sender, RoutedEventArgs e) => CadastrarVoluntario();
-            CadastrarOficinaMenu.Click += (object sender, RoutedEventArgs e) =>
-            {
-                if(OficinasTab == null)
-                {
-                    CadastroOficinaPage page = new();
-                    OficinasTab = Helper.Controles.AbrirNovaAba(TabConteudo, "Oficinas", page);
-                }
-                else
-                {
-                    OficinasTab.IsSelected = true;
-                }
-            };
+            CadastrarVoluntarioMenu.Click += (object sender, RoutedEventArgs e) => CadastrarVoluntario();            
             ConsultaAvancadaMenu.Click += (object sender, RoutedEventArgs e) => {
                 PesquisaAvancadaPage page = new();
                 
@@ -60,6 +51,18 @@ namespace Promart
                 TabelaDadosPage page = new();
                 Helper.Controles.AbrirNovaAba(TabConteudo, "Visualização de Dados", page);
             };
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            //var result = MessageBox.Show("O programa será encerrado e toda alteração não salva será perdida. Deseja fechar o programa?", "Aviso", MessageBoxButton.YesNo, MessageBoxImage.Warning) ;
+
+            //if (result == MessageBoxResult.No)
+            //{
+            //    e.Cancel = true;
+            //}
+
+            base.OnClosing(e);
         }
 
         private void CadastrarAluno()

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
+﻿using Promart.Codes;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Promart.Models
@@ -20,6 +16,7 @@ namespace Promart.Models
         /// <summary>
         /// [0] Masculino
         /// [1] Feminino
+        /// [2] Não Informado
         /// </summary>
         public int Sexo { get; set; }
         public string? Profissao { get; set; }
@@ -39,8 +36,30 @@ namespace Promart.Models
         public string? EnderecoEstado { get; set; }
         public string? EnderecoCEP { get; set; }
 
-        //---------- Outros ------------//Id
+        //---------- Outros ------------//
         public string? Observacoes { get; set; }
         public string? FotoUrl { get; set; }
+
+        //Propriedades para somente consulta
+
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public DateOnly? DataNascimentoValue
+        {
+            get => DataNascimento.HasValue ? DateOnly.FromDateTime(DataNascimento.Value) : null;
+        }
+
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public int IdadeValue { get => DataNascimento.HasValue ? Helper.Util.ObterIdade(DataNascimento.Value) : 0; }
+
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public string? SexoValue { get => ComboBoxTipos.TipoSexoNaoNumerado[Sexo]; }
+
+        public override string ToString()
+        {
+            return NomeCompleto ?? string.Empty;
+        }
     }
 }
