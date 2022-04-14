@@ -51,12 +51,28 @@
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
 
-            <Image Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" IsEnabled="True" Source="/assets/images/avatars/png-128/teacher-128x128-1409980.png"  >
-            </Image>
+            <Ellipse x:Name="FotoElipse" Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" Width="200">
+                <Ellipse.Fill>
+                    <ImageBrush x:Name="FotoImage" ImageSource="/assets/images/avatars/png-128/asian-128x128-1410051.png" />
+                </Ellipse.Fill>
+            </Ellipse>
+
+            <Button x:Name="AbrirImagemButton"  Grid.Row="4" Grid.Column="3"
+                        Width="60" Margin="-80,0,0,0"
+                    Background="Transparent" BorderBrush="Transparent"
+                    ToolTip="Abrir imagem do computador">
+                <Image Source="/assets/images/icons/folder.png" />
+            </Button>
+            <Button Grid.Row="4" Grid.Column="3" Margin="80,0,0,0" Width="60"
+                    Background="Transparent" BorderBrush="Transparent"
+                    ToolTip="Abrir câmera"  IsEnabled="False">
+                <Image Source="/assets/images/icons/photo-camera.png"/>
+            </Button>
+
 
             <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="5"
                       Margin="10,0,10,0" Padding="5" Header="Dados Pessoais"
-                      FontSize="20" FontFamily="Cascadia Code ExtraLight" >
+                      FontSize="20"  >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="250" />
@@ -73,59 +89,56 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Grid.Column="0" Content="Nome Completo:" 
-                           FontSize="16" FontFamily="Cascadia Code" 
-                           HorizontalAlignment="Right"/>
+                           FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Right" />
                     <TextBox x:Name="NomeText" Grid.Row="0" Grid.Column="1"
-                             HorizontalAlignment="Stretch" 
-                             TextAlignment="Left" VerticalAlignment="Center"                                
-                              FontFamily="Cascadia Code SemiBold" FontSize="20" FontWeight="Normal" />
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                             TextAlignment="Left"  FontSize="20" FontWeight="Bold" 
+                             MaxLength="148" />
 
                     <Label Grid.Row="1" Grid.Column="0" Content="Data Nascimento:"
-                           FontSize="16" FontFamily="Cascadia Code" 
-                           HorizontalAlignment="Right" />
+                           FontSize="16" HorizontalAlignment="Right" FontWeight="SemiBold" />
                     <DatePicker x:Name="NascimentoData" Grid.Row="1" Grid.Column="1"
-                                Width="220" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                FontSize="15"  />
+                                Width="220" HorizontalAlignment="Left" 
+                                FontSize="16"  />
                     <Label x:Name="IdadeLabel" Grid.Row="1" Grid.Column="1" Content="10 anos"
-                           FontSize="14" FontFamily="Cascadia Code" Visibility="Hidden"
-                           HorizontalAlignment="Left" Margin="230,0,0,0"/>
+                           FontSize="14" Visibility="Hidden"
+                           HorizontalAlignment="Left" Margin="230,0,0,0" />
 
                     <Label Grid.Row="2" Grid.Column="0" Content="Sexo:"
-                           FontSize="16" FontFamily="Cascadia Code" 
-                           HorizontalAlignment="Right" />
-                    <ComboBox x:Name="TipoSexoCombo" Grid.Row="2" Grid.Column="1"
-                              FontSize="16" FontFamily="Cascadia Code"
-                              Width="300" HorizontalAlignment="Left" SelectedIndex="0">
-                        <ComboBoxItem Content="0 - Masculino" />
-                        <ComboBoxItem Content="1 - Feminino" />
+                           FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Right" />
+                    <ComboBox x:Name="SexoCombo" Grid.Row="2" Grid.Column="1"
+                              FontSize="16" Width="300" HorizontalAlignment="Left" SelectedIndex="0">
                     </ComboBox>
 
                     <Label Grid.Row="3" Grid.Column="0" Content="RG:"
-                           FontSize="16"  FontFamily="Cascadia Code" 
+                           FontSize="16" FontWeight="SemiBold" 
                            HorizontalAlignment="Right" />
-                    <TextBox x:Name="RGText" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
-                             HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Center"
-                             FontSize="15" />
+                    <TextBox x:Name="RGText" Grid.Row="3" Grid.Column="1"
+                             HorizontalAlignment="Left" MinWidth="300" MaxWidth="300"
+                             VerticalContentAlignment="Center" TextAlignment="Left" VerticalAlignment="Stretch"
+                             FontSize="16" MaxLength="20"/>
 
                     <Label Grid.Row="4" Grid.Column="0" Content="CPF:"
-                           FontSize="16"  FontFamily="Cascadia Code" 
+                           FontSize="16"  FontWeight="SemiBold"
                            HorizontalAlignment="Right" />
-                    <TextBox x:Name="CPFText" Grid.Row="4" Grid.Column="1"
-                             HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Bottom"
-                             FontSize="15" FontFamily="Cascadia Code Light" Margin="0,0,0,5" MaxLength="14" />
+                    <TextBox x:Name="CPFText" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" MaxWidth="300"
+                             HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Stretch"
+                             VerticalContentAlignment="Center"
+                             FontSize="16" MaxLength="14" />
 
                     <Label Grid.Row="5" Grid.Column="0" Content="Profissão:"
-                           FontSize="16"  FontFamily="Cascadia Code" 
+                           FontSize="16"  FontWeight="SemiBold" 
                            HorizontalAlignment="Right" />
-                    <TextBox x:Name="ProfissaoText" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3"
-                             HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Center"
-                             FontSize="15" FontFamily="Cascadia Code Light" />
+                    <TextBox x:Name="ProfissaoText" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" MaxWidth="300"
+                             HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Stretch"
+                             VerticalContentAlignment="Center"
+                             FontSize="16" MaxLength="42" />
                 </Grid>
             </GroupBox>
 
             <GroupBox Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="4"
                        Margin="10,0,10,0" Padding="5" Header="Contatos"
-                      FontSize="20" FontFamily="Cascadia Code ExtraLight" >
+                      FontSize="20"  >
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -142,29 +155,29 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="1" Grid.Column="0" Content="Telefone 1:" 
-                           FontSize="16"  FontFamily="Cascadia Code" 
+                           FontSize="16"   
                            HorizontalAlignment="Right" />
 
                     <TextBox x:Name="Telefone1Text" Grid.Row="1" Grid.Column="1" 
                              HorizontalAlignment="Stretch"
-                             TextAlignment="Left" VerticalAlignment="Center"
-                             FontSize="15" Margin="0,0,50,0"  />
+                             TextAlignment="Left"
+                             FontSize="15" Margin="0,0,50,0" />
 
                     <Label Grid.Row="2" Grid.Column="0" Content="Telefone 2:" 
-                           FontSize="16"  FontFamily="Cascadia Code" 
+                           FontSize="16"   
                            HorizontalAlignment="Right" />
 
                     <TextBox x:Name="Telefone2Text" Grid.Row="2" Grid.Column="1"
                              HorizontalAlignment="Stretch"
-                             TextAlignment="Left" VerticalAlignment="Center"
+                             TextAlignment="Left"
                              FontSize="15" Margin="0,0,50,0"  />
 
                     <Label Grid.Row="3" Grid.Column="0" Content="Email:" 
-                           FontSize="16"  FontFamily="Cascadia Code" 
+                           FontSize="16"   
                            HorizontalAlignment="Right" />
 
                     <TextBox x:Name="EmailText" Grid.Row="3" Grid.Column="1"
-                             HorizontalAlignment="Stretch" TextAlignment="Left" VerticalAlignment="Center"
+                             HorizontalAlignment="Stretch" TextAlignment="Left"
                              FontSize="15"  />
 
                 </Grid>
@@ -172,7 +185,7 @@
 
             <GroupBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4"
                        Margin="10,0,10,0" Padding="5" Header="Endereço"
-                      FontSize="20" FontFamily="Cascadia Code ExtraLight" >
+                      FontSize="20"  >
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -190,60 +203,60 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Grid.Column="0" Content="Rua:" 
-                           FontSize="16"  FontFamily="Cascadia Code" 
+                           FontSize="16"
                            HorizontalAlignment="Right" />
-
                     <TextBox x:Name="RuaText" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"
-                             HorizontalAlignment="Stretch" TextAlignment="Left" VerticalAlignment="Center"
+                             HorizontalAlignment="Stretch" TextAlignment="Left" 
+                            
                              FontSize="15"  />
 
                     <Label Grid.Row="1" Grid.Column="0" Content="Bairro:" 
-                           FontSize="16"  FontFamily="Cascadia Code" 
+                           FontSize="16" 
                            HorizontalAlignment="Right" />
 
                     <TextBox x:Name="BairroText" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" 
-                          HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="15"  >                        
+                          HorizontalAlignment="Stretch" FontSize="15"  >
                     </TextBox>
 
                     <Label Grid.Row="2" Grid.Column="0" Content="Número:" 
-                           FontSize="16"  FontFamily="Cascadia Code" 
+                           FontSize="16" 
                            HorizontalAlignment="Right" />
 
                     <TextBox x:Name="NumeroText"  Grid.Row="2" Grid.Column="1" Width="100"
-                             HorizontalAlignment="Left" TextAlignment="Left" VerticalAlignment="Center"
+                             HorizontalAlignment="Left" TextAlignment="Left"
                              FontSize="15"  />
 
                     <Label Grid.Row="2" Grid.Column="2" Content="Complemento:" 
-                           FontSize="16"  FontFamily="Cascadia Code" 
+                           FontSize="16"   
                            HorizontalAlignment="Right" />
 
-                    <TextBox x:Name="ComplementoText" Grid.Row="2" Grid.Column="3" Width="200"
-                             HorizontalAlignment="Left" TextAlignment="Left" VerticalAlignment="Center"
+                    <TextBox x:Name="ComplementoText" Grid.Row="2" Grid.Column="3"
+                             HorizontalAlignment="Stretch" TextAlignment="Left"
                              FontSize="15"  />
 
                     <Label Grid.Row="3" Grid.Column="0" Content="Cidade:" 
-                           FontSize="16"  FontFamily="Cascadia Code" 
+                           FontSize="16"
                            HorizontalAlignment="Right" />
 
                     <TextBox x:Name="CidadeText" Grid.Row="3" Grid.Column="1"
                              HorizontalAlignment="Stretch"
-                             TextAlignment="Left" VerticalAlignment="Center"
+                             TextAlignment="Left"
                              FontSize="15"  />
 
                     <Label Grid.Row="3" Grid.Column="2" Content="CEP:" 
-                           FontSize="16"  FontFamily="Cascadia Code" 
+                           FontSize="16"   
                            HorizontalAlignment="Right" />
 
                     <TextBox x:Name="CEPText" Grid.Row="3" Grid.Column="3"
                              HorizontalAlignment="Stretch"
-                             TextAlignment="Left" VerticalAlignment="Center"
+                             TextAlignment="Left"
                              FontSize="15"  />
                 </Grid>
             </GroupBox>
 
             <GroupBox Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="7"
                        Margin="10,0,10,0" Padding="5" Header="Dados do Projeto"
-                      FontSize="20" FontFamily="Cascadia Code ExtraLight" >
+                      FontSize="20"  >
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -266,14 +279,14 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Oficinas Lecionadas:" 
-                           FontSize="16"  FontFamily="Cascadia Code" 
+                           FontSize="16"   
                            Margin="20,0" />
                     <ListBox x:Name="OficinasList" Grid.Row="1" Grid.Column="0" Grid.RowSpan="8" Grid.ColumnSpan="2"
                              Margin="20,0"
                              FontSize="15"  >
                     </ListBox>
                     <Label Grid.Row="0" Grid.Column="2" Content="Observações:" 
-                           FontSize="16"  FontFamily="Cascadia Code" Margin="10,0,0,0"/>
+                           FontSize="16"   Margin="10,0,0,0"/>
 
                     <TextBox x:Name="ObservacoesText" Grid.Row="1" Grid.Column="2" Grid.RowSpan="8" Grid.ColumnSpan="2"
                                Margin="10,0,10,0" FontSize="16"  
@@ -286,13 +299,13 @@
             <Button x:Name="ConfirmarButton"  Grid.Row="15" Grid.Column="3"  Grid.RowSpan="2"
                              Content="Confirmar"
                              HorizontalAlignment="Right" Width="200" Margin="0,10,10,5"
-                             FontSize="15"  FontFamily="Cascadia Code" 
+                             FontSize="15"   
                              />
 
             <Button x:Name="CancelarButton" Grid.Row="15" Grid.Column="3"  Grid.RowSpan="2"
                              Content="Descartar" HorizontalAlignment="Left"
                              Width="150" Margin="20,20,0,5"
-                             FontSize="15"  FontFamily="Cascadia Code" 
+                             FontSize="15"   
                              />
         </Grid>
     </Grid>

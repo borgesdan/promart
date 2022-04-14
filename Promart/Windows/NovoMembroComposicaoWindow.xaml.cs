@@ -35,11 +35,11 @@ namespace Promart.Windows
             Vinculo = vinculo;
 
             NomeText.Text = vinculo.NomeFamiliar ?? string.Empty;
-            IdadeText.Text = vinculo.Idade.ToString();
+            IdadeText.Text = vinculo.Idade > 0 ? vinculo.Idade.ToString() : string.Empty;
             ParentescoText.Text = vinculo.Parentesco ?? string.Empty;
             OcupacaoText.Text = vinculo.Ocupacao ?? string.Empty;
             EscolaridadeText.Text = vinculo.Escolaridade ?? string.Empty;
-            RendaText.Text = vinculo.Renda.ToString();
+            RendaText.Text = vinculo.Renda > 0 ? vinculo.Renda.ToString() : string.Empty;
 
             AdicionarButton.Click += AdicionarVinculo;
             CancelarButton.Click += (object sender, RoutedEventArgs e) => DialogResult = false;
@@ -78,9 +78,9 @@ namespace Promart.Windows
                 IdadeText.Text = "0";
             }
 
-            if (string.IsNullOrEmpty(RendaText.Text) && !ushort.TryParse(IdadeText.Text, out renda))
+            if (string.IsNullOrEmpty(RendaText.Text) || !ushort.TryParse(RendaText.Text, out renda))
             {
-                RendaText.Text = "0";
+                RendaText.Text = "0";                
             }
 
             return true;

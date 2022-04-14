@@ -20,6 +20,7 @@ namespace Promart.Models
         /// </summary>
         public int Sexo { get; set; }
         public string? Profissao { get; set; }
+        public string? Escolaridade { get; set; }
         public string? RG { get; set; }
         public string? CPF { get; set; }
         public string? Email { get; set; }

@@ -112,7 +112,7 @@ namespace Promart.Pages
             }
 
             Voluntario.DataNascimento = NascimentoData.SelectedDate;
-            Voluntario.Sexo = TipoSexoCombo.SelectedIndex;
+            Voluntario.Sexo = SexoCombo.SelectedIndex;
             Voluntario.Profissao = ProfissaoText.Text;
             Voluntario.RG = RGText.Text;
             Voluntario.CPF = CPFText.Text;
@@ -181,6 +181,5 @@ namespace Promart.Pages
                 }
             }
         }
-
     }
 }

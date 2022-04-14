@@ -25,15 +25,15 @@
 
         <StackPanel x:Name="MatriculaPanel" Orientation="Horizontal" 
                     Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right"
-                    Visibility="Collapsed">
+                    Visibility="Hidden">
             <Label
             Content="Matrícula:"            
             VerticalContentAlignment="Bottom"
             FontSize="16" />
-            <TextBox x:Name="MatriculaLabel"
-                 Width="200" Text="2022A001" IsReadOnly="True"                 
+            <TextBox x:Name="MatriculaText"
+                 Width="250" Text="2022A001" IsReadOnly="True"                 
                  VerticalContentAlignment="Center" TextAlignment="Center"
-                 FontSize="24" FontWeight="Bold" Cursor="Hand"/>
+                 FontSize="24" FontWeight="Bold" Cursor="Hand"/>            
         </StackPanel>
         
 
@@ -141,14 +141,14 @@
                            FontSize="16" FontWeight="SemiBold" 
                            HorizontalAlignment="Right" />
                     <TextBox x:Name="RGText" Grid.Row="3" Grid.Column="1"
-                             HorizontalAlignment="Left" MinWidth="300" 
+                             HorizontalAlignment="Left" MinWidth="300" MaxWidth="300"
                              VerticalContentAlignment="Center" TextAlignment="Left" VerticalAlignment="Stretch"
                              FontSize="16" MaxLength="20"/>
 
                     <Label Grid.Row="4" Grid.Column="0" Content="CPF:"
                            FontSize="16"  FontWeight="SemiBold"
                            HorizontalAlignment="Right" />
-                    <TextBox x:Name="CPFText" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"
+                    <TextBox x:Name="CPFText" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" MaxWidth="300"
                              HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Stretch"
                              VerticalContentAlignment="Center"
                              FontSize="16" MaxLength="14" />
@@ -156,10 +156,10 @@
                     <Label Grid.Row="5" Grid.Column="0" Content="Certidão de Nascimento:"
                            FontSize="16"  FontWeight="SemiBold" 
                            HorizontalAlignment="Right" />
-                    <TextBox x:Name="CertidaoText" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3"
+                    <TextBox x:Name="CertidaoText" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" MaxWidth="300"
                              HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Stretch"
                              VerticalContentAlignment="Center"
-                             FontSize="16" MaxLength="14" />
+                             FontSize="16" MaxLength="42" />
                 </Grid>
             </GroupBox>
 
@@ -204,7 +204,7 @@
                            FontSize="16" FontWeight="SemiBold"
                            HorizontalAlignment="Right" />
                     <ComboBox x:Name="VinculoCombo" Grid.Row="1" Grid.Column="1" 
-                              Width="250" HorizontalAlignment="Left"
+                              Width="250" MaxWidth="250" HorizontalAlignment="Left"
                               SelectedIndex="0"
                               FontSize="16"  >
                     </ComboBox>
@@ -212,7 +212,7 @@
                     <Label Grid.Row="2" Grid.Column="0" Content="Tipo de Moradia" 
                            FontSize="16"  FontWeight="SemiBold" 
                            HorizontalAlignment="Right" />
-                    <ComboBox x:Name="MoradiaCombo" Grid.Row="2" Grid.Column="1" Width="250"
+                    <ComboBox x:Name="MoradiaCombo" Grid.Row="2" Grid.Column="1" Width="250" MaxWidth="250"
                               HorizontalAlignment="Left"
                               SelectedIndex="0"
                               FontSize="16"  >
@@ -222,7 +222,7 @@
                            FontSize="16"  FontWeight="SemiBold" 
                            HorizontalAlignment="Right" />
                     <ComboBox x:Name="RendaCombo" Grid.Row="3" Grid.Column="1"  HorizontalAlignment="Left"
-                              SelectedIndex="0"  Width="250"
+                              SelectedIndex="0"  Width="250" MaxWidth="250"
                               FontSize="16"  >
                     </ComboBox>
 
@@ -342,7 +342,7 @@
                            FontSize="16"  FontWeight="SemiBold" 
                            HorizontalAlignment="Right" />
                     <ComboBox x:Name="TurnoEscolarCombo" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"
-                              SelectedIndex="0" Width="200"
+                              SelectedIndex="0" Width="200" MaxWidth="200"
                               FontSize="16"  >
                     </ComboBox>
 
@@ -350,7 +350,7 @@
                            FontSize="16"  FontWeight="SemiBold" 
                            HorizontalAlignment="Right" />
                     <ComboBox x:Name="AnoEscolarCombo" Grid.Row="2" Grid.Column="2" 
-                              Width="200" HorizontalAlignment="Left"
+                              Width="200" MaxWidth="200" HorizontalAlignment="Left"
                               SelectedIndex="0"
                               FontSize="16"  >
                     </ComboBox>
@@ -436,7 +436,7 @@
                            FontSize="16"  FontWeight="SemiBold" 
                            HorizontalAlignment="Right" />
 
-                    <ComboBox x:Name="SituacaoProjetoCombo" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="220"
+                    <ComboBox x:Name="SituacaoProjetoCombo" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="220" MaxWidth="220"
                                SelectedIndex="0"
                               FontSize="16"  >
                     </ComboBox>
@@ -452,7 +452,7 @@
 
                     <ComboBox x:Name="TurnoProjetoCombo" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"
                                SelectedIndex="1"
-                              FontSize="16"  Width="220" >                        
+                              FontSize="16"  Width="220" MaxWidth="220" >                        
                     </ComboBox>
 
                     <Label Grid.Row="5" Grid.Column="0" Content="Oficinas:" 

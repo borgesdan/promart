@@ -122,7 +122,8 @@ namespace Promart.Models
         /// [3] Não Informado
         /// </summary>
         public int TurnoProjeto { get; set; }        
-        public string? Matricula { get; set; }        
+        public string? Matricula { get; set; }    
+        public DateTime? DataMatricula { get; set; }
         public string? Observacoes { get; set; }
         public string? FotoUrl { get; set; }
 
@@ -159,6 +160,10 @@ namespace Promart.Models
         [NotMapped]
         [Dapper.Contrib.Extensions.Write(false)]
         public string? SituacaoProjetoValue { get => ComboBoxTipos.TipoAlunoSituacaoNaoNumerado[SituacaoProjeto]; }
+
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public DateOnly? DataMatriculaValue { get => DataMatricula.HasValue ? DateOnly.FromDateTime(DataMatricula.Value) : null; }
 
         public override string ToString()
         {

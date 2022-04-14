@@ -41,10 +41,10 @@ namespace Promart.Pages
         public CadastroAlunoPage(Aluno aluno)
         {
             InitializeComponent();
-            
+
             Aluno = aluno;
-            ComposicaoDataGrid.ItemsSource = vinculos;            
-            PreencherComboBoxes();            
+            ComposicaoDataGrid.ItemsSource = vinculos;
+            PreencherComboBoxes();
 
             //Eventos necessários dos controles
             ConfirmarButton.Click += async (object sender, RoutedEventArgs e) => await ConfirmarPaginaAsync();
@@ -54,9 +54,10 @@ namespace Promart.Pages
             TurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => { TurnoProjetoCombo.SelectedIndex = TurnoEscolarCombo.SelectedIndex == 0 ? 1 : 0; };
             NomeText.TextChanged += (object sender, TextChangedEventArgs e) => AlterarHeaderAba();
             AbrirImagemButton.Click += (object sender, RoutedEventArgs e) => AbrirImagem();
-            AddMembroButton.Click += (object sender, RoutedEventArgs e) => AbrirCadastroVinculo();            
+            AddMembroButton.Click += (object sender, RoutedEventArgs e) => AbrirCadastroVinculo();
             EditarMembroButton.Click += (object sender, RoutedEventArgs e) => EditarCadastroVinculo();
             ExcluirrMembroButton.Click += (object sender, RoutedEventArgs e) => ExcluirCadastroVinculo();
+            MatriculaText.MouseDoubleClick += (object sender, MouseButtonEventArgs e) => CopiarMatricula();
 
             //Eventos para confirmar alterações de dados ao sair da tela
             FotoImage.Changed += (object? sender, EventArgs e) => DefinirAlteracaoDados();
@@ -83,7 +84,7 @@ namespace Promart.Pages
             TurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
             TurnoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
             BeneficiarioCheck.Click += (object sender, RoutedEventArgs e) => DefinirAlteracaoDados();
-            ComposicaoDataGrid.RowEditEnding += (object? sender, DataGridRowEditEndingEventArgs e) => DefinirAlteracaoDados();            
+            ComposicaoDataGrid.RowEditEnding += (object? sender, DataGridRowEditEndingEventArgs e) => DefinirAlteracaoDados();
             //Vai para o evento Page_Loaded.
         }
 
@@ -109,7 +110,7 @@ namespace Promart.Pages
             Helper.Controles.RemoverAba(Tab);
         }
 
-        public async Task ConfirmarPaginaAsync()
+        private async Task ConfirmarPaginaAsync()
         {
             Aluno.NomeCompleto = NomeText.Text.Trim();
 
@@ -131,7 +132,7 @@ namespace Promart.Pages
             Aluno.Renda = RendaCombo.SelectedIndex;
             Aluno.Contato1 = Telefone1Text.Text;
             Aluno.Contato2 = Telefone2Text.Text;
-            Aluno.EscolaNome = NomeEscolaText.Text;            
+            Aluno.EscolaNome = NomeEscolaText.Text;
             Aluno.TurnoEscolar = TurnoEscolarCombo.SelectedIndex;
             Aluno.AnoEscolar = AnoEscolarCombo.SelectedIndex;
             Aluno.EnderecoRua = RuaText.Text;
@@ -141,10 +142,11 @@ namespace Promart.Pages
             Aluno.EnderecoCidade = "Ipiaú";
             Aluno.EnderecoEstado = "Bahia";
             Aluno.EnderecoCEP = "45570-000";
-            Aluno.SituacaoProjeto = SituacaoProjetoCombo.SelectedIndex;            
+            Aluno.SituacaoProjeto = SituacaoProjetoCombo.SelectedIndex;
             Aluno.TurnoProjeto = TurnoProjetoCombo.SelectedIndex;
             Aluno.Observacoes = ObservacoesText.Text;
             Aluno.Matricula = GeradorMatricula.Get();
+            Aluno.DataMatricula = DateTime.Now;
 
             if (Aluno.Id == 0)
             {
@@ -152,12 +154,12 @@ namespace Promart.Pages
 
                 if (result != -1)
                 {
-                    Task t = await InserirAlunoOficinaAsync();
                     await InserirVinculosAsync();
+                    await InserirAlunoOficinaAsync();
 
                     ConfirmarButton.IsEnabled = false;
-                    MessageBox.Show("O aluno foi cadastrado com sucesso", "Aluno cadastrado", MessageBoxButton.OK, MessageBoxImage.Information);
-                    MatriculaLabel.Text = Aluno.Matricula;
+                    MessageBox.Show("O cadastro do aluno foi realizado e um número de matrícula foi gerado.", "Aluno cadastrado", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MatriculaText.Text = Aluno.Matricula;
                     MatriculaPanel.Visibility = Visibility.Visible;
                 }
             }
@@ -170,8 +172,10 @@ namespace Promart.Pages
                     await InserirAlunoOficinaAsync(true);
                     ConfirmarButton.IsEnabled = false;
                     MessageBox.Show("O cadastro do aluno foi atualizado com sucesso", "Cadastro Atualizado", MessageBoxButton.OK, MessageBoxImage.Information);
-                }                    
-            }            
+                }
+            }
+
+            MatriculaText.Focus();
         }
 
         private async Task<bool> InserirAlunoOficinaAsync(bool atualizar = false)
@@ -181,7 +185,10 @@ namespace Promart.Pages
                 var result = await SqlAccess.TAlunoOficinas.DeletarAsync(Aluno);
 
                 if (result == null)
+                {
+                    MessageBox.Show("Infelizmente ocorreu um erro ao atualizar as oficinas do aluno.", "Erro em oficinas", MessageBoxButton.OK, MessageBoxImage.Information);
                     return false;
+                }                    
             }
 
             foreach (var checkBox in TipoOficinasList.ItemsSource)
@@ -203,7 +210,10 @@ namespace Promart.Pages
                         var result = await SqlAccess.InserirAsync(alunoOficina);
 
                         if (result == -1)
+                        {
+                            MessageBox.Show("Infelizmente ocorreu um erro ao inserir as oficinas do aluno.", "Erro em oficinas", MessageBoxButton.OK, MessageBoxImage.Information);
                             return false;
+                        }                            
                     }
                 }
             }
@@ -218,7 +228,10 @@ namespace Promart.Pages
                 var result = await SqlAccess.TAlunoVinculos.DeletarAsync(Aluno);
 
                 if (result == null)
-                    return false;                
+                {
+                    MessageBox.Show("Infelizmente ocorreu um erro ao atualizar os vínculos familiares do aluno.", "Erro em vínculos familiares", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return false;
+                }
             }
 
             for (int i = 0; i < ComposicaoDataGrid.Items.Count; i++)
@@ -229,17 +242,20 @@ namespace Promart.Pages
                 var result = await SqlAccess.InserirAsync(alunoVinculo);
 
                 if (result == -1)
+                {
+                    MessageBox.Show("Infelizmente ocorreu um erro ao inserir os vínculos familiares do aluno.", "Erro em vínculos familiares", MessageBoxButton.OK, MessageBoxImage.Information);
                     return false;
+                }
             }
 
             return true;
         }
-        
+
         private void DefinirAlteracaoDados()
         {
             dadosAlterados = true;
             ConfirmarButton.IsEnabled = true;
-        }        
+        }
 
         private void PreencherComboBoxes()
         {
@@ -317,28 +333,29 @@ namespace Promart.Pages
 
         private void AbrirImagem()
         {
-            try {
+            try
+            {
                 Guid guid = Guid.NewGuid();
                 var result = Helper.Util.AbrirSalvarImagem(Helper.Diretorios.FOTOS_ALUNOS, guid.ToString());
-                
+
                 if (result != null)
                 {
                     arquivoFoto = guid.ToString();
-                    FotoImage.ImageSource = result;                    
+                    FotoImage.ImageSource = result;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ocorreu um erro ao carregar a imagem.\n\nErro: {ex.Message}", "Erro de carregamento", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }        
-        
+        }
+
         private void AbrirCadastroVinculo()
         {
             NovoMembroComposicaoWindow novoMembro = new NovoMembroComposicaoWindow();
             var result = novoMembro.ShowDialog();
 
-            if(result == true && novoMembro.Vinculo != null)
+            if (result == true && novoMembro.Vinculo != null)
             {
                 vinculos.Add(novoMembro.Vinculo);
                 ComposicaoDataGrid.ItemsSource = null;
@@ -346,13 +363,13 @@ namespace Promart.Pages
             }
         }
 
-        private void EditarCadastroVinculo() 
+        private void EditarCadastroVinculo()
         {
-            if(ComposicaoDataGrid.SelectedIndex != -1)
+            if (ComposicaoDataGrid.SelectedIndex != -1)
             {
                 AlunoVinculo vinculo = vinculos[ComposicaoDataGrid.SelectedIndex];
-                
-                if(vinculo != null)
+
+                if (vinculo != null)
                 {
                     NovoMembroComposicaoWindow novoMembro = new NovoMembroComposicaoWindow(vinculo);
                     novoMembro.ShowDialog();
@@ -371,6 +388,11 @@ namespace Promart.Pages
                 ComposicaoDataGrid.ItemsSource = null;
                 ComposicaoDataGrid.ItemsSource = vinculos;
             }
+        }
+
+        private void CopiarMatricula()
+        {
+            Clipboard.SetText(MatriculaText.Text);
         }
     }
 }

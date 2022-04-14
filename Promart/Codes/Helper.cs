@@ -12,6 +12,7 @@ using Promart.Controls;
 using Microsoft.Win32;
 using System.IO;
 using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace Promart.Codes
 {
@@ -37,7 +38,7 @@ namespace Promart.Codes
                 TabItem tabItem = new();
                 tabItem.MinWidth = 300;
                 tabItem.MaxWidth = 300;
-                tabItem.MinHeight = 25;
+                tabItem.MinHeight = 25;                
                 tabItem.Header = new TabHeaderContentControl(tabHeader, 280, new RoutedEventHandler((o, t) => {
                     var result = MessageBox.Show("Todos os dados não salvos serão perdidos. Deseja fechar a aba?", "Fechar aba", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     
@@ -49,7 +50,7 @@ namespace Promart.Codes
                 
                 ScrollViewer scrollViewer = new();
                 Frame frame = new();
-
+                
                 frame.Content = contentPage;
                 scrollViewer.Content = frame;
                 tabItem.Content = scrollViewer;                
