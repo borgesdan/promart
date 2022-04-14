@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Promart.Windows"
         mc:Ignorable="d"
-        Title="Adicionar Novo Membro" Height="350" Width="800" WindowStartupLocation="CenterScreen">
+        Title="Adicionar Novo Membro" Height="350" Width="800" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
@@ -22,7 +22,7 @@
                   FontSize="20"  >
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="250" />
+                    <ColumnDefinition Width="150" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -93,5 +93,9 @@
                 FontSize="16" Margin="5" FontWeight="Bold"
                 Background="#FF0087FD" Foreground="White"
                 BorderBrush="DarkBlue" BorderThickness="2"/>
+        <Button x:Name="CancelarButton" Grid.Row="2" Grid.Column="1" Width="200" Content="Cancelar" HorizontalAlignment="Right"
+                FontSize="16" Margin="5,5,250,5" FontWeight="Bold"
+                Background="DarkRed" Foreground="White"
+                BorderBrush="DarkRed" BorderThickness="2"/>
     </Grid>
 </Window>

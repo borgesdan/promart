@@ -89,8 +89,8 @@
             </Button>
             <Button Grid.Row="4" Grid.Column="3" Margin="80,0,0,0" Width="60"
                     Background="Transparent" BorderBrush="Transparent"
-                    ToolTip="Abrir câmera">
-                <Image Source="/assets/images/icons/photo-camera.png" />
+                    ToolTip="Abrir câmera"  IsEnabled="False">
+                <Image Source="/assets/images/icons/photo-camera.png"/>
             </Button>
 
             <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="5"
@@ -273,15 +273,31 @@
                                     FontSize="14"  FontWeight="SemiBold" 
                                     Background="#FF0087FD" Foreground="White"
                                     BorderBrush="DarkBlue" BorderThickness="2"/>
+                            <Button x:Name="EditarMembroButton" Width="200" 
+                                    Content="Editar" 
+                                    Margin="210,0,0,5"
+                                    HorizontalAlignment="Left"
+                                    FontSize="14"  FontWeight="SemiBold" 
+                                    Background="Green" Foreground="White"
+                                    BorderBrush="DarkGreen" BorderThickness="2"/>
+                            <Button x:Name="ExcluirrMembroButton" Width="200" 
+                                    Content="Excluir" 
+                                    Margin="420,0,0,5"
+                                    HorizontalAlignment="Left"
+                                    FontSize="14"  FontWeight="SemiBold" 
+                                    Background="DarkRed" Foreground="White"
+                                    BorderBrush="DarkRed" BorderThickness="2"/>
                             <DataGrid x:Name="ComposicaoDataGrid" Grid.Row="1"
                                       FontSize="16"
+                                      RowHeaderWidth="10"
                                       AutoGenerateColumns="False" 
                                       CanUserDeleteRows="True" 
                                       CanUserReorderColumns="True"
                                       CanUserResizeColumns="True" 
                                       CanUserSortColumns="True"
                                       CanUserAddRows="False"
-                                      IsReadOnly="True">
+                                      IsReadOnly="True"
+                                      >
                                 <DataGrid.Columns>
                                     <DataGridTextColumn x:Name="NomeColumnDataGrid" Binding="{Binding NomeFamiliar}" Header="Nome" Width="350" FontWeight="Bold" />
                                     <DataGridTextColumn x:Name="IdadeColumnDataGrid" Binding="{Binding Idade}" Header="Idade" Width="70"/>
@@ -464,11 +480,11 @@
                     FontSize="24"  FontWeight="SemiBold"
                     Background="#FF0087FD" Foreground="White" BorderBrush="DarkBlue" BorderThickness="2"/>
 
-            <Button x:Name="CancelarButton"   Grid.Row="26" Grid.Column="2"
-                             Content="Fechar" HorizontalAlignment="Right"
-                             Width="150" Margin="0,0,240,10"
-                             FontSize="20"  FontWeight="SemiBold" 
-                    Background="#FFB50000" Foreground="White" BorderBrush="DarkRed" BorderThickness="2"
+            <Button x:Name="CancelarButton" Grid.Row="25" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2"
+                    Content="Fechar" HorizontalAlignment="Right"
+                    Width="200" Margin="0,20, 250,10"
+                    FontSize="24"  FontWeight="SemiBold" 
+                    Background="DarkRed" Foreground="White" BorderBrush="DarkRed" BorderThickness="2"
                              />            
         </Grid>
     </Grid>

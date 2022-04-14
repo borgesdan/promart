@@ -6,6 +6,7 @@ namespace Promart.Models
 {
     //TODO: Implementar controle de faltas
 
+
     [Table(name: "Alunos")]
     public class Aluno
     {

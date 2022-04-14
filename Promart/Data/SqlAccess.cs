@@ -196,6 +196,27 @@ namespace Promart.Data
             }            
         }
 
+        public static class TAlunoVinculos
+        {
+            public static async Task<IEnumerable<dynamic>?> DeletarAsync(Aluno aluno)
+            {
+                try
+                {
+                    using SqlConnection conn = new SqlConnection(GetConnectionString());
+                    await conn.OpenAsync();
+
+                    return await conn.QueryAsync(@"DELETE FROM AlunoVinculos 
+                            WHERE IdAluno = @Id", aluno);
+                }
+                catch (Exception ex)
+                {
+                    MostrarErro("Ocorreu um erro ao deletar as informações no banco de dados", ex);
+                }
+
+                return null;
+            }
+        }
+
         public static class TVoluntarioOficinas
         {
             public static async Task<IEnumerable<dynamic>?> DeletarAsync(Voluntario voluntario)
@@ -215,7 +236,7 @@ namespace Promart.Data
 
                 return null;
             }
-        }
+        }        
         
     }
 }

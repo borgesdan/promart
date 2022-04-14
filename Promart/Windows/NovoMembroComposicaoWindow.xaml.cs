@@ -20,27 +20,36 @@ namespace Promart.Windows
     /// </summary>
     public partial class NovoMembroComposicaoWindow : Window
     {
-        public AlunoVinculo? Vinculo { get; set; }
+        public AlunoVinculo Vinculo { get; set; }
         ushort idade = 0;
         ushort renda = 0;
 
-        public NovoMembroComposicaoWindow()
+        public NovoMembroComposicaoWindow() : this(new AlunoVinculo())
+        {
+
+        }
+
+        public NovoMembroComposicaoWindow(AlunoVinculo vinculo)
         {
             InitializeComponent();
+            Vinculo = vinculo;
+
+            NomeText.Text = vinculo.NomeFamiliar ?? string.Empty;
+            IdadeText.Text = vinculo.Idade.ToString();
+            ParentescoText.Text = vinculo.Parentesco ?? string.Empty;
+            OcupacaoText.Text = vinculo.Ocupacao ?? string.Empty;
+            EscolaridadeText.Text = vinculo.Escolaridade ?? string.Empty;
+            RendaText.Text = vinculo.Renda.ToString();
 
             AdicionarButton.Click += AdicionarVinculo;
-            IdadeText.PreviewTextInput += IdadeText_PreviewTextInput;
-            RendaText.PreviewTextInput += RendaText_PreviewTextInput;
+            CancelarButton.Click += (object sender, RoutedEventArgs e) => DialogResult = false;
+            IdadeText.PreviewTextInput += (object sender, TextCompositionEventArgs e) => e.Handled = !ValidarNumero(e.Text);
+            RendaText.PreviewTextInput += (object sender, TextCompositionEventArgs e) => e.Handled = !ValidarNumero(e.Text);
         }
 
-        private void RendaText_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            e.Handled = !ValidarNumero(e.Text);
-        }
-
-        private void IdadeText_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = !ValidarNumero(e.Text);
+            NomeText.Focus();
         }
 
         private bool ValidarNumero(string texto)
@@ -63,7 +72,6 @@ namespace Promart.Windows
                     idade = 130;
 
                 IdadeText.Text = "130";
-
             }
             else
             {
@@ -82,15 +90,15 @@ namespace Promart.Windows
         {
             if (ValidarDados())
             {
-                Vinculo = new AlunoVinculo();
                 Vinculo.NomeFamiliar = NomeText.Text;
                 Vinculo.Idade = idade;
                 Vinculo.Ocupacao = OcupacaoText.Text;
+                Vinculo.Parentesco = ParentescoText.Text;
                 Vinculo.Renda = renda;
                 Vinculo.Escolaridade = EscolaridadeText.Text;
 
                 DialogResult = true;
             }
-        }
+        }        
     }
 }
