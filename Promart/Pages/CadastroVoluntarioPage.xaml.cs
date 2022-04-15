@@ -34,34 +34,19 @@ namespace Promart.Pages
         public CadastroVoluntarioPage(Voluntario voluntario)
         {
             InitializeComponent();
-
             Voluntario = voluntario;
+            SexoCombo.ItemsSource = ComboBoxTipos.TipoSexoNumerado;
 
-            NascimentoData.SelectedDateChanged += (s, e) =>
-            {
-                if (NascimentoData.SelectedDate.HasValue)
-                {
-                    DateTime nascimento = NascimentoData.SelectedDate.Value;
-                    IdadeLabel.Content = string.Concat(Helper.Util.ObterIdade(nascimento), " anos");
-                    IdadeLabel.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    IdadeLabel.Visibility = Visibility.Hidden;
-                }
-            };
+            NascimentoData.SelectedDateChanged += (s, e) => ExibirIdade();
             CancelarButton.Click += CancelarButton_Click;
-            ConfirmarButton.Click += (s, e) => ConfirmarPagina();
-
-            //TODO: Desabilitado pois a tecla TAB não funciona corretamente
-            //CPFText.PreviewKeyDown += (sender, e) => { if (!Helper.Util.VerificarSomenteNumero(e.Key)) e.Handled = true; };
-            //CPFText.PreviewTextInput += (sender, e) => Helper.Util.FormatarCPF(CPFText);
+            ConfirmarButton.Click += async (s, e) => await ConfirmarPagina();            
 
             //Eventos para confirmar alterações de dados ao sair da tela
             NomeText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             RGText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             CPFText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             ProfissaoText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
+            EscolaridadeText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             Telefone1Text.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             Telefone2Text.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             EmailText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
@@ -72,15 +57,15 @@ namespace Promart.Pages
             CidadeText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             ObservacoesText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             NascimentoData.SelectedDateChanged += (object? sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
-        }
+            
+        }        
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             NomeText.Text = Voluntario.NomeCompleto;
             NomeText.Focus();
             NomeText.CaretIndex = NomeText.Text != null ? NomeText.Text.Length : 0;
-            
-            //await Helper.Controles.PopularOficinasListBoxAsync(OficinasList);
+
             await Helper.Controles.PopularOficinasListComCheckBoxAsync(OficinasList, (object o, RoutedEventArgs a) => DefinirAlteracaoDados());
         }
 
@@ -101,7 +86,7 @@ namespace Promart.Pages
             Helper.Controles.RemoverAba(Tab);
         }
 
-        public async void ConfirmarPagina()
+        private async Task ConfirmarPagina()
         {
             Voluntario.NomeCompleto = NomeText.Text.Trim();
 
@@ -127,6 +112,8 @@ namespace Promart.Pages
             Voluntario.EnderecoEstado = "Bahia";
             Voluntario.EnderecoCEP = CEPText.Text;
             Voluntario.Observacoes = ObservacoesText.Text;
+            Voluntario.DataCadastro = DateTime.Now;
+            Voluntario.Escolaridade = EscolaridadeText.Text;
 
             if (Voluntario.Id == 0)
             {
@@ -135,6 +122,10 @@ namespace Promart.Pages
                 if (result != -1)
                 {
                     await InserirVoluntarioOficinaAsync();
+                    
+                    ConfirmarButton.IsEnabled = false;
+                    dadosAlterados = false;
+                    MessageBox.Show("O cadastro do voluntário foi realizado.", "Voluntário Cadastrado", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             else
@@ -144,20 +135,27 @@ namespace Promart.Pages
                 if (result)
                 {
                     await InserirVoluntarioOficinaAsync(true);
+                    ConfirmarButton.IsEnabled = false;
+                    dadosAlterados = false;
+                    MessageBox.Show("O cadastro do voluntário foi atualizado.", "Voluntário Atualizado", MessageBoxButton.OK, MessageBoxImage.Information);
                 }                
             }
 
-            ConfirmarButton.IsEnabled = false;
+            TituloPaginaLabel.Focus();
         }
 
-        private async Task InserirVoluntarioOficinaAsync(bool atualizar = false)
+        private async Task<bool> InserirVoluntarioOficinaAsync(bool atualizar = false)
         {
             if (atualizar)
             {
                 var result = await SqlAccess.TVoluntarioOficinas.DeletarAsync(Voluntario);
 
                 if (result == null)
-                    return;
+                {
+                    MessageBox.Show("Infelizmente ocorreu um erro ao atualizar as oficinas do voluntpario.", "Erro em oficinas", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return false;
+                }
+                    
             }
 
             foreach (var checkBox in OficinasList.ItemsSource)
@@ -176,9 +174,31 @@ namespace Promart.Pages
                         alunoOficina.IdVoluntario = Voluntario.Id;
                         alunoOficina.IdOficina = oficina.Id;
 
-                        await SqlAccess.InserirAsync(alunoOficina);
+                        var result = await SqlAccess.InserirAsync(alunoOficina);
+
+                        if (result == -1)
+                        {
+                            MessageBox.Show("Infelizmente ocorreu um erro ao inserir as oficinas do voluntário.", "Erro em oficinas", MessageBoxButton.OK, MessageBoxImage.Information);
+                            return false;
+                        }
                     }
                 }
+            }
+
+            return true;
+        }
+
+        private void ExibirIdade()
+        {
+            if (NascimentoData.SelectedDate.HasValue)
+            {
+                DateTime nascimento = NascimentoData.SelectedDate.Value;
+                IdadeLabel.Content = string.Concat(Helper.Util.ObterIdade(nascimento), " anos");
+                IdadeLabel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                IdadeLabel.Visibility = Visibility.Hidden;
             }
         }
     }

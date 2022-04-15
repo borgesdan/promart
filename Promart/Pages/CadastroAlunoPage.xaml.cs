@@ -83,9 +83,14 @@ namespace Promart.Pages
             SituacaoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
             TurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
             TurnoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
-            BeneficiarioCheck.Click += (object sender, RoutedEventArgs e) => DefinirAlteracaoDados();
-            ComposicaoDataGrid.RowEditEnding += (object? sender, DataGridRowEditEndingEventArgs e) => DefinirAlteracaoDados();
+            BeneficiarioCheck.Click += (object sender, RoutedEventArgs e) => DefinirAlteracaoDados();           
+            
             //Vai para o evento Page_Loaded.
+        }
+
+        private void ComposicaoDataGrid_AddingNewItem(object? sender, AddingNewItemEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -145,7 +150,7 @@ namespace Promart.Pages
             Aluno.SituacaoProjeto = SituacaoProjetoCombo.SelectedIndex;
             Aluno.TurnoProjeto = TurnoProjetoCombo.SelectedIndex;
             Aluno.Observacoes = ObservacoesText.Text;
-            Aluno.Matricula = GeradorMatricula.Get();
+            Aluno.Matricula = GeradorMatricula.Get(Aluno.NomeCompleto);
             Aluno.DataMatricula = DateTime.Now;
 
             if (Aluno.Id == 0)
@@ -158,6 +163,7 @@ namespace Promart.Pages
                     await InserirAlunoOficinaAsync();
 
                     ConfirmarButton.IsEnabled = false;
+                    dadosAlterados = false;
                     MessageBox.Show("O cadastro do aluno foi realizado e um número de matrícula foi gerado.", "Aluno cadastrado", MessageBoxButton.OK, MessageBoxImage.Information);
                     MatriculaText.Text = Aluno.Matricula;
                     MatriculaPanel.Visibility = Visibility.Visible;
@@ -171,6 +177,7 @@ namespace Promart.Pages
                 {
                     await InserirAlunoOficinaAsync(true);
                     ConfirmarButton.IsEnabled = false;
+                    dadosAlterados = false;
                     MessageBox.Show("O cadastro do aluno foi atualizado com sucesso", "Cadastro Atualizado", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -360,6 +367,7 @@ namespace Promart.Pages
                 vinculos.Add(novoMembro.Vinculo);
                 ComposicaoDataGrid.ItemsSource = null;
                 ComposicaoDataGrid.ItemsSource = vinculos;
+                DefinirAlteracaoDados();
             }
         }
 
@@ -376,6 +384,7 @@ namespace Promart.Pages
 
                     ComposicaoDataGrid.ItemsSource = null;
                     ComposicaoDataGrid.ItemsSource = vinculos;
+                    DefinirAlteracaoDados();
                 }
             }
         }
@@ -387,6 +396,7 @@ namespace Promart.Pages
                 vinculos.RemoveAt(ComposicaoDataGrid.SelectedIndex);
                 ComposicaoDataGrid.ItemsSource = null;
                 ComposicaoDataGrid.ItemsSource = vinculos;
+                DefinirAlteracaoDados();
             }
         }
 

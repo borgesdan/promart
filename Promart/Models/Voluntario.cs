@@ -12,7 +12,6 @@ namespace Promart.Models
         //------ Dados Pessoais ------//        
         public string? NomeCompleto { get; set; }
         public DateTime? DataNascimento { get; set; }
-        //TODO: Implementar sexo
         /// <summary>
         /// [0] Masculino
         /// [1] Feminino
@@ -39,6 +38,7 @@ namespace Promart.Models
 
         //---------- Outros ------------//
         public string? Observacoes { get; set; }
+        public DateTime? DataCadastro { get; set; }
         public string? FotoUrl { get; set; }
 
         //Propriedades para somente consulta
@@ -57,6 +57,13 @@ namespace Promart.Models
         [NotMapped]
         [Dapper.Contrib.Extensions.Write(false)]
         public string? SexoValue { get => ComboBoxTipos.TipoSexoNaoNumerado[Sexo]; }
+
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public DateOnly? DataCadastroValue
+        {
+            get => DataCadastro.HasValue ? DateOnly.FromDateTime(DataCadastro.Value) : null;
+        }
 
         public override string ToString()
         {
