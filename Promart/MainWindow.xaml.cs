@@ -26,7 +26,6 @@ namespace Promart
     /// </summary>
     public partial class MainWindow : Window
     {
-        TabItem? OficinasTab = null;
         public static MainWindow? Instance { get; private set; }        
 
         public MainWindow()
@@ -49,7 +48,7 @@ namespace Promart
             AbrirTabelaDadosButton.Click += (object sender, RoutedEventArgs e) =>
             {
                 TabelaDadosPage page = new();
-                Helper.Controles.AbrirNovaAba(TabConteudo, "Visualização de Dados", page);
+                Helper.Controles.AbrirNovaAba(TabConteudo, "Relatórios", page);
             };
         }
 

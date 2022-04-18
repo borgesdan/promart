@@ -7,8 +7,8 @@
       mc:Ignorable="d" 
       d:DesignHeight="1500" d:DesignWidth="1280"
       Title="CadastrarAlunoPage" Loaded="Page_Loaded">
-
-    <Grid Background="White">
+    
+    <Grid x:Name="MainGrid" Background="White" >
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition />
@@ -32,7 +32,7 @@
             <TextBox x:Name="MatriculaText"
                  Width="250" Text="2022A001" IsReadOnly="True"                 
                  VerticalContentAlignment="Center" TextAlignment="Center" Margin="0,10"
-                 FontSize="18" FontWeight="Bold" Cursor="Hand"/>
+                 FontSize="18" FontWeight="Bold"/>
             <Label
             Content="Data:"            
             VerticalContentAlignment="Center"
@@ -40,7 +40,7 @@
             <TextBox x:Name="DataMatriculaText"
                  Width="200" Text="2022A001" IsReadOnly="True"                 
                  VerticalContentAlignment="Center" TextAlignment="Center" Margin="0,10"
-                 FontSize="18" FontWeight="Bold" Cursor="Hand"/>
+                 FontSize="18" FontWeight="Bold"/>
         </StackPanel>
         
 
@@ -287,7 +287,7 @@
                                     FontSize="14"  FontWeight="SemiBold" 
                                     Background="Green" Foreground="White"
                                     BorderBrush="DarkGreen" BorderThickness="2"/>
-                            <Button x:Name="ExcluirrMembroButton" Width="200" 
+                            <Button x:Name="ExcluirMembroButton" Width="200" 
                                     Content="Excluir" 
                                     Margin="420,0,0,5"
                                     HorizontalAlignment="Left"
@@ -494,5 +494,5 @@
                     Background="DarkRed" Foreground="White" BorderBrush="DarkRed" BorderThickness="2"
                              />            
         </Grid>
-    </Grid>
+    </Grid>    
 </Page>

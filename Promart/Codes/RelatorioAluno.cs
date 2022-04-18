@@ -1,14 +1,6 @@
-﻿using System;
+﻿using Promart.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Win32;
-using Promart.Codes;
-using Promart.Data;
-using Promart.Windows;
-using Promart.Models;
-using System.IO;
 using System.Windows.Controls;
 using System.Windows.Data;
 
@@ -16,12 +8,14 @@ namespace Promart.Codes
 {
     public class RelatorioAluno
     {
-        public static List<string> TiposFiltro { get; } = new List<string>()
+        IEnumerable<Aluno> alunos;
+
+        public List<string> TiposFiltro { get; } = new List<string>()
         {
             //Texto
             "Nome",
             "Idade",
-            "Responsável",            
+            "Responsável",
             "Escola",
             "Rua",
             "Bairro",
@@ -37,8 +31,6 @@ namespace Promart.Codes
             "Turno Projeto",
             "Moradia",
         };
-
-        IEnumerable<Aluno> alunos;
 
         public RelatorioAluno(IEnumerable<Aluno> alunos)
         {

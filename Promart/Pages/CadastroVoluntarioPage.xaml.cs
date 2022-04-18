@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using Promart.Models;
 using Promart.Data;
 using Promart.Codes;
+using System.IO;
+using Promart.Controls;
 
 namespace Promart.Pages
 {
@@ -37,9 +39,12 @@ namespace Promart.Pages
             Voluntario = voluntario;
             SexoCombo.ItemsSource = ComboBoxTipos.TipoSexoNumerado;
 
+            //Eventos necessários dos controles
             NascimentoData.SelectedDateChanged += (s, e) => ExibirIdade();
             CancelarButton.Click += CancelarButton_Click;
-            ConfirmarButton.Click += async (s, e) => await ConfirmarPagina();            
+            ConfirmarButton.Click += async (s, e) => await ConfirmarPagina();
+            AbrirImagemButton.Click += (object sender, RoutedEventArgs e) => AbrirNovaImagem();
+            NomeText.TextChanged += (object sender, TextChangedEventArgs e) => AlterarHeaderAba();
 
             //Eventos para confirmar alterações de dados ao sair da tela
             NomeText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
@@ -57,8 +62,9 @@ namespace Promart.Pages
             CidadeText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             ObservacoesText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             NascimentoData.SelectedDateChanged += (object? sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
+            FotoImage.Changed += (object? sender, EventArgs e) => DefinirAlteracaoDados();
             
-        }        
+        }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -67,6 +73,38 @@ namespace Promart.Pages
             NomeText.CaretIndex = NomeText.Text != null ? NomeText.Text.Length : 0;
 
             await Helper.Controles.PopularOficinasListComCheckBoxAsync(OficinasList, (object o, RoutedEventArgs a) => DefinirAlteracaoDados());
+
+            if (Voluntario.Id != 0)
+            {
+                await PreencherDados();
+            }
+        }
+
+        private async Task PreencherDados()
+        {
+            NomeText.Text = Voluntario.NomeCompleto;
+            NascimentoData.SelectedDate = Voluntario.DataNascimento;
+            SexoCombo.SelectedIndex = Voluntario.Sexo;
+            RGText.Text = Voluntario.RG;
+            CPFText.Text = Voluntario.CPF;
+            ProfissaoText.Text = Voluntario.Profissao;
+            EscolaridadeText.Text = Voluntario.Escolaridade;
+            Telefone1Text.Text = Voluntario.Contato1;
+            Telefone2Text.Text = Voluntario.Contato2;
+            EmailText.Text = Voluntario.Email;
+            RuaText.Text = Voluntario.EnderecoRua;
+            BairroText.Text = Voluntario.EnderecoBairro;
+            NumeroText.Text = Voluntario.EnderecoNumero;
+            ComplementoText.Text = Voluntario.EnderecoComplemento;
+            CidadeText.Text = Voluntario.EnderecoCidade;
+            CEPText.Text = Voluntario.EnderecoCEP;            
+
+            CarregarFoto();
+
+            await ObterOficinas();
+
+            ConfirmarButton.IsEnabled = false;
+            dadosAlterados = false;
         }
 
         private void DefinirAlteracaoDados()
@@ -199,6 +237,80 @@ namespace Promart.Pages
             else
             {
                 IdadeLabel.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void AlterarHeaderAba()
+        {
+            if (Tab != null)
+            {
+                if (Tab.Header is string)
+                {
+                    Tab.Header = NomeText.Text;
+                }
+                else if (Tab.Header is TabHeaderContentControl)
+                {
+                    var header = Tab.Header as TabHeaderContentControl;
+
+                    if (header != null)
+                    {
+                        header.HeaderText = NomeText.Text;
+                    }
+                }
+            }
+        }
+
+        private void AbrirNovaImagem()
+        {
+            try
+            {
+                Guid guid = Guid.NewGuid();
+                var result = Helper.Util.AbrirSalvarImagem(Helper.Diretorios.FOTOS_VOLUNTARIOS, guid.ToString());
+
+                if (result != null)
+                {
+                    Voluntario.FotoUrl = result;
+                    CarregarFoto();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocorreu um erro ao carregar a imagem.\n\nErro: {ex.Message}", "Erro de carregamento", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void CarregarFoto()
+        {
+            if (Voluntario.FotoUrl != null)
+            {
+                string arquivo = $"{Helper.Diretorios.FOTOS_VOLUNTARIOS}/{Voluntario.FotoUrl}";
+
+                if (File.Exists(arquivo))
+                {
+                    FotoImage.ImageSource = new BitmapImage(new Uri(arquivo));
+                }
+            }
+        }
+
+        private async Task ObterOficinas()
+        {
+            var resultado = await SqlAccess.TVoluntarioOficinas.GetAsync(Voluntario);
+
+            if (resultado != null)
+            {
+                foreach (var voluntarioOficina in resultado)
+                {
+                    foreach (var boxes in OficinasList.ItemsSource)
+                    {
+                        CheckBox checkBox = (CheckBox)boxes;
+                        Oficina oficina = (Oficina)checkBox.Content;
+
+                        if (oficina.Id == voluntarioOficina.IdOficina)
+                        {
+                            checkBox.IsChecked = true;
+                        }
+                    }
+                }
             }
         }
     }

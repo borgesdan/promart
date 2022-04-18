@@ -31,7 +31,6 @@ namespace Promart.Pages
         bool dadosAlterados = false;
         public Aluno Aluno { get; private set; }
         public TabItem? Tab { get; set; }
-        string arquivoFoto = string.Empty;
         List<AlunoVinculo> vinculos = new List<AlunoVinculo>();
 
         public CadastroAlunoPage() : this(new Aluno())
@@ -45,20 +44,19 @@ namespace Promart.Pages
             Aluno = aluno;
             MatriculaPanel.Visibility = Visibility.Hidden;
             ComposicaoDataGrid.ItemsSource = vinculos;
-            PreencherComboBoxes();                        
+            PreencherComboBoxes();
 
             //Eventos necessários dos controles
             ConfirmarButton.Click += async (object sender, RoutedEventArgs e) => await ConfirmarPaginaAsync();
-            CancelarButton.Click += CancelarButton_Click;
+            CancelarButton.Click += (object sender, RoutedEventArgs e) => CancelarPagina();
             NascimentoData.SelectedDateChanged += (object? sender, SelectionChangedEventArgs e) => ExibirIdade();
             SituacaoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => ExibirInfoSituacao();
             TurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => { TurnoProjetoCombo.SelectedIndex = TurnoEscolarCombo.SelectedIndex == 0 ? 1 : 0; };
             NomeText.TextChanged += (object sender, TextChangedEventArgs e) => AlterarHeaderAba();
-            AbrirImagemButton.Click += (object sender, RoutedEventArgs e) => AbrirImagem();
+            AbrirImagemButton.Click += (object sender, RoutedEventArgs e) => AbrirNovaImagem();
             AddMembroButton.Click += (object sender, RoutedEventArgs e) => AbrirCadastroVinculo();
             EditarMembroButton.Click += (object sender, RoutedEventArgs e) => EditarCadastroVinculo();
-            ExcluirrMembroButton.Click += (object sender, RoutedEventArgs e) => ExcluirCadastroVinculo();
-            MatriculaText.MouseDoubleClick += (object sender, MouseButtonEventArgs e) => CopiarMatricula();
+            ExcluirMembroButton.Click += (object sender, RoutedEventArgs e) => ExcluirCadastroVinculo();
 
             //Eventos para confirmar alterações de dados ao sair da tela
             FotoImage.Changed += (object? sender, EventArgs e) => DefinirAlteracaoDados();
@@ -88,12 +86,7 @@ namespace Promart.Pages
             
             //Vai para o evento Page_Loaded.
         }       
-
-        private void ComposicaoDataGrid_AddingNewItem(object? sender, AddingNewItemEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             //Carrega o nome do aluno e coloca o cursor para o fim do nome.
@@ -141,13 +134,17 @@ namespace Promart.Pages
 
             MatriculaText.Text = Aluno.Matricula;
             DataMatriculaText.Text = Aluno.DataMatriculaValue.ToString();
-            MatriculaPanel.Visibility = Visibility.Visible;
+            MatriculaPanel.Visibility = Visibility.Visible;            
+            CarregarFoto();
 
             await ObterVinculos();
             await ObterOficinas();
+
+            ConfirmarButton.IsEnabled = false;
+            dadosAlterados = false;
         }
 
-        private void CancelarButton_Click(object sender, RoutedEventArgs e)
+        private void CancelarPagina()
         {
             if (dadosAlterados)
             {
@@ -192,9 +189,7 @@ namespace Promart.Pages
             Aluno.EnderecoCEP = "45570-000";
             Aluno.SituacaoProjeto = SituacaoProjetoCombo.SelectedIndex;
             Aluno.TurnoProjeto = TurnoProjetoCombo.SelectedIndex;
-            Aluno.Observacoes = ObservacoesText.Text;
-            Aluno.Matricula = GeradorMatricula.Get(Aluno.NomeCompleto);
-            Aluno.DataMatricula = DateTime.Now;
+            Aluno.Observacoes = ObservacoesText.Text;            
 
             if (Aluno.Id == 0)
             {
@@ -205,6 +200,8 @@ namespace Promart.Pages
                     await InserirVinculosAsync();
                     await InserirAlunoOficinaAsync();
 
+                    Aluno.Matricula = GeradorMatricula.Get(Aluno.NomeCompleto);
+                    Aluno.DataMatricula = DateTime.Now;
                     ConfirmarButton.IsEnabled = false;
                     dadosAlterados = false;
                     MessageBox.Show("O cadastro do aluno foi realizado e um número de matrícula foi gerado.", "Aluno cadastrado", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -383,7 +380,7 @@ namespace Promart.Pages
             }
         }
 
-        private void AbrirImagem()
+        private void AbrirNovaImagem()
         {
             try
             {
@@ -392,13 +389,26 @@ namespace Promart.Pages
 
                 if (result != null)
                 {
-                    arquivoFoto = guid.ToString();
-                    FotoImage.ImageSource = result;
+                    Aluno.FotoUrl = result;
+                    CarregarFoto();
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ocorreu um erro ao carregar a imagem.\n\nErro: {ex.Message}", "Erro de carregamento", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void CarregarFoto()
+        {
+            if(Aluno.FotoUrl != null)
+            {
+                string arquivo = $"{Helper.Diretorios.FOTOS_ALUNOS}/{Aluno.FotoUrl}";
+
+                if (File.Exists(arquivo))
+                {
+                    FotoImage.ImageSource = new BitmapImage(new Uri(arquivo));
+                }                
             }
         }
 
@@ -443,11 +453,6 @@ namespace Promart.Pages
                 ComposicaoDataGrid.ItemsSource = vinculos;
                 DefinirAlteracaoDados();
             }
-        }
-
-        private void CopiarMatricula()
-        {
-            Clipboard.SetText(MatriculaText.Text);
         }
 
         private async Task ObterVinculos()

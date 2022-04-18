@@ -24,11 +24,13 @@ namespace Promart.Codes
             public static string SALVOS = ATUAL + "/Salvos";
             public static string FOTOS = SALVOS + "/Fotos";
             public static string FOTOS_ALUNOS = SALVOS + "/Fotos/Alunos";
+            public static string FOTOS_VOLUNTARIOS = SALVOS + "/Fotos/Voluntarios";
 
             //Caminhos relativos
             public static string REL_SALVOS = "/Salvos";
             public static string REL_FOTOS = REL_SALVOS + "/Fotos";
             public static string REL_FOTOS_ALUNOS = REL_FOTOS + "/Alunos";
+            public static string REL_FOTOS_VOLUNTARIOS = REL_FOTOS + "/Voluntarios";
         }
 
         public static class Controles
@@ -112,7 +114,7 @@ namespace Promart.Codes
                 return extensao.Length == 2 ? extensao[1] : string.Empty;
             }
 
-            public static BitmapImage? AbrirSalvarImagem(string diretorioDestino, string nomeImagem)
+            public static string? AbrirSalvarImagem(string diretorioDestino, string nomeImagem)
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.Filter = "Arquivos de Imagem (*.PNG, *.JPG, *.BMP)|*.png;*.jpg;*.bmp";
@@ -126,12 +128,12 @@ namespace Promart.Codes
                     }
 
                     string extensao = ObterExtensaoArquivo(openFileDialog.SafeFileName);
-                    string arquivoFoto = $"{nomeImagem}.{extensao[1]}";
+                    string arquivoFoto = $"{nomeImagem}.{extensao}";
                     string caminhoFinal = $"{diretorioDestino}/{arquivoFoto}";
 
                     File.Copy(openFileDialog.FileName, caminhoFinal);
 
-                    return new BitmapImage(new Uri(caminhoFinal));
+                    return arquivoFoto;
                 }
 
                 return null;

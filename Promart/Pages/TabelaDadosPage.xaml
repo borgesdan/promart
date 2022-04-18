@@ -20,7 +20,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="1" Content="CONSULTA DE TABELAS"
+        <Label Grid.Row="0" Grid.Column="1" Content="RELATÓRIOS"
                FontSize="24" FontWeight="Bold" />
 
         <Grid Grid.Row="1" Grid.Column="1">

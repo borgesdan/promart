@@ -316,6 +316,34 @@ namespace Promart.Data
 
                 return null;
             }
+
+            public static async Task<IEnumerable<VoluntarioOficina>?> GetAsync(Voluntario voluntario)
+            {
+                try
+                {
+                    using SqlConnection conn = new SqlConnection(GetConnectionString());
+                    await conn.OpenAsync();
+
+                    var resultado = await conn.QueryAsync(@"SELECT IdVoluntario, IdOficina FROM VoluntarioOficinas WHERE IdVoluntario = @Id", voluntario);
+                    List<VoluntarioOficina> oficinas = new List<VoluntarioOficina>();
+
+                    foreach (var item in resultado)
+                    {
+                        VoluntarioOficina voluntarioOficina = new VoluntarioOficina();
+                        voluntarioOficina.IdVoluntario = item.IdVoluntario;
+                        voluntarioOficina.IdOficina = item.IdOficina;
+                        oficinas.Add(voluntarioOficina);
+
+                        return oficinas;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MostrarErro("Ocorreu um erro ao obter as informações no banco de dados", ex);
+                }
+
+                return null;
+            }
         }
 
     }

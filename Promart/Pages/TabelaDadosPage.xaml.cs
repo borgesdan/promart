@@ -29,9 +29,10 @@ namespace Promart.Pages
     /// </summary>
     public partial class TabelaDadosPage : Page
     {
-        int selectedIndex = -1;
-        IEnumerable<Voluntario>? voluntarios = new List<Voluntario>();
+        int selectedIndex = -1;        
+
         RelatorioAluno relatorioAluno = new RelatorioAluno(new List<Aluno>());
+        RelatorioVoluntario relatorioVoluntario = new RelatorioVoluntario(new List<Voluntario>());
 
         public TabelaDadosPage()
         {
@@ -42,25 +43,40 @@ namespace Promart.Pages
             ExportarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => Exportar();
             SelecionarButton.Click += async (object sender, RoutedEventArgs e) => await DefinirEstadoRelatorio();
             FiltroSelecaoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirControleValor();
-            DadosDataGrid.PreviewKeyDown += (object sender, KeyEventArgs e) => RemoverColuna(e);
-            DadosDataGrid.PreviewKeyDown += (object sender, KeyEventArgs e) => AbrirItem(e);
+            DadosDataGrid.PreviewKeyDown += (object sender, KeyEventArgs e) => RemoverDados(e);
+            DadosDataGrid.PreviewKeyDown += (object sender, KeyEventArgs e) => AbrirItem(e, null);
+            DadosDataGrid.PreviewMouseDoubleClick += (object sender, MouseButtonEventArgs e) => AbrirItem(null, e);
         }
 
-        private async void AbrirItem(KeyEventArgs e)
+        private async void AbrirItem(KeyEventArgs? ek, MouseButtonEventArgs? em)
         {
-            if(selectedIndex == 0 && e.Key == Key.Enter)
-            {
-                var aluno =  (Aluno)DadosDataGrid.SelectedItem;
-                var resultado = await SqlAccess.GetDadoAsync<Aluno>(aluno.Id);
-
-                if(resultado != null)
+            if((ek != null && ek.Key == Key.Enter) || (em != null && em.LeftButton == MouseButtonState.Pressed))
+            {                
+                switch(selectedIndex)
                 {
-                    MainWindow.Instance?.AbrirNovaAba(aluno.NomeCompleto ?? "Aluno Selecionado", new CadastroAlunoPage(resultado));
-                }                
-            }
+                    case 0:
+                        var alunoSelecionado = (Aluno)DadosDataGrid.SelectedItem;
+                        var alunoAtualizado = await SqlAccess.GetDadoAsync<Aluno>(alunoSelecionado.Id);
+
+                        if (alunoAtualizado != null)
+                        {
+                            MainWindow.Instance?.AbrirNovaAba(alunoAtualizado.NomeCompleto ?? "Aluno Selecionado", new CadastroAlunoPage(alunoAtualizado));
+                        }
+                        break;
+                    case 1:
+                        var voluntarioSelecionado = (Voluntario)DadosDataGrid.SelectedItem;
+                        var voluntarioAtualizado = await SqlAccess.GetDadoAsync<Voluntario>(voluntarioSelecionado.Id);
+
+                        if (voluntarioAtualizado != null)
+                        {
+                            MainWindow.Instance?.AbrirNovaAba(voluntarioAtualizado.NomeCompleto ?? "Aluno Selecionado", new CadastroVoluntarioPage(voluntarioAtualizado));
+                        }
+                        break;
+                }
+            }            
         }
 
-        private void RemoverColuna(KeyEventArgs e)
+        private void RemoverDados(KeyEventArgs e)
         {
             if((e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.Right))
                 && e.KeyboardDevice.IsKeyDown(Key.Delete))
@@ -96,50 +112,69 @@ namespace Promart.Pages
         private async Task DefinirEstadoRelatorio()
         {
             SelecionarButton.IsEnabled = false;
+            selectedIndex = TipoTabelaCombo.SelectedIndex;
 
-            switch (TipoTabelaCombo.SelectedIndex)
+            switch (selectedIndex)
             {
-                case 0:
-                    selectedIndex = TipoTabelaCombo.SelectedIndex;
+                case 0:                    
                     var alunos = await SqlAccess.GetDadosAsync<Aluno>();
 
                     if (alunos != null)
                     {
                         relatorioAluno = new RelatorioAluno(alunos);
-                        DefinirRelatorio(alunos);
-                        SelecionarButton.IsEnabled = true;
+                        DefinirRelatorio(alunos);                        
                         HabilitarControles();
                     }
                     break;
                 case 1:
-                    selectedIndex = TipoTabelaCombo.SelectedIndex;
-                    var voluntarios = await SqlAccess.GetDadosAsync<Aluno>();
+                    var voluntarios = await SqlAccess.GetDadosAsync<Voluntario>();
 
                     if (voluntarios != null)
                     {
-                        //PopularDataGrid(alunos);
+                        relatorioVoluntario = new RelatorioVoluntario(voluntarios);
+                        DefinirRelatorio(voluntarios);                        
+                        HabilitarControles();
                     }
                     break;
             }
+
+            SelecionarButton.IsEnabled = true;
+            SelecionarButton.IsEnabled = true;
         }
 
         private void DefinirRelatorio(IEnumerable<Aluno> alunos)
         {
             PopularDataGrid(alunos);
-            FiltroSelecaoCombo.ItemsSource = RelatorioAluno.TiposFiltro;
+            FiltroSelecaoCombo.ItemsSource = relatorioAluno.TiposFiltro;
+            FiltroSelecaoCombo.SelectedIndex = 0;
+        }
+
+        private void DefinirRelatorio(IEnumerable<Voluntario> voluntarios)
+        {
+            PopularDataGrid(voluntarios);
+            FiltroSelecaoCombo.ItemsSource = relatorioVoluntario.TiposFiltro;
             FiltroSelecaoCombo.SelectedIndex = 0;
         }
 
         private void PopularDataGrid(IEnumerable<Aluno> alunos)
-        {
-            //DadosDataGrid.ItemsSource = alunos;
-            
+        {            
             DadosDataGrid.Items.Clear();
-            foreach(var aluno in alunos)
+            foreach(var a in alunos)
             {
-                DadosDataGrid.Items.Add(aluno);
+                DadosDataGrid.Items.Add(a);
             }
             relatorioAluno.PopularColunasDataGrid(DadosDataGrid);
+        }
+
+        private void PopularDataGrid(IEnumerable<Voluntario> voluntarios)
+        {
+            DadosDataGrid.Items.Clear();
+            foreach (var v in voluntarios)
+            {
+                DadosDataGrid.Items.Add(v);
+            }
+
+            relatorioVoluntario.PopularColunasDataGrid(DadosDataGrid);
         }
 
         private void DefinirControleValor()
@@ -158,7 +193,7 @@ namespace Promart.Pages
                         break;
                     case FiltroControleType.ComboBox:
                         AlterarVisibilidadeFiltroValor(ComboValor);
-                        relatorioAluno.PopularComboValor(nomeFiltro, ComboValor);
+                        PopularComboValor(nomeFiltro);
                         ComboValor.SelectedIndex = 0;
                         break;
                 }
@@ -174,28 +209,54 @@ namespace Promart.Pages
             controle.Visibility = Visibility.Visible;
         }
 
+        private void PopularComboValor(string nomeFiltro)
+        {
+            switch (selectedIndex)
+            {
+                case 0:
+                    relatorioAluno.PopularComboValor(nomeFiltro, ComboValor);
+                    break;
+                case 1:
+                    relatorioAluno.PopularComboValor(nomeFiltro, ComboValor);
+                    break;
+            }
+        }
+
         private void Filtrar()
         {
             FiltrarButton.IsEnabled = false;
 
-            if (selectedIndex == 0)
+            switch (selectedIndex)
             {
-                IEnumerable<Aluno> resultado = new List<Aluno>();
+                case 0:
+                    IEnumerable<Aluno> resultadoAluno = new List<Aluno>();
 
-                if (TextoValor.Visibility == Visibility.Visible)
-                {
-                    resultado = relatorioAluno.Filtrar((string)FiltroSelecaoCombo.SelectedValue, TextoValor.Text.Trim());
-                }
-                else if (ComboValor.Visibility == Visibility.Visible)
-                {
-                    resultado = relatorioAluno.Filtrar((string)FiltroSelecaoCombo.SelectedValue, ComboValor.SelectedIndex);
-                }
+                    if (TextoValor.Visibility == Visibility.Visible)
+                    {
+                        resultadoAluno = relatorioAluno.Filtrar((string)FiltroSelecaoCombo.SelectedValue, TextoValor.Text.Trim());
+                    }
+                    else if (ComboValor.Visibility == Visibility.Visible)
+                    {
+                        resultadoAluno = relatorioAluno.Filtrar((string)FiltroSelecaoCombo.SelectedValue, ComboValor.SelectedIndex);
+                    }
 
-                if (resultado.Any())
-                {
-                    PopularDataGrid(resultado);
-                }
-            }
+                    PopularDataGrid(resultadoAluno);
+                    break;
+                case 1:
+                    IEnumerable<Voluntario> resultadoVoluntario = new List<Voluntario>();
+
+                    if (TextoValor.Visibility == Visibility.Visible)
+                    {
+                        resultadoVoluntario = relatorioVoluntario.Filtrar((string)FiltroSelecaoCombo.SelectedValue, TextoValor.Text.Trim());
+                    }
+                    else if (ComboValor.Visibility == Visibility.Visible)
+                    {
+                        resultadoVoluntario = relatorioVoluntario.Filtrar((string)FiltroSelecaoCombo.SelectedValue, ComboValor.SelectedIndex);
+                    }
+
+                    PopularDataGrid(resultadoVoluntario);
+                    break;
+            }            
 
             FiltrarButton.IsEnabled = true;
         }
