@@ -24,7 +24,7 @@ namespace Promart.Data
         static string GetConnectionString(string id = "Default")
         {
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;
-        }        
+        }
 
         public static List<T>? GetDados<T>() where T : class
         {
@@ -34,14 +34,14 @@ namespace Promart.Data
                 conn.Open();
                 return conn.GetAll<T>().ToList();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MostrarErro("Ocorreu um erro ao receber as informações do banco de dados", ex);
             }
 
             return null;
         }
-        
+
         public static T? GetDado<T>(int id) where T : class
         {
             try
@@ -57,7 +57,7 @@ namespace Promart.Data
             }
 
             return null;
-        }        
+        }
 
         public static long Inserir<T>(T dado) where T : class
         {
@@ -72,9 +72,9 @@ namespace Promart.Data
                 MostrarErro("Ocorreu um erro ao inserir as informações no banco de dados", ex);
             }
 
-            return -1;            
+            return -1;
         }
-        
+
         public static bool Atualizar<T>(T dado) where T : class
         {
             try
@@ -91,7 +91,7 @@ namespace Promart.Data
 
             return false;
         }
-        
+
         public static bool Deletar<T>(T dado) where T : class
         {
             try
@@ -108,7 +108,7 @@ namespace Promart.Data
 
             return false;
         }
-        
+
         public static bool DeletarTudo<T>() where T : class
         {
             try
@@ -125,7 +125,24 @@ namespace Promart.Data
 
             return false;
         }
-        
+
+        public static async Task<T?> GetDadoAsync<T>(int id) where T : class
+        {
+            try
+            {
+                using SqlConnection conn = new SqlConnection(GetConnectionString());
+                await conn.OpenAsync();
+
+                return await conn.GetAsync<T>(id);
+            }
+            catch (Exception ex)
+            {
+                MostrarErro("Ocorreu um erro ao receber as informações do banco de dados", ex);
+            }
+
+            return null;
+        }
+
         public static async Task<IEnumerable<T>?> GetDadosAsync<T>() where T : class
         {
             try
@@ -134,20 +151,20 @@ namespace Promart.Data
                 await conn.OpenAsync();
                 return await conn.GetAllAsync<T>();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MostrarErro("Ocorreu um erro ao receber informações do Banco de Dados", ex);
             }
 
             return null;
         }
-        
+
         public static async Task<long> InserirAsync<T>(T dado) where T : class
         {
             try
             {
                 using SqlConnection conn = new SqlConnection(GetConnectionString());
-                await conn.OpenAsync();                
+                await conn.OpenAsync();
                 return await conn.InsertAsync(dado);
             }
             catch (Exception ex)
@@ -158,7 +175,7 @@ namespace Promart.Data
             return -1;
         }
 
-        public static async Task<bool> AtualizarAsync<T>(T dado) where T: class
+        public static async Task<bool> AtualizarAsync<T>(T dado) where T : class
         {
             try
             {
@@ -166,7 +183,7 @@ namespace Promart.Data
                 await conn.OpenAsync();
 
                 return await conn.UpdateAsync(dado);
-            }    
+            }
             catch (Exception ex)
             {
                 MostrarErro("Ocorreu um erro ao atualizar as informações no banco de dados", ex);
@@ -187,13 +204,41 @@ namespace Promart.Data
                     return await conn.QueryAsync(@"DELETE FROM AlunoOficinas 
                             WHERE IdAluno = @Id", aluno);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MostrarErro("Ocorreu um erro ao deletar as informações no banco de dados", ex);
                 }
 
                 return null;
-            }            
+            }
+
+            public static async Task<IEnumerable<AlunoOficina>?> GetAsync(Aluno aluno)
+            {
+                try
+                {
+                    using SqlConnection conn = new SqlConnection(GetConnectionString());
+                    await conn.OpenAsync();
+
+                    var resultado = await conn.QueryAsync(@"SELECT IdAluno, IdOficina FROM AlunoOficinas WHERE IdAluno = @Id", aluno);
+                    List<AlunoOficina> oficinas = new List<AlunoOficina>();
+
+                    foreach(var item in resultado)
+                    {
+                        AlunoOficina alunoOficina = new AlunoOficina();
+                        alunoOficina.IdAluno = item.IdAluno;
+                        alunoOficina.IdOficina = item.IdOficina;
+                        oficinas.Add(alunoOficina);
+                    }
+
+                    return oficinas;
+                }
+                catch (Exception ex)
+                {
+                    MostrarErro("Ocorreu um erro ao obter as informações no banco de dados", ex);
+                }
+
+                return null;
+            }
         }
 
         public static class TAlunoVinculos
@@ -211,6 +256,41 @@ namespace Promart.Data
                 catch (Exception ex)
                 {
                     MostrarErro("Ocorreu um erro ao deletar as informações no banco de dados", ex);
+                }
+
+                return null;
+            }
+
+            public static async Task<IEnumerable<AlunoVinculo>?> GetAsync(Aluno aluno)
+            {
+                try
+                {
+                    using SqlConnection conn = new SqlConnection(GetConnectionString());
+                    await conn.OpenAsync();
+
+                    var resultado = await conn.QueryAsync(@"SELECT IdAluno, NomeFamiliar, Idade, Parentesco, 
+                        Ocupacao, Escolaridade, Renda FROM AlunoVinculos WHERE IdAluno = @Id", aluno);
+
+                    List<AlunoVinculo> vinculos = new List<AlunoVinculo>();
+                    foreach (var item in resultado)
+                    {
+                        AlunoVinculo vinculo = new AlunoVinculo();
+                        vinculo.IdAluno = item.IdAluno;
+                        vinculo.NomeFamiliar = item.NomeFamiliar;
+                        vinculo.Idade = item.Idade;
+                        vinculo.Parentesco = item.Parentesco;
+                        vinculo.Ocupacao = item.Ocupacao;
+                        vinculo.Escolaridade = item.Escolaridade;
+                        vinculo.Renda = item.Renda;
+
+                        vinculos.Add(vinculo);
+                    }
+
+                    return vinculos;
+                }
+                catch (Exception ex)
+                {
+                    MostrarErro("Ocorreu um erro ao obter as informações no banco de dados", ex);
                 }
 
                 return null;
@@ -236,7 +316,7 @@ namespace Promart.Data
 
                 return null;
             }
-        }        
-        
+        }
+
     }
 }

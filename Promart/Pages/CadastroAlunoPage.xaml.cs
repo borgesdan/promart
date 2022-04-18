@@ -43,8 +43,9 @@ namespace Promart.Pages
             InitializeComponent();
 
             Aluno = aluno;
+            MatriculaPanel.Visibility = Visibility.Hidden;
             ComposicaoDataGrid.ItemsSource = vinculos;
-            PreencherComboBoxes();
+            PreencherComboBoxes();                        
 
             //Eventos necessários dos controles
             ConfirmarButton.Click += async (object sender, RoutedEventArgs e) => await ConfirmarPaginaAsync();
@@ -86,7 +87,7 @@ namespace Promart.Pages
             BeneficiarioCheck.Click += (object sender, RoutedEventArgs e) => DefinirAlteracaoDados();           
             
             //Vai para o evento Page_Loaded.
-        }
+        }       
 
         private void ComposicaoDataGrid_AddingNewItem(object? sender, AddingNewItemEventArgs e)
         {
@@ -100,8 +101,50 @@ namespace Promart.Pages
             NomeText.Focus();
             NomeText.CaretIndex = NomeText.Text != null ? NomeText.Text.Length : 0;
 
-            //Tenta popular a lista de oficinas       
-            await Helper.Controles.PopularOficinasListComCheckBoxAsync(TipoOficinasList, (object sender, RoutedEventArgs e) => DefinirAlteracaoDados());
+            await PopularOficinas();
+            
+            if(Aluno.Id != 0)
+            {
+                await PreencherDados();
+            }
+        }
+
+        private async Task PreencherDados()
+        {
+            NomeText.Text = Aluno.NomeCompleto;
+            NascimentoData.SelectedDate = Aluno.DataNascimento;
+            SexoCombo.SelectedIndex = Aluno.Sexo;
+            RGText.Text = Aluno.RG;
+            CPFText.Text = Aluno.CPF;
+            CertidaoText.Text = Aluno.Certidao;
+
+            NomeResponsavelText.Text = Aluno.NomeResponsavel;
+            VinculoCombo.SelectedIndex = Aluno.VinculoFamiliar;
+            MoradiaCombo.SelectedIndex = Aluno.TipoMoradia;
+            RendaCombo.SelectedIndex = Aluno.Renda;
+
+            BeneficiarioCheck.IsChecked = Aluno.IsBeneficiario;
+            Telefone1Text.Text = Aluno.Contato1;
+            Telefone2Text.Text = Aluno.Contato2;
+
+            NomeEscolaText.Text = Aluno.EscolaNome;
+            TurnoEscolarCombo.SelectedIndex = Aluno.TurnoEscolar;
+            AnoEscolarCombo.SelectedIndex = Aluno.AnoEscolar;
+            RuaText.Text = Aluno.EnderecoRua;
+            BairroText.Text = Aluno.EnderecoBairro;
+            NumeroText.Text = Aluno.EnderecoNumero;
+            ComplementoText.Text = Aluno.EnderecoComplemento;
+
+            SituacaoProjetoCombo.SelectedIndex = Aluno.SituacaoProjeto;
+            TurnoProjetoCombo.SelectedIndex = Aluno.TurnoProjeto;
+            ObservacoesText.Text = Aluno.Observacoes;
+
+            MatriculaText.Text = Aluno.Matricula;
+            DataMatriculaText.Text = Aluno.DataMatriculaValue.ToString();
+            MatriculaPanel.Visibility = Visibility.Visible;
+
+            await ObterVinculos();
+            await ObterOficinas();
         }
 
         private void CancelarButton_Click(object sender, RoutedEventArgs e)
@@ -166,6 +209,7 @@ namespace Promart.Pages
                     dadosAlterados = false;
                     MessageBox.Show("O cadastro do aluno foi realizado e um número de matrícula foi gerado.", "Aluno cadastrado", MessageBoxButton.OK, MessageBoxImage.Information);
                     MatriculaText.Text = Aluno.Matricula;
+                    DataMatriculaText.Text = Aluno.DataMatriculaValue.ToString();
                     MatriculaPanel.Visibility = Visibility.Visible;
                 }
             }
@@ -175,6 +219,7 @@ namespace Promart.Pages
 
                 if (result)
                 {
+                    await InserirVinculosAsync(true);
                     await InserirAlunoOficinaAsync(true);
                     ConfirmarButton.IsEnabled = false;
                     dadosAlterados = false;
@@ -195,10 +240,10 @@ namespace Promart.Pages
                 {
                     MessageBox.Show("Infelizmente ocorreu um erro ao atualizar as oficinas do aluno.", "Erro em oficinas", MessageBoxButton.OK, MessageBoxImage.Information);
                     return false;
-                }                    
+                }                
             }
 
-            foreach (var checkBox in TipoOficinasList.ItemsSource)
+            foreach (var checkBox in OficinasList.ItemsSource)
             {
                 CheckBox? c = checkBox as CheckBox;
 
@@ -241,7 +286,7 @@ namespace Promart.Pages
                 }
             }
 
-            for (int i = 0; i < ComposicaoDataGrid.Items.Count; i++)
+            for (int i = 0; i < vinculos.Count; i++)
             {
                 AlunoVinculo alunoVinculo = vinculos[i];
                 alunoVinculo.IdAluno = Aluno.Id;
@@ -403,6 +448,48 @@ namespace Promart.Pages
         private void CopiarMatricula()
         {
             Clipboard.SetText(MatriculaText.Text);
+        }
+
+        private async Task ObterVinculos()
+        {
+            var resultado = await SqlAccess.TAlunoVinculos.GetAsync(Aluno);
+
+            if(resultado != null)
+            {
+                vinculos = new List<AlunoVinculo>(resultado);
+                ComposicaoDataGrid.ItemsSource = vinculos;
+            }
+            else
+            {
+                MessageBox.Show("Ocorreu um erro ao receber os vínculos do aluno.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async Task PopularOficinas()
+        {
+            await Helper.Controles.PopularOficinasListComCheckBoxAsync(OficinasList, (object sender, RoutedEventArgs e) => DefinirAlteracaoDados());
+        }
+
+        private async Task ObterOficinas()
+        {
+            var resultado = await SqlAccess.TAlunoOficinas.GetAsync(Aluno);
+
+            if(resultado != null)
+            {
+                foreach(var alunoOficina in resultado)
+                {
+                    foreach (var boxes in OficinasList.ItemsSource)
+                    {
+                        CheckBox checkBox = (CheckBox)boxes;
+                        Oficina oficina = (Oficina)checkBox.Content;
+
+                        if(oficina.Id == alunoOficina.IdOficina)
+                        {
+                            checkBox.IsChecked = true;
+                        }
+                    }
+                }
+            }
         }
     }
 }

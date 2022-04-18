@@ -24,16 +24,23 @@
                FontSize="24" FontWeight="Bold" />
 
         <StackPanel x:Name="MatriculaPanel" Orientation="Horizontal" 
-                    Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right"
-                    Visibility="Hidden">
+                    Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" >
             <Label
             Content="Matrícula:"            
-            VerticalContentAlignment="Bottom"
+            VerticalContentAlignment="Center"
             FontSize="16" />
             <TextBox x:Name="MatriculaText"
                  Width="250" Text="2022A001" IsReadOnly="True"                 
-                 VerticalContentAlignment="Center" TextAlignment="Center"
-                 FontSize="24" FontWeight="Bold" Cursor="Hand"/>            
+                 VerticalContentAlignment="Center" TextAlignment="Center" Margin="0,10"
+                 FontSize="18" FontWeight="Bold" Cursor="Hand"/>
+            <Label
+            Content="Data:"            
+            VerticalContentAlignment="Center"
+            FontSize="16" />
+            <TextBox x:Name="DataMatriculaText"
+                 Width="200" Text="2022A001" IsReadOnly="True"                 
+                 VerticalContentAlignment="Center" TextAlignment="Center" Margin="0,10"
+                 FontSize="18" FontWeight="Bold" Cursor="Hand"/>
         </StackPanel>
         
 
@@ -458,7 +465,7 @@
                     <Label Grid.Row="5" Grid.Column="0" Content="Oficinas:" 
                            FontSize="16"  FontWeight="SemiBold" 
                            HorizontalAlignment="Right" />
-                    <ListBox x:Name="TipoOficinasList" Grid.Row="5" Grid.Column="1" Grid.RowSpan="6"
+                    <ListBox x:Name="OficinasList" Grid.Row="5" Grid.Column="1" Grid.RowSpan="6"
                              FontSize="16">
                     </ListBox>                    
 

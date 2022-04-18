@@ -76,5 +76,10 @@ namespace Promart
             CadastroVoluntarioPage page = new CadastroVoluntarioPage(new Voluntario());
             page.Tab = Helper.Controles.AbrirNovaAba(TabConteudo, "Novo Voluntário", page);
         }
+
+        public void AbrirNovaAba(string nome, Page page)
+        {
+            Helper.Controles.AbrirNovaAba(TabConteudo, nome, page);
+        }
     }
 }

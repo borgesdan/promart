@@ -98,6 +98,7 @@
     <None Remove="assets\images\icons\database.png" />
     <None Remove="assets\images\icons\folder.png" />
     <None Remove="assets\images\icons\list.png" />
+    <None Remove="assets\images\icons\notebook.png" />
     <None Remove="assets\images\icons\photo-camera.png" />
     <None Remove="assets\images\icons\search.png" />
   </ItemGroup>
@@ -374,6 +375,7 @@
     <Resource Include="assets\images\icons\database.png" />
     <Resource Include="assets\images\icons\folder.png" />
     <Resource Include="assets\images\icons\list.png" />
+    <Resource Include="assets\images\icons\notebook.png" />
     <Resource Include="assets\images\icons\photo-camera.png" />
     <Resource Include="assets\images\icons\search.png" />
   </ItemGroup>

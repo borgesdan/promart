@@ -22,140 +22,146 @@ using System.IO;
 
 namespace Promart.Pages
 {
+
+
     /// <summary>
     /// Interaction logic for TabelaDadosPage.xaml
     /// </summary>
     public partial class TabelaDadosPage : Page
     {
         int selectedIndex = -1;
-        IEnumerable<Aluno>? alunos = new List<Aluno>();
         IEnumerable<Voluntario>? voluntarios = new List<Voluntario>();
+        RelatorioAluno relatorioAluno = new RelatorioAluno(new List<Aluno>());
 
         public TabelaDadosPage()
         {
             InitializeComponent();
+            DesabilitarControles();
 
-            SelecionarButton.Click += async (object sender, RoutedEventArgs e) =>
-            {
-                SelecionarButton.IsEnabled = false;
-
-                switch (TipoTabelaCombo.SelectedIndex)
-                {
-                    case 0:
-                        selectedIndex = TipoTabelaCombo.SelectedIndex;
-                        alunos = await SqlAccess.GetDadosAsync<Aluno>();
-
-                        if (alunos != null)
-                        {
-                            PopularDataGrid(alunos);
-                        }
-
-                        break;
-                    case 1:
-                        
-                        break;
-                }
-
-                FiltroSelecaoCombo.SelectedIndex = 0;
-                SelecionarButton.IsEnabled = true;
-            };
-
-            PopularSelecaoCombo();
-            FiltrarButton.Click += FiltrarButton_Click;
-            FiltroSelecaoCombo.SelectionChanged += FiltroSelecaoCombo_SelectionChanged;
-
-            ExportarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) =>
-            {
-                //https://stackoverflow.com/questions/34704314/wpf-datagrid-to-csv-exporting-only-the-visible-values-in-the-grid
-
-                if (ExportarCombo.SelectedIndex == 1)
-                {
-                    DadosDataGrid.SelectAllCells();
-                    DadosDataGrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
-
-                    ApplicationCommands.Copy.Execute(null, DadosDataGrid);
-                    DadosDataGrid.UnselectAllCells();
-
-                    string result = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
-                    
-                    SaveFileDialog saveFileDialog = new SaveFileDialog();
-                    saveFileDialog.Filter = "Arquivo CSV (*.csv)|*.csv";
-
-                    if (saveFileDialog.ShowDialog() == true)
-                    {
-                        File.AppendAllText(saveFileDialog.FileName, result, UnicodeEncoding.UTF8);
-                    }                    
-                }           
-                
-                ExportarCombo.SelectedIndex = 0;
-            };
+            FiltrarButton.Click += (object sender, RoutedEventArgs e) => Filtrar();
+            ExportarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => Exportar();
+            SelecionarButton.Click += async (object sender, RoutedEventArgs e) => await DefinirEstadoRelatorio();
+            FiltroSelecaoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirControleValor();
+            DadosDataGrid.PreviewKeyDown += (object sender, KeyEventArgs e) => RemoverColuna(e);
+            DadosDataGrid.PreviewKeyDown += (object sender, KeyEventArgs e) => AbrirItem(e);
         }
 
-        private void FiltroSelecaoCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void AbrirItem(KeyEventArgs e)
         {
-            switch (FiltroSelecaoCombo.SelectedValue)
+            if(selectedIndex == 0 && e.Key == Key.Enter)
             {
-                case "Nome":
-                case "Idade":
-                case "Responsável":
-                case "Profissão":
-                case "Escola":
-                case "Rua":
-                case "Bairro":
-                    AlterarVisibilidadeFiltroValor(TextoValor);
-                    break;
+                var aluno =  (Aluno)DadosDataGrid.SelectedItem;
+                var resultado = await SqlAccess.GetDadoAsync<Aluno>(aluno.Id);
 
-                case "Nascimento":
-                    AlterarVisibilidadeFiltroValor(DataValor);
-                    break;
+                if(resultado != null)
+                {
+                    MainWindow.Instance?.AbrirNovaAba(aluno.NomeCompleto ?? "Aluno Selecionado", new CadastroAlunoPage(resultado));
+                }                
+            }
+        }
 
-                case "Sexo":
-                case "Vínculo":
-                case "Beneficiário":
-                case "Moradia":
-                case "Renda":
-                case "Ano Escolar":
-                case "Turno Escolar":
-                case "Situação":
-                case "Turno no Projeto":
-                    AlterarVisibilidadeFiltroValor(ComboValor);
-                    PopularComboValor(FiltroSelecaoCombo.SelectedValue);
-                    ComboValor.SelectedIndex = 0;
+        private void RemoverColuna(KeyEventArgs e)
+        {
+            if((e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.Right))
+                && e.KeyboardDevice.IsKeyDown(Key.Delete))
+            {
+                DadosDataGrid.Columns.Remove(DadosDataGrid.CurrentColumn);
+            }
+            else if (e.Key == Key.Delete)
+            {
+                DadosDataGrid.Items.Remove(DadosDataGrid.SelectedItem);                
+            }
+        }
+
+        private void DesabilitarControles()
+        {
+            FiltrarButton.IsEnabled = false;
+            FiltroSelecaoCombo.IsEnabled = false;
+            ComboValor.IsEnabled = false;
+            TextoValor.IsEnabled = false;
+            DataValor.IsEnabled = false;
+            ExportarCombo.IsEnabled = false;
+        }
+
+        private void HabilitarControles()
+        {
+            FiltrarButton.IsEnabled = true;
+            FiltroSelecaoCombo.IsEnabled = true;
+            ComboValor.IsEnabled = true;
+            TextoValor.IsEnabled = true;
+            DataValor.IsEnabled = true;
+            ExportarCombo.IsEnabled = true;
+        }
+
+        private async Task DefinirEstadoRelatorio()
+        {
+            SelecionarButton.IsEnabled = false;
+
+            switch (TipoTabelaCombo.SelectedIndex)
+            {
+                case 0:
+                    selectedIndex = TipoTabelaCombo.SelectedIndex;
+                    var alunos = await SqlAccess.GetDadosAsync<Aluno>();
+
+                    if (alunos != null)
+                    {
+                        relatorioAluno = new RelatorioAluno(alunos);
+                        DefinirRelatorio(alunos);
+                        SelecionarButton.IsEnabled = true;
+                        HabilitarControles();
+                    }
+                    break;
+                case 1:
+                    selectedIndex = TipoTabelaCombo.SelectedIndex;
+                    var voluntarios = await SqlAccess.GetDadosAsync<Aluno>();
+
+                    if (voluntarios != null)
+                    {
+                        //PopularDataGrid(alunos);
+                    }
                     break;
             }
         }
 
-        void PopularComboValor(object caso)
+        private void DefinirRelatorio(IEnumerable<Aluno> alunos)
         {
-            switch (caso)
+            PopularDataGrid(alunos);
+            FiltroSelecaoCombo.ItemsSource = RelatorioAluno.TiposFiltro;
+            FiltroSelecaoCombo.SelectedIndex = 0;
+        }
+
+        private void PopularDataGrid(IEnumerable<Aluno> alunos)
+        {
+            //DadosDataGrid.ItemsSource = alunos;
+            
+            DadosDataGrid.Items.Clear();
+            foreach(var aluno in alunos)
             {
-                case "Sexo":
-                    ComboValor.ItemsSource = ComboBoxTipos.TipoSexoNaoNumerado;
-                    break;
-                case "Vínculo":
-                    ComboValor.ItemsSource = ComboBoxTipos.TipoVinculoFamiliarNaoNumerado;
-                    break;
-                case "Beneficiário":
-                    ComboValor.ItemsSource = ComboBoxTipos.TipoBeneficiarioNaoNumerado;
-                    break;
-                case "Moradia":
-                    ComboValor.ItemsSource = ComboBoxTipos.TipoMoradiaNaoNumerado;
-                    break;
-                case "Renda":
-                    ComboValor.ItemsSource = ComboBoxTipos.TipoRendaNaoNumerado;
-                    break;
-                case "Ano Escolar":
-                    ComboValor.ItemsSource = ComboBoxTipos.TipoAnoEscolarNaoNumerado;
-                    break;
-                case "Turno Escolar":
-                    ComboValor.ItemsSource = ComboBoxTipos.TipoTurnoEscolarNaoNumerado;
-                    break;
-                case "Situação":
-                    ComboValor.ItemsSource = ComboBoxTipos.TipoAlunoSituacaoNaoNumerado;
-                    break;
-                case "Turno no Projeto":
-                    ComboValor.ItemsSource = ComboBoxTipos.TipoTurnoEscolarNaoNumerado;
-                    break;
+                DadosDataGrid.Items.Add(aluno);
+            }
+            relatorioAluno.PopularColunasDataGrid(DadosDataGrid);
+        }
+
+        private void DefinirControleValor()
+        {
+            if (FiltroSelecaoCombo.SelectedValue != null && FiltroSelecaoCombo.SelectedValue is string nomeFiltro)
+            {
+                FiltroControleType tipo = relatorioAluno.VerificarTipoFiltro(nomeFiltro);
+
+                switch (tipo)
+                {
+                    case FiltroControleType.Texto:
+                        AlterarVisibilidadeFiltroValor(TextoValor);
+                        break;
+                    case FiltroControleType.Data:
+                        AlterarVisibilidadeFiltroValor(DataValor);
+                        break;
+                    case FiltroControleType.ComboBox:
+                        AlterarVisibilidadeFiltroValor(ComboValor);
+                        relatorioAluno.PopularComboValor(nomeFiltro, ComboValor);
+                        ComboValor.SelectedIndex = 0;
+                        break;
+                }
             }
         }
 
@@ -168,261 +174,68 @@ namespace Promart.Pages
             controle.Visibility = Visibility.Visible;
         }
 
-        void PopularSelecaoCombo()
+        private void Filtrar()
         {
-            FiltroSelecaoCombo.ItemsSource = new List<string>
-            {
-                "Nome",
-                "Nascimento",
-                "Idade",
-                "Sexo",
-                "Profissão",
-                "Responsável",
-                "Vínculo",
-                "Beneficiário",
-                "Moradia",
-                "Renda",
-                "Escola",
-                "Ano Escolar",
-                "Turno Escolar",
-                "Rua",
-                "Bairro",
-                "Situação",
-                "Turno no Projeto",
-            };
+            FiltrarButton.IsEnabled = false;
 
             if (selectedIndex == 0)
             {
-                FiltroSelecaoCombo.Items.Remove("Profissão");
-            }
-            if (selectedIndex == 1)
-            {
-                FiltroSelecaoCombo.Items.Remove("Responsável");
-                FiltroSelecaoCombo.Items.Remove("Escola");
-                FiltroSelecaoCombo.Items.Remove("Vínculo");
-                FiltroSelecaoCombo.Items.Remove("Beneficiário");
-                FiltroSelecaoCombo.Items.Remove("Moradia");
-                FiltroSelecaoCombo.Items.Remove("Renda");
-                FiltroSelecaoCombo.Items.Remove("Ano Escolar");
-                FiltroSelecaoCombo.Items.Remove("Turno Escolar");
-                FiltroSelecaoCombo.Items.Remove("Situação");
-                FiltroSelecaoCombo.Items.Remove("Turno no Projeto");
-            }
-        }
-
-        private void FiltrarButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (selectedIndex == 0 && alunos != null)
-            {
                 IEnumerable<Aluno> resultado = new List<Aluno>();
 
-                switch (FiltroSelecaoCombo.SelectedValue)
+                if (TextoValor.Visibility == Visibility.Visible)
                 {
-                    case "Nome":
-                        resultado = alunos.Where(a => a.NomeCompleto != null
-                        && a.NomeCompleto.Contains(TextoValor.Text));
-                        break;
-                    case "Idade":
-                        int idade;
-                        if (int.TryParse(TextoValor.Text, out idade))
-                        {
-                            resultado = alunos.Where(a => a.IdadeValue == idade);
-                        }
-                        break;
-                    case "Responsável":
-                        resultado = alunos.Where(a => a.NomeResponsavel != null
-                        && a.NomeResponsavel.Contains(TextoValor.Text));
-                        break;
-                    case "Escola":
-                        resultado = alunos.Where(a => a.EscolaNome != null
-                         && a.EscolaNome.Contains(TextoValor.Text));
-                        break;
-                    case "Rua":
-                        resultado = alunos.Where(a => a.EnderecoRua != null
-                        && a.EnderecoRua.Contains(TextoValor.Text));
-                        break;
-                    case "Bairro":
-                        resultado = alunos.Where(a => a.EnderecoBairro != null
-                        && a.EnderecoBairro.Contains(TextoValor.Text));
-                        break;
-                    case "Nascimento":
-                        if (DataValor.SelectedDate != null)
-                        {
-                            resultado = alunos.Where(a => a.DataNascimento != null
-                                && a.DataNascimento == DataValor.SelectedDate.Value);
-                        }
-                        break;
-                    case "Sexo":
-                        resultado = alunos.Where(a => a.Sexo == ComboValor.SelectedIndex);
-                        break; 
-                    case "Ano Escolar":
-                        resultado = alunos.Where(a => a.AnoEscolar == ComboValor.SelectedIndex);
-                        break; 
-                    case "Turno Escolar":
-                        //TODO
-                        //resultado = alunos.Where(a => a.TurnoEscolar == ComboValor.SelectedValue as string);
-                        break;
-                    case "Turno no Projeto":
-                        //TODO
-                        //resultado = alunos.Where(a => a.TurnoProjeto == ComboValor.SelectedValue as string);
-                        break;
-                    case "Vínculo":
-                        resultado = alunos.Where(a => a.VinculoFamiliar == ComboValor.SelectedIndex);
-                        break;
-                    case "Beneficiário":
-                        resultado = alunos.Where(a => a.IsBeneficiario == (ComboValor.SelectedIndex == 0));
-                        break;
-                    case "Moradia":
-                        resultado = alunos.Where(a => a.TipoMoradia == ComboValor.SelectedIndex);
-                        break;
-                    case "Renda":
-                        resultado = alunos.Where(a => a.Renda == ComboValor.SelectedIndex);
-                        break;
-                    case "Situação":
-                        resultado = alunos.Where(a => a.SituacaoProjeto == ComboValor.SelectedIndex);
-                        break;
-                }               
+                    resultado = relatorioAluno.Filtrar((string)FiltroSelecaoCombo.SelectedValue, TextoValor.Text.Trim());
+                }
+                else if (ComboValor.Visibility == Visibility.Visible)
+                {
+                    resultado = relatorioAluno.Filtrar((string)FiltroSelecaoCombo.SelectedValue, ComboValor.SelectedIndex);
+                }
 
                 if (resultado.Any())
                 {
                     PopularDataGrid(resultado);
                 }
             }
+
+            FiltrarButton.IsEnabled = true;
         }
 
-        private void PopularDataGrid(IEnumerable<Aluno> alunos)
+        private void Exportar()
         {
-            DadosDataGrid.ItemsSource = alunos;
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
+            //https://stackoverflow.com/questions/34704314/wpf-datagrid-to-csv-exporting-only-the-visible-values-in-the-grid
+
+            ExportarCombo.IsEnabled = false;
+
+            try
             {
-                Header = "Nome",
-                Binding = new Binding("NomeCompleto")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
+                if (ExportarCombo.SelectedIndex == 1)
+                {
+                    DadosDataGrid.SelectAllCells();
+                    DadosDataGrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+
+                    ApplicationCommands.Copy.Execute(null, DadosDataGrid);
+                    DadosDataGrid.UnselectAllCells();
+
+                    string result = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
+
+                    SaveFileDialog saveFileDialog = new SaveFileDialog();
+                    saveFileDialog.Filter = "Arquivo CSV (*.csv)|*.csv";
+
+                    if (saveFileDialog.ShowDialog() == true)
+                    {
+                        File.AppendAllText(saveFileDialog.FileName, result, UnicodeEncoding.UTF8);
+                        MessageBox.Show($"Os dados foram exportados com sucesso", "Dados exportados", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }                    
+                }
+            }
+            catch (Exception ex)
             {
-                Header = "Data de Nascimento",
-                Binding = new Binding("DataNascimentoValue")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Idade",
-                Binding = new Binding("IdadeValue")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Sexo",
-                Binding = new Binding("SexoValue")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "RG",
-                Binding = new Binding("RG")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "CPF",
-                Binding = new Binding("CPF")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Certidão",
-                Binding = new Binding("Certidao")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Nome do Responsável",
-                Binding = new Binding("NomeResponsavel")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Vínculo Familiar",
-                Binding = new Binding("VinculoFamiliarValue")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Contato 1",
-                Binding = new Binding("Contato1")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Contato 2",
-                Binding = new Binding("Contato2")
-            });
-            DadosDataGrid.Columns.Add(new DataGridCheckBoxColumn()
-            {
-                Header = "Beneficiário",
-                Binding = new Binding("IsBeneficiario")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Tipo de Moradia",
-                Binding = new Binding("TipoCasaValue")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Renda",
-                Binding = new Binding("RendaValue")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Escola",
-                Binding = new Binding("EscolaNome")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Ano Escolar",
-                Binding = new Binding("AnoEscolarValue")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Turno Escolar",
-                Binding = new Binding("TurnoEscolar")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Rua",
-                Binding = new Binding("EnderecoRua")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Bairro",
-                Binding = new Binding("EnderecoBairro")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Número",
-                Binding = new Binding("EnderecoNumero")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Complemento",
-                Binding = new Binding("EnderecoComplemento")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Cidade",
-                Binding = new Binding("EnderecoCidade")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Estado",
-                Binding = new Binding("EnderecoEstado")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "CEP",
-                Binding = new Binding("EnderecoCEP")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Situação do Aluno",
-                Binding = new Binding("SituacaoProjetoValue")
-            });
-            DadosDataGrid.Columns.Add(new DataGridTextColumn()
-            {
-                Header = "Turno no Projeto",
-                Binding = new Binding("TurnoProjeto")
-            });
+                MessageBox.Show($"Ocorreu um erro ao tentar exportar os dados.\n\n Erro: {ex.Message}", "Erro ao Exportar", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+
+            ExportarCombo.IsEnabled = true;
+            ExportarCombo.SelectedIndex = 0;
         }
     }
 }

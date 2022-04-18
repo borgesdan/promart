@@ -26,15 +26,22 @@
             </MenuItem>            
         </Menu>
         <ToolBar x:Name="MenuFerramentas" Grid.Row="1" FontSize="14">
-            <Button x:Name="CadastrarAlunoButton" VerticalAlignment="Stretch"
+            <Button x:Name="CadastrarAlunoButton" VerticalAlignment="Stretch" Width="60"
                    ToolTip="Cadastrar Aluno">
                 <Button.Content>
                     <Image Source="/assets/images/avatars/png-128/add-128x128-1410058.png" Stretch="Fill" />
                 </Button.Content>
             </Button>
-            <Button x:Name="CadastrarVoluntarioBtn" VerticalAlignment="Stretch" ToolTip="Cadastrar Voluntário" >
+            <Button x:Name="CadastrarVoluntarioBtn" VerticalAlignment="Stretch" Width="60"
+                    ToolTip="Cadastrar Voluntário" >
                 <Button.Content>
                     <Image Source="/assets/images/avatars/png-128/agreement-128x128-1410057.png" />
+                </Button.Content>
+            </Button>
+            <Button x:Name="AbrirOficinasButton" VerticalAlignment="Stretch" Width="60"
+                    ToolTip="Abrir Oficinas" >
+                <Button.Content>
+                    <Image Source="/assets/images/icons/notebook.png" Width="35" />
                 </Button.Content>
             </Button>
             <Separator Margin="20,0" />
