@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Promart.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
-      Title="TabelaDadosPage">
+      Title="TabelaDadosPage" Loaded="Page_Loaded">
 
     <Grid Background="White">
         <Grid.RowDefinitions>

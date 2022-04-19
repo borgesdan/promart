@@ -21,16 +21,11 @@ namespace Promart.Codes
         public static class Diretorios 
         {
             public static string ATUAL = Environment.CurrentDirectory;
-            public static string SALVOS = ATUAL + "/Salvos";
-            public static string FOTOS = SALVOS + "/Fotos";
-            public static string FOTOS_ALUNOS = SALVOS + "/Fotos/Alunos";
-            public static string FOTOS_VOLUNTARIOS = SALVOS + "/Fotos/Voluntarios";
-
-            //Caminhos relativos
-            public static string REL_SALVOS = "/Salvos";
-            public static string REL_FOTOS = REL_SALVOS + "/Fotos";
-            public static string REL_FOTOS_ALUNOS = REL_FOTOS + "/Alunos";
-            public static string REL_FOTOS_VOLUNTARIOS = REL_FOTOS + "/Voluntarios";
+            public static string SALVOS = ATUAL + "\\Salvos";
+            public static string FOTOS = SALVOS + "\\Fotos";
+            public static string FOTOS_ALUNOS = SALVOS + "\\Fotos\\Alunos";
+            public static string FOTOS_VOLUNTARIOS = SALVOS + "\\Fotos\\Voluntarios";
+            public static string BACKUPS = ATUAL + "\\Backups";
         }
 
         public static class Controles
@@ -42,12 +37,7 @@ namespace Promart.Codes
                 tabItem.MaxWidth = 300;
                 tabItem.MinHeight = 25;                
                 tabItem.Header = new TabHeaderContentControl(tabHeader, 280, new RoutedEventHandler((o, t) => {
-                    var result = MessageBox.Show("Todos os dados não salvos serão perdidos. Deseja fechar a aba?", "Fechar aba", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    
-                    if(result == MessageBoxResult.Yes)
-                    {
-                        RemoverAba(tabItem);
-                    }                    
+                    RemoverAba(tabItem);
                 }));
                 
                 ScrollViewer scrollViewer = new();
@@ -129,7 +119,7 @@ namespace Promart.Codes
 
                     string extensao = ObterExtensaoArquivo(openFileDialog.SafeFileName);
                     string arquivoFoto = $"{nomeImagem}.{extensao}";
-                    string caminhoFinal = $"{diretorioDestino}/{arquivoFoto}";
+                    string caminhoFinal = $"{diretorioDestino}\\{arquivoFoto}";
 
                     File.Copy(openFileDialog.FileName, caminhoFinal);
 

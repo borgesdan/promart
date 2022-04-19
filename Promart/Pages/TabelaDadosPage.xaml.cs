@@ -29,15 +29,19 @@ namespace Promart.Pages
     /// </summary>
     public partial class TabelaDadosPage : Page
     {
-        int selectedIndex = -1;        
+        int selectedIndex = -1;
+        string? nomeAlunoPesquisa;
 
         RelatorioAluno relatorioAluno = new RelatorioAluno(new List<Aluno>());
         RelatorioVoluntario relatorioVoluntario = new RelatorioVoluntario(new List<Voluntario>());
 
-        public TabelaDadosPage()
+        public TabelaDadosPage() : this(null) { }
+
+        public TabelaDadosPage(string? nomeAluno)
         {
             InitializeComponent();
             DesabilitarControles();
+            this.nomeAlunoPesquisa = nomeAluno;
 
             FiltrarButton.Click += (object sender, RoutedEventArgs e) => Filtrar();
             ExportarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => Exportar();
@@ -45,7 +49,7 @@ namespace Promart.Pages
             FiltroSelecaoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirControleValor();
             DadosDataGrid.PreviewKeyDown += (object sender, KeyEventArgs e) => RemoverDados(e);
             DadosDataGrid.PreviewKeyDown += (object sender, KeyEventArgs e) => AbrirItem(e, null);
-            DadosDataGrid.PreviewMouseDoubleClick += (object sender, MouseButtonEventArgs e) => AbrirItem(null, e);
+            DadosDataGrid.PreviewMouseDoubleClick += (object sender, MouseButtonEventArgs e) => AbrirItem(null, e);            
         }
 
         private async void AbrirItem(KeyEventArgs? ek, MouseButtonEventArgs? em)
@@ -297,6 +301,18 @@ namespace Promart.Pages
 
             ExportarCombo.IsEnabled = true;
             ExportarCombo.SelectedIndex = 0;
+        }
+
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if(nomeAlunoPesquisa != null)
+            {
+                selectedIndex = 0;
+                await DefinirEstadoRelatorio();
+                FiltroSelecaoCombo.SelectedIndex = 0;
+                TextoValor.Text = nomeAlunoPesquisa;
+                Filtrar();
+            }
         }
     }
 }

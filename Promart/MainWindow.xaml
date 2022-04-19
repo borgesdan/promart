@@ -20,12 +20,16 @@
             <MenuItem Header="Cadastro">
                 <MenuItem x:Name="CadastrarAlunoMenu" Header="Alunos" />
                 <MenuItem x:Name="CadastrarVoluntarioMenu" Header="Voluntários" />
-                <MenuItem x:Name="CadastrarOficinaMenu" Header="Oficinas" />
-                <Separator />
-                <MenuItem x:Name="ConsultaAvancadaMenu" Header="Consulta Avançada" />
-            </MenuItem>            
+                <MenuItem x:Name="CadastrarOficinaMenu" Header="Oficinas" />                
+            </MenuItem>
+            <MenuItem Header="Backup">
+                <MenuItem x:Name="CriarBackupMenu" Header="Criar" />
+                <MenuItem x:Name="RestaurarBackupMenu" Header="Restaurar" />
+                <MenuItem x:Name="AbrirPastaBackupMenu" Header="Abrir Pasta" />
+            </MenuItem>
         </Menu>
-        <ToolBar x:Name="MenuFerramentas" Grid.Row="1" FontSize="14">
+        
+        <ToolBar x:Name="MenuFerramentas" Grid.Row="1" FontSize="14">           
             <Button x:Name="CadastrarAlunoButton" VerticalAlignment="Stretch" Width="60"
                    ToolTip="Cadastrar Aluno">
                 <Button.Content>
@@ -44,18 +48,28 @@
                     <Image Source="/assets/images/icons/notebook.png" Width="35" />
                 </Button.Content>
             </Button>
-            <Separator Margin="20,0" />
+            <Separator  Width="2" Margin="20,0" />
             <Label Content="Pesquisa Rápida" VerticalAlignment="Center" Margin="0,0"/>
-            <TextBox Width="250" />
-            <Button VerticalAlignment="Stretch" ToolTip="Buscar" Width="60" >
+            <TextBox x:Name="NomeAlunoBusca" Width="250" TextAlignment="Left" VerticalContentAlignment="Center" />
+            <Button x:Name="BuscarAlunoButton" VerticalAlignment="Stretch" ToolTip="Buscar" Width="60" >
                 <Button.Content>
                     <Image Source="/assets/images/icons/search.png" Width="25" />
                 </Button.Content>
-            </Button>
-            <Separator Margin="20,0" />
-            <Button x:Name="AbrirTabelaDadosButton" Width="60" VerticalAlignment="Stretch" ToolTip="Relatórios">
+            </Button>            
+            <Button x:Name="RelatoriosButton" Width="60" VerticalAlignment="Stretch" ToolTip="Relatórios">
                 <Button.Content>
-                    <Image Source="/assets/images/icons/database.png" Stretch="Uniform"  />
+                    <Image Source="/assets/images/icons/database.png"  />
+                </Button.Content>
+            </Button>
+            <Separator Width="2" Margin="20,0" />
+            <Button x:Name="BackupButton" Width="60" VerticalAlignment="Stretch" ToolTip="Relatórios">
+                <Button.Content>
+                    <Image Source="/assets/images/icons/download.png"   />
+                </Button.Content>
+            </Button>
+            <Button x:Name="RestaurarButton" Width="60" VerticalAlignment="Stretch" ToolTip="Relatórios">
+                <Button.Content>
+                    <Image Source="/assets/images/icons/upload.png"   />
                 </Button.Content>
             </Button>
         </ToolBar>

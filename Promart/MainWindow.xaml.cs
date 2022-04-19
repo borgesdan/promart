@@ -18,6 +18,8 @@ using Promart.Models;
 using Promart.Codes;
 using Promart.Data;
 using System.ComponentModel;
+using System.IO;
+using Microsoft.Win32;
 
 namespace Promart
 {
@@ -39,17 +41,11 @@ namespace Promart
             CadastrarAlunoButton.Click += (object sender, RoutedEventArgs e) => CadastrarAluno();
             CadastrarAlunoMenu.Click += (object sender, RoutedEventArgs e) => CadastrarAluno();
             CadastrarVoluntarioBtn.Click += (object sender, RoutedEventArgs e) => CadastrarVoluntario();
-            CadastrarVoluntarioMenu.Click += (object sender, RoutedEventArgs e) => CadastrarVoluntario();            
-            ConsultaAvancadaMenu.Click += (object sender, RoutedEventArgs e) => {
-                PesquisaAvancadaPage page = new();
-                
-                Helper.Controles.AbrirNovaAba(TabConteudo, "Pesquisa Avançada", page);
-            };
-            AbrirTabelaDadosButton.Click += (object sender, RoutedEventArgs e) =>
-            {
-                TabelaDadosPage page = new();
-                Helper.Controles.AbrirNovaAba(TabConteudo, "Relatórios", page);
-            };
+            CadastrarVoluntarioMenu.Click += (object sender, RoutedEventArgs e) => CadastrarVoluntario();
+            RelatoriosButton.Click += (object sender, RoutedEventArgs e) => AbrirRelatorios();
+            BuscarAlunoButton.Click += (object sender, RoutedEventArgs e) => AbrirRelatoriosComNome();
+            BackupButton.Click += async (object sender, RoutedEventArgs e) => await CriarBackup();
+            RestaurarButton.Click += async (object sender, RoutedEventArgs e) => await RestaurarBackup();
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -67,18 +63,81 @@ namespace Promart
         private void CadastrarAluno()
         {
             CadastroAlunoPage page = new CadastroAlunoPage(new Aluno());
-            page.Tab = Helper.Controles.AbrirNovaAba(TabConteudo, "Novo Aluno", page);
+            page.Tab = AbrirNovaAba("Novo Aluno", page);
         }
 
         private void CadastrarVoluntario()
         {
             CadastroVoluntarioPage page = new CadastroVoluntarioPage(new Voluntario());
-            page.Tab = Helper.Controles.AbrirNovaAba(TabConteudo, "Novo Voluntário", page);
+            page.Tab = AbrirNovaAba("Novo Voluntário", page);
         }
 
-        public void AbrirNovaAba(string nome, Page page)
+        private void AbrirRelatorios()
         {
-            Helper.Controles.AbrirNovaAba(TabConteudo, nome, page);
+            TabelaDadosPage page = new();
+            AbrirNovaAba("Relatórios", page);
+        }
+
+        private void AbrirRelatoriosComNome()
+        {
+            TabelaDadosPage page = new(NomeAlunoBusca.Text);
+            AbrirNovaAba($"Relatórios: {NomeAlunoBusca.Text}", page);
+        }
+
+        public async Task CriarBackup()
+        {
+            if (!Directory.Exists(Helper.Diretorios.BACKUPS))
+            {
+                Directory.CreateDirectory(Helper.Diretorios.BACKUPS);
+            }
+
+            DateTime data = DateTime.Now;
+
+            string ano = data.Year.ToString();
+            string mes = data.Month < 10 ? $"0{data.Month}" : data.Month.ToString();
+            string dia = data.Day < 10 ? $"0{data.Day}" : data.Day.ToString();
+            string hora = data.Hour < 10 ? $"0{data.Hour}" : data.Hour.ToString();
+            string minutos = data.Minute < 10 ? $"0{data.Minute}" : data.Minute.ToString();
+            string final = $"{ano}-{mes}-{dia}-{hora}-{minutos}-promartbd";
+            var retorno = await Backup.Criar($"{Helper.Diretorios.BACKUPS}\\{final}.bak");
+
+            if (retorno)
+            {
+                MessageBox.Show("Backup Completo.");
+            }
+        }
+
+        public async Task RestaurarBackup()
+        {
+            if (!Directory.Exists(Helper.Diretorios.BACKUPS))
+            {
+                Directory.CreateDirectory(Helper.Diretorios.BACKUPS);
+            }
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Environment.CurrentDirectory;
+            openFileDialog.Filter = "Arquivos de backup (*.BAK)|*.bak";
+            openFileDialog.Multiselect = false;
+            openFileDialog.CheckFileExists = true;
+            openFileDialog.CheckPathExists = true;            
+            var result = openFileDialog.ShowDialog();
+
+            if(result == true)
+            {
+                string backup = openFileDialog.FileName;
+
+                var retorno = await Backup.Restaurar($"{backup}");
+
+                if (retorno)
+                {
+                    MessageBox.Show("A restauração foi feita com sucesso.");
+                }
+            }
+        }
+
+        public TabItem AbrirNovaAba(string nome, Page page)
+        {
+            return Helper.Controles.AbrirNovaAba(TabConteudo, nome, page);
         }
     }
 }

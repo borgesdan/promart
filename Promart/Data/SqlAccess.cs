@@ -21,7 +21,7 @@ namespace Promart.Data
             MessageBox.Show(texto, "Erro no Banco de Dados", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        static string GetConnectionString(string id = "Default")
+        public static string GetConnectionString(string id = "Default")
         {
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;
         }
