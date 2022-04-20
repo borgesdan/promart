@@ -96,11 +96,15 @@
     <None Remove="assets\images\avatars\png-128\worker-128x128-1409975.png" />
     <None Remove="assets\images\icons\128\magnifying-glass.png" />
     <None Remove="assets\images\icons\database.png" />
+    <None Remove="assets\images\icons\database2.png" />
     <None Remove="assets\images\icons\download.png" />
+    <None Remove="assets\images\icons\file.png" />
     <None Remove="assets\images\icons\folder.png" />
+    <None Remove="assets\images\icons\folder2.png" />
     <None Remove="assets\images\icons\list.png" />
     <None Remove="assets\images\icons\notebook.png" />
     <None Remove="assets\images\icons\photo-camera.png" />
+    <None Remove="assets\images\icons\print.png" />
     <None Remove="assets\images\icons\search.png" />
     <None Remove="assets\images\icons\server.png" />
     <None Remove="assets\images\icons\upload.png" />
@@ -376,11 +380,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="assets\images\icons\database.png" />
+    <Resource Include="assets\images\icons\database2.png" />
     <Resource Include="assets\images\icons\download.png" />
+    <Resource Include="assets\images\icons\file.png" />
     <Resource Include="assets\images\icons\folder.png" />
+    <Resource Include="assets\images\icons\folder2.png" />
     <Resource Include="assets\images\icons\list.png" />
     <Resource Include="assets\images\icons\notebook.png" />
     <Resource Include="assets\images\icons\photo-camera.png" />
+    <Resource Include="assets\images\icons\print.png" />
     <Resource Include="assets\images\icons\search.png" />
     <Resource Include="assets\images\icons\server.png" />
     <Resource Include="assets\images\icons\upload.png" />

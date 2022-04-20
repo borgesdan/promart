@@ -58,18 +58,18 @@
             </Button>            
             <Button x:Name="RelatoriosButton" Width="60" VerticalAlignment="Stretch" ToolTip="Relatórios">
                 <Button.Content>
-                    <Image Source="/assets/images/icons/database.png"  />
+                    <Image Source="/assets/images/icons/folder2.png" Width="35"  />
                 </Button.Content>
             </Button>
             <Separator Width="2" Margin="20,0" />
-            <Button x:Name="BackupButton" Width="60" VerticalAlignment="Stretch" ToolTip="Relatórios">
+            <Button x:Name="BackupButton" Width="60" VerticalAlignment="Stretch" ToolTip="Criar Backup">
                 <Button.Content>
-                    <Image Source="/assets/images/icons/download.png"   />
+                    <Image Source="/assets/images/icons/database2.png" Width="35"  />
                 </Button.Content>
             </Button>
-            <Button x:Name="RestaurarButton" Width="60" VerticalAlignment="Stretch" ToolTip="Relatórios">
+            <Button x:Name="RestaurarButton" Width="60" VerticalAlignment="Stretch" ToolTip="Restaurar Backup">
                 <Button.Content>
-                    <Image Source="/assets/images/icons/upload.png"   />
+                    <Image Source="/assets/images/icons/database.png" Width="35"  />
                 </Button.Content>
             </Button>
         </ToolBar>

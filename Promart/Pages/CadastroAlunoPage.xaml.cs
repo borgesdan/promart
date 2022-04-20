@@ -20,6 +20,7 @@ using System.Text.RegularExpressions;
 using Promart.Controls;
 using Microsoft.Win32;
 using System.IO;
+using System.Printing;
 
 namespace Promart.Pages
 {
@@ -28,6 +29,8 @@ namespace Promart.Pages
     /// </summary>
     public partial class CadastroAlunoPage : Page
     {
+        bool dadosCarregados = false;
+        bool oficinasPopuladas = false;
         bool dadosAlterados = false;
         public Aluno Aluno { get; private set; }
         public TabItem? Tab { get; set; }
@@ -57,6 +60,7 @@ namespace Promart.Pages
             AddMembroButton.Click += (object sender, RoutedEventArgs e) => AbrirCadastroVinculo();
             EditarMembroButton.Click += (object sender, RoutedEventArgs e) => EditarCadastroVinculo();
             ExcluirMembroButton.Click += (object sender, RoutedEventArgs e) => ExcluirCadastroVinculo();
+            ImprimirButton.Click += (object sender, RoutedEventArgs e) => Imprimir();
 
             //Eventos para confirmar alterações de dados ao sair da tela
             FotoImage.Changed += (object? sender, EventArgs e) => DefinirAlteracaoDados();
@@ -82,25 +86,27 @@ namespace Promart.Pages
             SituacaoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
             TurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
             TurnoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
-            BeneficiarioCheck.Click += (object sender, RoutedEventArgs e) => DefinirAlteracaoDados();           
-            
-            //Vai para o evento Page_Loaded.
-        }       
-        
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            //Carrega o nome do aluno e coloca o cursor para o fim do nome.
+            BeneficiarioCheck.Click += (object sender, RoutedEventArgs e) => DefinirAlteracaoDados();
+
             NomeText.Text = Aluno.NomeCompleto;
             NomeText.Focus();
             NomeText.CaretIndex = NomeText.Text != null ? NomeText.Text.Length : 0;
+        }
 
-            await PopularOficinas();
-            
-            if(Aluno.Id != 0)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!oficinasPopuladas)
+            {
+                await PopularOficinas();
+                oficinasPopuladas = true;
+            }            
+
+            if (!dadosCarregados && Aluno.Id != 0)
             {
                 await PreencherDados();
+                dadosCarregados = true;
             }
-        }
+        }        
 
         private async Task PreencherDados()
         {
@@ -134,7 +140,7 @@ namespace Promart.Pages
 
             MatriculaText.Text = Aluno.Matricula;
             DataMatriculaText.Text = Aluno.DataMatriculaValue.ToString();
-            MatriculaPanel.Visibility = Visibility.Visible;            
+            MatriculaPanel.Visibility = Visibility.Visible;
             CarregarFoto();
 
             await ObterVinculos();
@@ -189,19 +195,19 @@ namespace Promart.Pages
             Aluno.EnderecoCEP = "45570-000";
             Aluno.SituacaoProjeto = SituacaoProjetoCombo.SelectedIndex;
             Aluno.TurnoProjeto = TurnoProjetoCombo.SelectedIndex;
-            Aluno.Observacoes = ObservacoesText.Text;            
+            Aluno.Observacoes = ObservacoesText.Text;
 
             if (Aluno.Id == 0)
             {
+                Aluno.Matricula = GeradorMatricula.Get(Aluno.NomeCompleto);
+                Aluno.DataMatricula = DateTime.Now;
+
                 long result = await SqlAccess.InserirAsync(Aluno);
 
                 if (result != -1)
                 {
                     await InserirVinculosAsync();
-                    await InserirAlunoOficinaAsync();
-
-                    Aluno.Matricula = GeradorMatricula.Get(Aluno.NomeCompleto);
-                    Aluno.DataMatricula = DateTime.Now;
+                    await InserirAlunoOficinaAsync();                    
                     ConfirmarButton.IsEnabled = false;
                     dadosAlterados = false;
                     MessageBox.Show("O cadastro do aluno foi realizado e um número de matrícula foi gerado.", "Aluno cadastrado", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -237,7 +243,7 @@ namespace Promart.Pages
                 {
                     MessageBox.Show("Infelizmente ocorreu um erro ao atualizar as oficinas do aluno.", "Erro em oficinas", MessageBoxButton.OK, MessageBoxImage.Information);
                     return false;
-                }                
+                }
             }
 
             foreach (var checkBox in OficinasList.ItemsSource)
@@ -262,7 +268,7 @@ namespace Promart.Pages
                         {
                             MessageBox.Show("Infelizmente ocorreu um erro ao inserir as oficinas do aluno.", "Erro em oficinas", MessageBoxButton.OK, MessageBoxImage.Information);
                             return false;
-                        }                            
+                        }
                     }
                 }
             }
@@ -401,14 +407,14 @@ namespace Promart.Pages
 
         private void CarregarFoto()
         {
-            if(Aluno.FotoUrl != null)
+            if (Aluno.FotoUrl != null)
             {
                 string arquivo = $"{Helper.Diretorios.FOTOS_ALUNOS}/{Aluno.FotoUrl}";
 
                 if (File.Exists(arquivo))
                 {
                     FotoImage.ImageSource = new BitmapImage(new Uri(arquivo));
-                }                
+                }
             }
         }
 
@@ -459,7 +465,7 @@ namespace Promart.Pages
         {
             var resultado = await SqlAccess.TAlunoVinculos.GetAsync(Aluno);
 
-            if(resultado != null)
+            if (resultado != null)
             {
                 vinculos = new List<AlunoVinculo>(resultado);
                 ComposicaoDataGrid.ItemsSource = vinculos;
@@ -479,22 +485,33 @@ namespace Promart.Pages
         {
             var resultado = await SqlAccess.TAlunoOficinas.GetAsync(Aluno);
 
-            if(resultado != null)
+            if (resultado != null)
             {
-                foreach(var alunoOficina in resultado)
+                foreach (var alunoOficina in resultado)
                 {
                     foreach (var boxes in OficinasList.ItemsSource)
                     {
                         CheckBox checkBox = (CheckBox)boxes;
                         Oficina oficina = (Oficina)checkBox.Content;
 
-                        if(oficina.Id == alunoOficina.IdOficina)
+                        if (oficina.Id == alunoOficina.IdOficina)
                         {
                             checkBox.IsChecked = true;
                         }
                     }
                 }
             }
+        }
+
+        private void Imprimir()
+        {
+            PrintDialog printDialog = new PrintDialog();
+
+            AlunoDadosPrintPage cadastroAlunoPage = new AlunoDadosPrintPage(this);
+            bool? result = printDialog.ShowDialog();
+
+            if(result == true)
+                printDialog.PrintVisual(cadastroAlunoPage, "Cadastro do Aluno");
         }
     }
 }

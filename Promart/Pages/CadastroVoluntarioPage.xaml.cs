@@ -25,6 +25,8 @@ namespace Promart.Pages
     /// </summary>
     public partial class CadastroVoluntarioPage : Page
     {
+        bool dadosCarregados = false;
+        bool oficinasPopuladas = false;
         bool dadosAlterados = false;
         public Voluntario Voluntario { get; private set; }
         public TabItem? Tab { get; set; }
@@ -63,20 +65,25 @@ namespace Promart.Pages
             ObservacoesText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             NascimentoData.SelectedDateChanged += (object? sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
             FotoImage.Changed += (object? sender, EventArgs e) => DefinirAlteracaoDados();
-            
+
+            NomeText.Text = Voluntario.NomeCompleto;
+            NomeText.Focus();
+            NomeText.CaretIndex = NomeText.Text != null ? NomeText.Text.Length : 0;
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            NomeText.Text = Voluntario.NomeCompleto;
-            NomeText.Focus();
-            NomeText.CaretIndex = NomeText.Text != null ? NomeText.Text.Length : 0;
+            
+            if(!oficinasPopuladas)
+            {
+                await Helper.Controles.PopularOficinasListComCheckBoxAsync(OficinasList, (object o, RoutedEventArgs a) => DefinirAlteracaoDados());
+                oficinasPopuladas = true;
+            }            
 
-            await Helper.Controles.PopularOficinasListComCheckBoxAsync(OficinasList, (object o, RoutedEventArgs a) => DefinirAlteracaoDados());
-
-            if (Voluntario.Id != 0)
+            if (!dadosCarregados && Voluntario.Id != 0)
             {
                 await PreencherDados();
+                dadosCarregados = true;
             }
         }
 

@@ -40,9 +40,8 @@ namespace Promart.Data
         public static async Task<bool> Restaurar(string caminhoCompleto)
         {
             try
-            {
-                //using SqlConnection conn = new SqlConnection(SqlAccess.GetConnectionString());
-                using SqlConnection conn = new SqlConnection(@"Server=localhost\SQLEXPRESS;Trusted_Connection=True;");
+            {                
+                using SqlConnection conn = new SqlConnection(SqlAccess.GetConnectionString("NoDatabase"));
                 await conn.OpenAsync();
 
                 await conn.ExecuteAsync(@$"                    

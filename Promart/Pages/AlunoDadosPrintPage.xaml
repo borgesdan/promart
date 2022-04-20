@@ -1,0 +1,179 @@
+﻿<Page x:Class="Promart.Pages.AlunoDadosPrintPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Promart.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="1000" d:DesignWidth="800"
+      Title="AlunoDadosPrintPage">
+
+    <StackPanel Background="White">
+        <GroupBox x:Name="DadosPessoaisGroup"
+                      Margin="40,40,40,5" Padding="5" Header="Dados Pessoais"
+                  Height="250">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />                    
+                
+                </Grid.RowDefinitions>
+                
+                <Label Grid.Row="0" Grid.Column="0" Content="Nome Completo:" 
+                            FontWeight="SemiBold" HorizontalAlignment="Right" />
+                <Label x:Name="Nome" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontWeight="Bold" />
+
+                
+                <Label Grid.Row="1" Grid.Column="0" Content="Data Nascimento:"
+                            HorizontalAlignment="Right" FontWeight="SemiBold" />
+                <Label x:Name="Nascimento" Grid.Row="1" Grid.Column="1" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              />
+
+                
+                <Label Grid.Row="1" Grid.Column="2" Content="Sexo:"
+                            FontWeight="SemiBold" HorizontalAlignment="Right" />
+                <Label x:Name="Sexo" Grid.Row="1" Grid.Column="3" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              />
+                
+                <Label Grid.Row="2" Grid.Column="0" Content="RG:"
+                            FontWeight="SemiBold" 
+                           HorizontalAlignment="Right" />
+                <Label x:Name="RG" Grid.Row="2" Grid.Column="1" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              />
+                
+                <Label Grid.Row="2" Grid.Column="2" Content="CPF:"
+                             FontWeight="SemiBold"
+                           HorizontalAlignment="Right" />
+                <Label x:Name="CPF" Grid.Row="2" Grid.Column="3" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              />
+
+                <Label Grid.Row="3" Grid.Column="0" Content="Certidão de Nascimento:"
+                             FontWeight="SemiBold" 
+                           HorizontalAlignment="Right" />
+                <Label x:Name="Certidao" Grid.Row="3" Grid.Column="1" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              />
+
+                <Label Grid.Row="4" Grid.Column="0" Content="Responsável:"
+                             FontWeight="SemiBold" 
+                           HorizontalAlignment="Right" />
+                <Label x:Name="Responsável" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+
+                <Label Grid.Row="5" Grid.Column="0" Content="Vínculo:"
+                             FontWeight="SemiBold" 
+                           HorizontalAlignment="Right" />
+                <Label x:Name="Vinculo" Grid.Row="5" Grid.Column="1" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+
+                <Label Grid.Row="5" Grid.Column="2" Content="Moradia:"
+                             FontWeight="SemiBold" 
+                           HorizontalAlignment="Right" />
+                <Label x:Name="Moradia" Grid.Row="5" Grid.Column="3" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+
+                <Label Grid.Row="6" Grid.Column="0" Content="Renda:"
+                             FontWeight="SemiBold" 
+                           HorizontalAlignment="Right" />
+                <Label x:Name="Renda" Grid.Row="6" Grid.Column="1" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+
+                <Label Grid.Row="6" Grid.Column="2" Content="Beneficiário:"
+                             FontWeight="SemiBold" 
+                           HorizontalAlignment="Right" />
+                <Label x:Name="Beneficiario" Grid.Row="6" Grid.Column="3" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+
+                <Label Grid.Row="7" Grid.Column="0" Content="Telefone 1:"
+                             FontWeight="SemiBold" 
+                           HorizontalAlignment="Right" />
+                <Label x:Name="Telefone1" Grid.Row="7" Grid.Column="1" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+
+                <Label Grid.Row="8" Grid.Column="0" Content="Telefone 2:"
+                             FontWeight="SemiBold" 
+                           HorizontalAlignment="Right" />
+                <Label x:Name="Telefone2" Grid.Row="8" Grid.Column="1" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+
+
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox x:Name="EnderecoGroup"
+                      Margin="40,0,40,5" Padding="5" Header="Endereço e Dados Escolares"
+                  Height="180">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Rua:" 
+                            FontWeight="SemiBold" HorizontalAlignment="Right" />
+                <Label x:Name="Rua" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  />
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Bairro:" 
+                            FontWeight="SemiBold" HorizontalAlignment="Right" />
+                <Label x:Name="Bairro" Grid.Row="1" Grid.Column="1"
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  />
+
+                <Label Grid.Row="1" Grid.Column="2" Content="Número:" 
+                            FontWeight="SemiBold" HorizontalAlignment="Right" />
+                <Label x:Name="Numero" Grid.Row="1" Grid.Column="3"
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  />
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Complemento:" 
+                            FontWeight="SemiBold" HorizontalAlignment="Right" />
+                <Label x:Name="Complemento" Grid.Row="2" Grid.Column="1" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  />
+
+
+                <Label Grid.Row="4" Grid.Column="0" Content="Escola:" 
+                            FontWeight="SemiBold" HorizontalAlignment="Right" />
+                <Label x:Name="Escola" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  />
+
+                <Label Grid.Row="5" Grid.Column="0" Content="Turno:" 
+                            FontWeight="SemiBold" HorizontalAlignment="Right" />
+                <Label x:Name="Turno" Grid.Row="5" Grid.Column="1"
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  />
+
+                <Label Grid.Row="5" Grid.Column="2" Content="Ano:" 
+                            FontWeight="SemiBold" HorizontalAlignment="Right" />
+                <Label x:Name="Ano" Grid.Row="5" Grid.Column="3"
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  />
+            </Grid>
+        </GroupBox>
+    </StackPanel>
+</Page>
