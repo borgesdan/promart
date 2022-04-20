@@ -11,7 +11,7 @@
     <StackPanel Background="White">
         <GroupBox x:Name="DadosPessoaisGroup"
                       Margin="40,40,40,5" Padding="5" Header="Dados Pessoais"
-                  Height="250">
+                  >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150" />
@@ -28,36 +28,35 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
-                    <RowDefinition />                    
-                
+                    <RowDefinition />
                 </Grid.RowDefinitions>
-                
+
                 <Label Grid.Row="0" Grid.Column="0" Content="Nome Completo:" 
                             FontWeight="SemiBold" HorizontalAlignment="Right" />
                 <Label x:Name="Nome" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" 
                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontWeight="Bold" />
 
-                
+
                 <Label Grid.Row="1" Grid.Column="0" Content="Data Nascimento:"
                             HorizontalAlignment="Right" FontWeight="SemiBold" />
                 <Label x:Name="Nascimento" Grid.Row="1" Grid.Column="1" 
                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                               />
 
-                
+
                 <Label Grid.Row="1" Grid.Column="2" Content="Sexo:"
                             FontWeight="SemiBold" HorizontalAlignment="Right" />
                 <Label x:Name="Sexo" Grid.Row="1" Grid.Column="3" 
                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                               />
-                
+
                 <Label Grid.Row="2" Grid.Column="0" Content="RG:"
                             FontWeight="SemiBold" 
                            HorizontalAlignment="Right" />
                 <Label x:Name="RG" Grid.Row="2" Grid.Column="1" 
                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                               />
-                
+
                 <Label Grid.Row="2" Grid.Column="2" Content="CPF:"
                              FontWeight="SemiBold"
                            HorizontalAlignment="Right" />
@@ -121,7 +120,7 @@
 
         <GroupBox x:Name="EnderecoGroup"
                       Margin="40,0,40,5" Padding="5" Header="Endereço e Dados Escolares"
-                  Height="180">
+                 >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150" />
@@ -174,6 +173,51 @@
                 <Label x:Name="Ano" Grid.Row="5" Grid.Column="3"
                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  />
             </Grid>
+        </GroupBox>
+
+        <GroupBox x:Name="ProjetoGroup"
+                      Margin="40,0,40,5" Padding="5" Header="Dados do Projeto"
+                  >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Situação:" 
+                            FontWeight="SemiBold" HorizontalAlignment="Right" />
+                <Label x:Name="Situacao" Grid.Row="0" Grid.Column="1"
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontWeight="Bold" />
+
+                <Label Grid.Row="0" Grid.Column="2" Content="Turno:" 
+                            FontWeight="SemiBold" HorizontalAlignment="Right" />
+                <Label x:Name="TurnoProjeto" Grid.Row="0" Grid.Column="3"
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Oficinas:" 
+                            FontWeight="SemiBold" HorizontalAlignment="Right" />
+                <WrapPanel x:Name="Oficinas" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="4"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            </Grid>
+        </GroupBox>
+
+        <GroupBox x:Name="ComposicaoFamiliarGroup"
+                      Margin="40,0,40,5" Padding="5" Header="Composição Familiar">
+            <StackPanel x:Name="Composicao" Orientation="Vertical"></StackPanel>
+        </GroupBox>
+
+        <GroupBox x:Name="ObservacoesGroup"
+                      Margin="40,0,40,5" Padding="5" Header="Observações">
+            <TextBox x:Name="Observacoes" TextWrapping="WrapWithOverflow"></TextBox>
         </GroupBox>
     </StackPanel>
 </Page>

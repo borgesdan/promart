@@ -508,10 +508,13 @@ namespace Promart.Pages
             PrintDialog printDialog = new PrintDialog();
 
             AlunoDadosPrintPage cadastroAlunoPage = new AlunoDadosPrintPage(this);
+            
             bool? result = printDialog.ShowDialog();
 
             if(result == true)
+            {
                 printDialog.PrintVisual(cadastroAlunoPage, "Cadastro do Aluno");
+            }                
         }
     }
 }

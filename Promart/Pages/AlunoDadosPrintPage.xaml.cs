@@ -49,6 +49,33 @@ namespace Promart.Pages
             Escola.Content = aluno.NomeEscolaText.Text;
             Turno.Content = aluno.TurnoEscolarCombo.SelectedValue;
             Ano.Content = aluno.AnoEscolarCombo.SelectedValue;
+
+            Situacao.Content = aluno.SituacaoProjetoCombo.SelectedValue;
+            TurnoProjeto.Content = aluno.TurnoProjetoCombo.SelectedValue;
+
+            foreach(CheckBox cb in aluno.OficinasList.Items)
+            {
+                if (cb.IsChecked == true)
+                {
+                    TextBox txt = new TextBox();
+                    txt.Text = cb.Content.ToString();      
+                    txt.MinWidth = 50;
+                    txt.Margin = new Thickness(0, 0, 5, 5);
+                    
+                    Oficinas.Children.Add(txt);
+                }
+            }
+
+            foreach(AlunoVinculo av in aluno.ComposicaoDataGrid.ItemsSource)
+            {
+                TextBox txt = new TextBox();
+                txt.Text = $"{av.NomeFamiliar}, {av.Parentesco}, {av.Idade}, {av.Escolaridade}, {av.Ocupacao}, {av.Renda} de renda";
+                txt.Margin = new Thickness(0,0,0,1);
+                txt.BorderThickness = new Thickness(0);
+                Composicao.Children.Add(txt);
+            }
+
+            Observacoes.Text = aluno.ObservacoesText.Text;
         }
     }
 }

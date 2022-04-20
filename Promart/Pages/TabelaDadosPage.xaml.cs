@@ -60,7 +60,12 @@ namespace Promart.Pages
                 {
                     case 0:
                         var alunoSelecionado = (Aluno)DadosDataGrid.SelectedItem;
-                        var alunoAtualizado = await SqlAccess.GetDadoAsync<Aluno>(alunoSelecionado.Id);
+                        Aluno? alunoAtualizado = null;
+
+                        if(alunoSelecionado != null)
+                        {
+                            alunoAtualizado = await SqlAccess.GetDadoAsync<Aluno>(alunoSelecionado.Id);
+                        }
 
                         if (alunoAtualizado != null)
                         {
@@ -69,7 +74,12 @@ namespace Promart.Pages
                         break;
                     case 1:
                         var voluntarioSelecionado = (Voluntario)DadosDataGrid.SelectedItem;
-                        var voluntarioAtualizado = await SqlAccess.GetDadoAsync<Voluntario>(voluntarioSelecionado.Id);
+                        Voluntario? voluntarioAtualizado = null;
+
+                        if (voluntarioSelecionado != null)
+                        {
+                            voluntarioAtualizado = await SqlAccess.GetDadoAsync<Voluntario>(voluntarioSelecionado.Id);
+                        }                        
 
                         if (voluntarioAtualizado != null)
                         {
