@@ -116,7 +116,6 @@ namespace Promart
 
                         if (valores.Length == 3)
                         {
-
                             if (!File.Exists(valores[0]))
                                 return;
 
@@ -135,6 +134,10 @@ namespace Promart
                             int imgStretch;
                             int.TryParse(valores[2], out imgStretch);
                             ImagemFundo.Stretch = (Stretch)imgStretch;
+                        }
+                        else
+                        {
+                            File.Delete($"{Helper.Diretorios.SALVOS}\\fundo.txt");
                         }
                     }
                     else
