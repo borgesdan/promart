@@ -30,7 +30,7 @@ namespace Promart.Pages
     public partial class CadastroAlunoPage : Page
     {
         bool dadosCarregados = false;
-        bool oficinasPopuladas = false;
+        bool paginaCarregada = false;
         bool dadosAlterados = false;
         public Aluno Aluno { get; private set; }
         public TabItem? Tab { get; set; }
@@ -61,6 +61,7 @@ namespace Promart.Pages
             EditarMembroButton.Click += (object sender, RoutedEventArgs e) => EditarCadastroVinculo();
             ExcluirMembroButton.Click += (object sender, RoutedEventArgs e) => ExcluirCadastroVinculo();
             ImprimirButton.Click += (object sender, RoutedEventArgs e) => Imprimir();
+            ExcluirButton.Click += async (object sender, RoutedEventArgs e) => await ExcluirCadastro();
 
             //Eventos para confirmar alterações de dados ao sair da tela
             FotoImage.Changed += (object? sender, EventArgs e) => DefinirAlteracaoDados();
@@ -95,17 +96,20 @@ namespace Promart.Pages
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!oficinasPopuladas)
-            {
-                await PopularOficinas();
-                oficinasPopuladas = true;
-            }            
+            await PopularOficinas();           
 
             if (!dadosCarregados && Aluno.Id != 0)
             {
                 await PreencherDados();
                 dadosCarregados = true;
             }
+
+            if(paginaCarregada)
+            {
+                await ObterOficinas();
+            }
+
+            paginaCarregada = true;
         }        
 
         private async Task PreencherDados()
@@ -147,6 +151,7 @@ namespace Promart.Pages
             await ObterOficinas();
 
             ConfirmarButton.IsEnabled = false;
+            ExcluirButton.IsEnabled = true;
             dadosAlterados = false;
         }
 
@@ -158,7 +163,7 @@ namespace Promart.Pages
                     return;
             }
 
-            Helper.Controles.RemoverAba(Tab);
+            MainWindow.Instance?.FecharAbaAtual();
         }
 
         private async Task ConfirmarPaginaAsync()
@@ -173,29 +178,29 @@ namespace Promart.Pages
 
             Aluno.DataNascimento = NascimentoData.SelectedDate;
             Aluno.Sexo = SexoCombo.SelectedIndex;
-            Aluno.RG = RGText.Text;
-            Aluno.CPF = CPFText.Text;
-            Aluno.Certidao = CertidaoText.Text;
+            Aluno.RG = RGText.Text.Trim();
+            Aluno.CPF = CPFText.Text.Trim();
+            Aluno.Certidao = CertidaoText.Text.Trim();
             Aluno.VinculoFamiliar = VinculoCombo.SelectedIndex;
-            Aluno.NomeResponsavel = NomeResponsavelText.Text;
+            Aluno.NomeResponsavel = NomeResponsavelText.Text.Trim();
             Aluno.IsBeneficiario = BeneficiarioCheck.IsChecked ?? false;
             Aluno.TipoMoradia = MoradiaCombo.SelectedIndex;
             Aluno.Renda = RendaCombo.SelectedIndex;
-            Aluno.Contato1 = Telefone1Text.Text;
-            Aluno.Contato2 = Telefone2Text.Text;
-            Aluno.EscolaNome = NomeEscolaText.Text;
+            Aluno.Contato1 = Telefone1Text.Text.Trim();
+            Aluno.Contato2 = Telefone2Text.Text.Trim();
+            Aluno.EscolaNome = NomeEscolaText.Text.Trim();
             Aluno.TurnoEscolar = TurnoEscolarCombo.SelectedIndex;
             Aluno.AnoEscolar = AnoEscolarCombo.SelectedIndex;
-            Aluno.EnderecoRua = RuaText.Text;
-            Aluno.EnderecoBairro = BairroText.Text;
-            Aluno.EnderecoNumero = NumeroText.Text;
-            Aluno.EnderecoComplemento = ComplementoText.Text;
+            Aluno.EnderecoRua = RuaText.Text.Trim();
+            Aluno.EnderecoBairro = BairroText.Text.Trim();
+            Aluno.EnderecoNumero = NumeroText.Text.Trim();
+            Aluno.EnderecoComplemento = ComplementoText.Text.Trim();
             Aluno.EnderecoCidade = "Ipiaú";
             Aluno.EnderecoEstado = "Bahia";
             Aluno.EnderecoCEP = "45570-000";
             Aluno.SituacaoProjeto = SituacaoProjetoCombo.SelectedIndex;
             Aluno.TurnoProjeto = TurnoProjetoCombo.SelectedIndex;
-            Aluno.Observacoes = ObservacoesText.Text;
+            Aluno.Observacoes = ObservacoesText.Text.Trim();
 
             if (Aluno.Id == 0)
             {
@@ -209,6 +214,7 @@ namespace Promart.Pages
                     await InserirVinculosAsync();
                     await InserirAlunoOficinaAsync();                    
                     ConfirmarButton.IsEnabled = false;
+                    ExcluirButton.IsEnabled = true;
                     dadosAlterados = false;
                     MessageBox.Show("O cadastro do aluno foi realizado e um número de matrícula foi gerado.", "Aluno cadastrado", MessageBoxButton.OK, MessageBoxImage.Information);
                     MatriculaText.Text = Aluno.Matricula;
@@ -225,6 +231,7 @@ namespace Promart.Pages
                     await InserirVinculosAsync(true);
                     await InserirAlunoOficinaAsync(true);
                     ConfirmarButton.IsEnabled = false;
+                    ExcluirButton.IsEnabled = true;
                     dadosAlterados = false;
                     MessageBox.Show("O cadastro do aluno foi atualizado com sucesso", "Cadastro Atualizado", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -515,6 +522,20 @@ namespace Promart.Pages
             {
                 printDialog.PrintVisual(cadastroAlunoPage, "Cadastro do Aluno");
             }                
+        }
+
+        private async Task ExcluirCadastro()
+        {
+            var result = MessageBox.Show("Deseja realmente excluir esse cadastro? Essa alteração não pode ser desfeita.", "Excluir Cadastro", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                await SqlAccess.TAlunoOficinas.DeletarAsync(Aluno);
+                await SqlAccess.TAlunoVinculos.DeletarAsync(Aluno);
+                await SqlAccess.DeletarAsync(Aluno);
+
+                MainWindow.Instance?.FecharAbaAtual();
+            }            
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Promart.Pages
     public partial class CadastroVoluntarioPage : Page
     {
         bool dadosCarregados = false;
-        bool oficinasPopuladas = false;
+        bool paginaCarregada = false;
         bool dadosAlterados = false;
         public Voluntario Voluntario { get; private set; }
         public TabItem? Tab { get; set; }
@@ -47,6 +47,7 @@ namespace Promart.Pages
             ConfirmarButton.Click += async (s, e) => await ConfirmarPagina();
             AbrirImagemButton.Click += (object sender, RoutedEventArgs e) => AbrirNovaImagem();
             NomeText.TextChanged += (object sender, TextChangedEventArgs e) => AlterarHeaderAba();
+            ExcluirButton.Click += async (object sender, RoutedEventArgs e) => await ExcluirCadastro();
 
             //Eventos para confirmar alterações de dados ao sair da tela
             NomeText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
@@ -73,18 +74,20 @@ namespace Promart.Pages
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            
-            if(!oficinasPopuladas)
-            {
-                await Helper.Controles.PopularOficinasListComCheckBoxAsync(OficinasList, (object o, RoutedEventArgs a) => DefinirAlteracaoDados());
-                oficinasPopuladas = true;
-            }            
+            await Helper.Controles.PopularOficinasListComCheckBoxAsync(OficinasList, (object o, RoutedEventArgs a) => DefinirAlteracaoDados());
 
             if (!dadosCarregados && Voluntario.Id != 0)
             {
                 await PreencherDados();
                 dadosCarregados = true;
             }
+
+            if (paginaCarregada)
+            {
+                await ObterOficinas();
+            }
+
+            paginaCarregada = true;
         }
 
         private async Task PreencherDados()
@@ -111,7 +114,9 @@ namespace Promart.Pages
             await ObterOficinas();
 
             ConfirmarButton.IsEnabled = false;
+            ExcluirButton.IsEnabled = true;
             dadosAlterados = false;
+
         }
 
         private void DefinirAlteracaoDados()
@@ -128,7 +133,7 @@ namespace Promart.Pages
                     return;
             }
 
-            Helper.Controles.RemoverAba(Tab);
+            MainWindow.Instance?.FecharAbaAtual();
         }
 
         private async Task ConfirmarPagina()
@@ -143,22 +148,21 @@ namespace Promart.Pages
 
             Voluntario.DataNascimento = NascimentoData.SelectedDate;
             Voluntario.Sexo = SexoCombo.SelectedIndex;
-            Voluntario.Profissao = ProfissaoText.Text;
-            Voluntario.RG = RGText.Text;
-            Voluntario.CPF = CPFText.Text;
-            Voluntario.Contato1 = Telefone1Text.Text;
-            Voluntario.Contato2 = Telefone2Text.Text;
-            Voluntario.Email = EmailText.Text;
-            Voluntario.EnderecoRua = RuaText.Text;
-            Voluntario.EnderecoBairro = BairroText.Text;
-            Voluntario.EnderecoNumero = NumeroText.Text;
-            Voluntario.EnderecoComplemento = ComplementoText.Text;
-            Voluntario.EnderecoCidade = CidadeText.Text;
+            Voluntario.Profissao = ProfissaoText.Text.Trim();
+            Voluntario.RG = RGText.Text.Trim();
+            Voluntario.CPF = CPFText.Text.Trim();
+            Voluntario.Contato1 = Telefone1Text.Text.Trim();
+            Voluntario.Contato2 = Telefone2Text.Text.Trim();
+            Voluntario.Email = EmailText.Text.Trim();
+            Voluntario.EnderecoRua = RuaText.Text.Trim();
+            Voluntario.EnderecoBairro = BairroText.Text.Trim();
+            Voluntario.EnderecoNumero = NumeroText.Text.Trim();
+            Voluntario.EnderecoComplemento = ComplementoText.Text.Trim();
+            Voluntario.EnderecoCidade = CidadeText.Text.Trim();
             Voluntario.EnderecoEstado = "Bahia";
-            Voluntario.EnderecoCEP = CEPText.Text;
-            Voluntario.Observacoes = ObservacoesText.Text;
-            Voluntario.DataCadastro = DateTime.Now;
-            Voluntario.Escolaridade = EscolaridadeText.Text;
+            Voluntario.EnderecoCEP = CEPText.Text.Trim();
+            Voluntario.Observacoes = ObservacoesText.Text.Trim();            
+            Voluntario.Escolaridade = EscolaridadeText.Text.Trim();
 
             if (Voluntario.Id == 0)
             {
@@ -169,6 +173,8 @@ namespace Promart.Pages
                     await InserirVoluntarioOficinaAsync();
                     
                     ConfirmarButton.IsEnabled = false;
+                    ExcluirButton.IsEnabled = true;
+                    Voluntario.DataCadastro = DateTime.Now;
                     dadosAlterados = false;
                     MessageBox.Show("O cadastro do voluntário foi realizado.", "Voluntário Cadastrado", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -181,6 +187,7 @@ namespace Promart.Pages
                 {
                     await InserirVoluntarioOficinaAsync(true);
                     ConfirmarButton.IsEnabled = false;
+                    ExcluirButton.IsEnabled = true;
                     dadosAlterados = false;
                     MessageBox.Show("O cadastro do voluntário foi atualizado.", "Voluntário Atualizado", MessageBoxButton.OK, MessageBoxImage.Information);
                 }                
@@ -318,6 +325,19 @@ namespace Promart.Pages
                         }
                     }
                 }
+            }
+        }
+
+        private async Task ExcluirCadastro()
+        {
+            var result = MessageBox.Show("Deseja realmente excluir esse cadastro? Essa alteração não pode ser desfeita.", "Excluir Cadastro", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                await SqlAccess.TVoluntarioOficinas.DeletarAsync(Voluntario);
+                await SqlAccess.DeletarAsync(Voluntario);
+
+                MainWindow.Instance?.FecharAbaAtual();
             }
         }
     }

@@ -23,59 +23,84 @@ namespace Promart.Pages
     /// </summary>
     public partial class CadastroOficinaPage : Page
     {
-        public Oficina Oficina { get; private set; }
-
-        public CadastroOficinaPage() : this(new Oficina())
-        {            
-        }
-
-        public CadastroOficinaPage(Oficina oficina)
+        public CadastroOficinaPage()
         {
             InitializeComponent();
-            Oficina = oficina;
-
-            //Helper.Controles.PopularOficinasListBox(OficinasList);
-
-            TrocarVisibilidadeGrupo(AdicionarGrupo);
-
-            AdicionarButton.Click += AdicionarButton_Click;
-            ConfirmarAdicaoButton.Click += ConfirmarAdicaoButton_Click;
-            OrdenarButton.Click += OrdenarButton_Click;
+            this.Loaded += async (object sender, RoutedEventArgs e) => await Carregar();
+            Adicionar.Click += async (object sender, RoutedEventArgs e) => await Add();
+            OficinasList.PreviewKeyDown += async (object sender, KeyEventArgs e) => await DeletarOficina(e);
         }
 
-        private void OrdenarButton_Click(object sender, RoutedEventArgs e)
-        {  
-        }
-
-        private void ConfirmarAdicaoButton_Click(object sender, RoutedEventArgs e)
+        private async Task DeletarOficina(KeyEventArgs e)
         {
-            Oficina.Id = 0;
-            Oficina.Nome = AddNomeText.Text;
-            Oficina.Descricao = AddDescricaoText.Text;
-
-            SqlAccess.Inserir(Oficina);
-            MessageBox.Show($"A oficina '{Oficina.Nome}' foi adicionada com sucesso!", "Oficina Adicionada", MessageBoxButton.OK, MessageBoxImage.Information);
-            //Helper.Controles.PopularOficinasListBox(OficinasList);                        
-
-            AddNomeText.Text = string.Empty;
-            AddDescricaoText.Text = string.Empty;
-            AddNomeText.Focus();
-        }
-
-        private void AdicionarButton_Click(object sender, RoutedEventArgs e)
-        {
-            if(!AdicionarGrupo.IsEnabled)
+            if(e.Key == Key.Delete)
             {
-                TrocarVisibilidadeGrupo(AdicionarGrupo);
-                AddNomeText.Focus();
+                await Remover();
             }
         }
 
-        void TrocarVisibilidadeGrupo(GroupBox group)
+        private async Task Carregar()
         {
-            group.IsEnabled = !group.IsEnabled;
-            group.Visibility = group.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
+            var result = await SqlAccess.GetDadosAsync<Oficina>();
 
+            if(result != null)
+            {
+                OficinasList.Items.Clear();
+
+                foreach(var item in result.Reverse())
+                {
+                    OficinasList.Items.Add(item);
+                }
+            }
+        }
+
+        private async Task Add()
+        {
+            Adicionar.IsEnabled = false;
+
+            if (!string.IsNullOrWhiteSpace(Nome.Text))
+            {
+                
+                Oficina oficina = new Oficina();
+                oficina.Nome = Nome.Text;
+
+                var result = await SqlAccess.InserirAsync(oficina);
+
+                if(result != -1)
+                {
+                    await Carregar();
+                    Nome.Text = string.Empty;
+                }
+            }
+
+            Adicionar.IsEnabled = true;
+        }
+
+        private async Task Remover()
+        {
+            Adicionar.IsEnabled = false;
+            OficinasList.IsEnabled = false;
+
+            if(OficinasList.SelectedIndex != -1)
+            {
+                Oficina oficina = (Oficina)OficinasList.SelectedValue;
+                await SqlAccess.TAlunoOficinas.RemoverAlunosDaOficina(oficina);
+                await SqlAccess.TVoluntarioOficinas.RemoverVoluntariosDaOficina(oficina);
+                await SqlAccess.DeletarAsync(oficina);
+                await Carregar();
+            }
+
+            OficinasList.IsEnabled = true;
+            Adicionar.IsEnabled = true;
+        }
+
+        private async Task EditarNome()
+        {
+            Adicionar.IsEnabled = false;
+            OficinasList.IsEnabled = false;
+
+            OficinasList.IsEnabled = true;
+            Adicionar.IsEnabled = true;
         }
     }
 }

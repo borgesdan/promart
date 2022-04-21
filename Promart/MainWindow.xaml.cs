@@ -27,8 +27,8 @@ namespace Promart
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-        public static MainWindow? Instance { get; private set; }        
+    {        
+        public static MainWindow? Instance { get; private set; }              
 
         public MainWindow()
         {
@@ -46,6 +46,7 @@ namespace Promart
             BuscarAlunoButton.Click += (object sender, RoutedEventArgs e) => AbrirRelatoriosComNome();
             BackupButton.Click += async (object sender, RoutedEventArgs e) => await CriarBackup();
             RestaurarButton.Click += async (object sender, RoutedEventArgs e) => await RestaurarBackup();
+            AbrirOficinasButton.Click += (object sender, RoutedEventArgs e) => AbrirOficinas();
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -70,6 +71,12 @@ namespace Promart
         {
             CadastroVoluntarioPage page = new CadastroVoluntarioPage(new Voluntario());
             page.Tab = AbrirNovaAba("Novo Voluntário", page);
+        }
+
+        private void AbrirOficinas()
+        {
+            CadastroOficinaPage page = new CadastroOficinaPage();
+            AbrirNovaAba("Oficinas", page);
         }
 
         private void AbrirRelatorios()
@@ -138,6 +145,11 @@ namespace Promart
         public TabItem AbrirNovaAba(string nome, Page page)
         {
             return Helper.Controles.AbrirNovaAba(TabConteudo, nome, page);
+        }
+
+        public void FecharAbaAtual()
+        {
+            TabConteudo.Items.RemoveAt(TabConteudo.SelectedIndex);
         }
     }
 }

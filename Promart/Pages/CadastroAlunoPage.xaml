@@ -83,9 +83,10 @@
             </Grid.RowDefinitions>
 
             <ToolBar Grid.ColumnSpan="3">
-                <Button Name="ImprimirButton" Width="40" VerticalAlignment="Stretch">
+                <Button Name="ImprimirButton" Width="40" VerticalAlignment="Stretch" ToolTip="Imprimir">
                     <Image Source="/assets/images/icons/print.png" />
                 </Button>
+                <Separator Margin="20,0,20,0" />                
             </ToolBar>
             <Ellipse x:Name="FotoElipse" Grid.Row="1" Grid.Column="3" Grid.RowSpan="4" Width="200">
                 <Ellipse.Fill>
@@ -486,18 +487,28 @@
                 </Grid>
             </GroupBox>
 
-            <Button x:Name="ConfirmarButton" Grid.Row="26" Grid.Column="2" Grid.RowSpan="2"
+            <Button x:Name="ConfirmarButton" Grid.Row="27" Grid.Column="2"
                     Content="Confirmar"
-                    HorizontalAlignment="Right" Width="200" Margin="0,20,20,10"
+                    HorizontalAlignment="Right" Width="200" Margin="0,0,20,0"
                     FontSize="24"  FontWeight="SemiBold"
                     Background="#FF0087FD" Foreground="White" BorderBrush="DarkBlue" BorderThickness="2"/>
 
-            <Button x:Name="CancelarButton" Grid.Row="26" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2"
+            <Button x:Name="CancelarButton" Grid.Row="27" Grid.Column="1" Grid.ColumnSpan="2"
                     Content="Fechar" HorizontalAlignment="Right"
-                    Width="200" Margin="0,20, 250,10"
+                    Width="200" Margin="0,0, 250,0"
                     FontSize="24"  FontWeight="SemiBold" 
                     Background="DarkRed" Foreground="White" BorderBrush="DarkRed" BorderThickness="2"
-                             />            
+                             />
+
+            <Button x:Name="ExcluirButton" Grid.Row="27" Grid.Column="0"
+                    HorizontalAlignment="Left" IsEnabled="False"
+                    Width="200" Margin="20,0, 0, 0"
+                    FontSize="24"  FontWeight="SemiBold">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/assets/images/icons/error.png" Width="50" />
+                    <Label Content="Excluir" />
+                </StackPanel>
+            </Button>
         </Grid>
     </Grid>    
 </Page>

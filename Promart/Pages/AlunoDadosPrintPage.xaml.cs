@@ -28,6 +28,8 @@ namespace Promart.Pages
             InitializeComponent();
             this.aluno = aluno;
 
+            DadosPessoaisGroup.Header = $"Dados Pessoais | Matrícula: {aluno.MatriculaText.Text} Data {aluno.DataMatriculaText.Text}";
+
             Nome.Content = aluno.NomeText.Text;
             Nascimento.Content = aluno.NascimentoData.SelectedDate;
             Sexo.Content = aluno.SexoCombo.SelectedValue;

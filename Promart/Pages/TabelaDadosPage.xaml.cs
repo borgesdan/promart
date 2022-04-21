@@ -48,11 +48,11 @@ namespace Promart.Pages
             SelecionarButton.Click += async (object sender, RoutedEventArgs e) => await DefinirEstadoRelatorio();
             FiltroSelecaoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirControleValor();
             DadosDataGrid.PreviewKeyDown += (object sender, KeyEventArgs e) => RemoverDados(e);
-            DadosDataGrid.PreviewKeyDown += (object sender, KeyEventArgs e) => AbrirItem(e, null);
-            DadosDataGrid.PreviewMouseDoubleClick += (object sender, MouseButtonEventArgs e) => AbrirItem(null, e);            
+            DadosDataGrid.PreviewKeyDown += async (object sender, KeyEventArgs e) => await AbrirItem(e, null);
+            DadosDataGrid.PreviewMouseDoubleClick += async (object sender, MouseButtonEventArgs e) => await AbrirItem(null, e);            
         }
 
-        private async void AbrirItem(KeyEventArgs? ek, MouseButtonEventArgs? em)
+        private async Task AbrirItem(KeyEventArgs? ek, MouseButtonEventArgs? em)
         {
             if((ek != null && ek.Key == Key.Enter) || (em != null && em.LeftButton == MouseButtonState.Pressed))
             {                
@@ -60,34 +60,44 @@ namespace Promart.Pages
                 {
                     case 0:
                         var alunoSelecionado = (Aluno)DadosDataGrid.SelectedItem;
-                        Aluno? alunoAtualizado = null;
-
-                        if(alunoSelecionado != null)
-                        {
-                            alunoAtualizado = await SqlAccess.GetDadoAsync<Aluno>(alunoSelecionado.Id);
-                        }
-
-                        if (alunoAtualizado != null)
-                        {
-                            MainWindow.Instance?.AbrirNovaAba(alunoAtualizado.NomeCompleto ?? "Aluno Selecionado", new CadastroAlunoPage(alunoAtualizado));
-                        }
+                        await AbrirSelecionado(alunoSelecionado);
                         break;
                     case 1:
                         var voluntarioSelecionado = (Voluntario)DadosDataGrid.SelectedItem;
-                        Voluntario? voluntarioAtualizado = null;
-
-                        if (voluntarioSelecionado != null)
-                        {
-                            voluntarioAtualizado = await SqlAccess.GetDadoAsync<Voluntario>(voluntarioSelecionado.Id);
-                        }                        
-
-                        if (voluntarioAtualizado != null)
-                        {
-                            MainWindow.Instance?.AbrirNovaAba(voluntarioAtualizado.NomeCompleto ?? "Aluno Selecionado", new CadastroVoluntarioPage(voluntarioAtualizado));
-                        }
+                        await AbrirSelecionado(voluntarioSelecionado);
                         break;
                 }
             }            
+        }
+
+        private async Task AbrirSelecionado(Aluno? alunoSelecionado)
+        {
+            Aluno? alunoAtualizado = null;
+
+            if (alunoSelecionado != null)
+            {
+                alunoAtualizado = await SqlAccess.GetDadoAsync<Aluno>(alunoSelecionado.Id);
+            }
+
+            if (alunoAtualizado != null)
+            {
+                MainWindow.Instance?.AbrirNovaAba(alunoAtualizado.NomeCompleto ?? "Aluno Selecionado", new CadastroAlunoPage(alunoAtualizado));
+            }
+        }
+
+        private async Task AbrirSelecionado(Voluntario? voluntarioSelecionado)
+        {
+            Voluntario? voluntarioAtualizado = null;
+
+            if (voluntarioSelecionado != null)
+            {
+                voluntarioAtualizado = await SqlAccess.GetDadoAsync<Voluntario>(voluntarioSelecionado.Id);
+            }
+
+            if (voluntarioAtualizado != null)
+            {
+                MainWindow.Instance?.AbrirNovaAba(voluntarioAtualizado.NomeCompleto ?? "Aluno Selecionado", new CadastroVoluntarioPage(voluntarioAtualizado));
+            }
         }
 
         private void RemoverDados(KeyEventArgs e)

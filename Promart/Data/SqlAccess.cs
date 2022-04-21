@@ -192,6 +192,23 @@ namespace Promart.Data
             return false;
         }
 
+        public static async Task<bool> DeletarAsync<T>(T dado) where T : class
+        {
+            try
+            {
+                using SqlConnection conn = new SqlConnection(GetConnectionString());
+                await conn.OpenAsync();
+
+                return await conn.DeleteAsync(dado);
+            }
+            catch (Exception ex)
+            {
+                MostrarErro("Ocorreu um erro ao deletar as informações no banco de dados", ex);
+            }
+
+            return false;
+        }
+
         public static class TAlunoOficinas
         {
             public static async Task<IEnumerable<dynamic>?> DeletarAsync(Aluno aluno)
@@ -203,6 +220,24 @@ namespace Promart.Data
 
                     return await conn.QueryAsync(@"DELETE FROM AlunoOficinas 
                             WHERE IdAluno = @Id", aluno);
+                }
+                catch (Exception ex)
+                {
+                    MostrarErro("Ocorreu um erro ao deletar as informações no banco de dados", ex);
+                }
+
+                return null;
+            }
+
+            public static async Task<IEnumerable<dynamic>?> RemoverAlunosDaOficina(Oficina oficina)
+            {
+                try
+                {
+                    using SqlConnection conn = new SqlConnection(GetConnectionString());
+                    await conn.OpenAsync();
+
+                    return await conn.QueryAsync(@"DELETE FROM AlunoOficinas 
+                            WHERE IdOficina = @Id", oficina);
                 }
                 catch (Exception ex)
                 {
@@ -317,6 +352,24 @@ namespace Promart.Data
                 return null;
             }
 
+            public static async Task<IEnumerable<dynamic>?> RemoverVoluntariosDaOficina(Oficina oficina)
+            {
+                try
+                {
+                    using SqlConnection conn = new SqlConnection(GetConnectionString());
+                    await conn.OpenAsync();
+
+                    return await conn.QueryAsync(@"DELETE FROM VoluntarioOficinas 
+                            WHERE IdOficina = @Id", oficina);
+                }
+                catch (Exception ex)
+                {
+                    MostrarErro("Ocorreu um erro ao deletar as informações no banco de dados", ex);
+                }
+
+                return null;
+            }
+
             public static async Task<IEnumerable<VoluntarioOficina>?> GetAsync(Voluntario voluntario)
             {
                 try
@@ -344,7 +397,7 @@ namespace Promart.Data
 
                 return null;
             }
-        }
+        }        
 
     }
 }

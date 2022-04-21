@@ -8,7 +8,7 @@
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="CadastroOficinaPage">
 
-    <Grid Background="White" ShowGridLines="True">
+    <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition />
@@ -21,7 +21,7 @@
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="0" Grid.Column="1" Content="CADASTRO DE OFICINAS"
-               FontSize="24" FontWeight="Bold" FontFamily="Cascadia Code" />
+               FontSize="24" FontWeight="Bold" />
 
         <Grid Grid.Row="1" Grid.Column="1" >
             <Grid.ColumnDefinitions>
@@ -42,100 +42,26 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />                
-                <RowDefinition Height="50" />                
+        
             </Grid.RowDefinitions>
-
-            <GroupBox Header="Lista de Oficinas"
-                      Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" Grid.RowSpan="12"
-                      Margin="10" Padding="5"
-                      FontSize="20" FontFamily="Cascadia Code ExtraLight" >
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="35" />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-
-                    <ToolBar Grid.Row="0">
-                        
-                        <Button x:Name="AdicionarButton" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="30"
-                                BorderThickness="1" BorderBrush="Black"
-                                FontSize="20" FontFamily="Cascadia Code"
-                                Content="+" Cursor="Hand"></Button>
-
-                        <Separator Margin="10,0"/>
-                        <Button x:Name="OrdenarButton" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="30"
-                                BorderThickness="1" BorderBrush="Black"
-                                FontSize="20" FontFamily="Cascadia Code"
-                                Content="O" Cursor="Hand"></Button>
-                        
-                        <Separator Margin="10,0"/>
-
-                        <Button VerticalAlignment="Stretch" Width="30"                                
-                                BorderThickness="1" BorderBrush="Black"
-                                FontSize="16" FontFamily="Cascadia Code"
-                                Content="ex" Cursor="Hand"></Button>
-                    </ToolBar>
-
-                    <ListBox x:Name="OficinasList" Grid.Row="1" 
-                             FontSize="20" FontFamily="Cascadia Code"
-                             Margin="0, 10, 0, 0" Cursor="Hand">                       
-                    </ListBox>                                       
-                </Grid>
+            <ToolBar Grid.ColumnSpan="3">
+                <Label Content="Nome da Oficina:" FontSize="16" VerticalContentAlignment="Center" />
+                <TextBox x:Name="Nome" Width="300" VerticalAlignment="Stretch" Margin="10"
+                         BorderBrush="DarkBlue" BorderThickness="1.5"
+                         FontSize="14"></TextBox>
+                <Button x:Name="Adicionar" Width="200" 
+                                    Content="Adicionar" 
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    FontSize="14"  FontWeight="SemiBold" 
+                                    Background="#FF0087FD" Foreground="White"
+                                    BorderBrush="DarkBlue" BorderThickness="2" />                
+            </ToolBar>
+            <GroupBox Header="Oficinas" FontSize="18" 
+                          Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="10"
+                      Padding="10">
+                <ListBox x:Name="OficinasList"></ListBox>
             </GroupBox>
-
-            <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="12">
-                <GroupBox x:Name="AdicionarGrupo" Header="Adicionar Oficina"
-                      Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" Grid.RowSpan="12"
-                      Margin="10" Padding="5"
-                      FontSize="20" FontWeight="Bold" FontFamily="Cascadia Code" >
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                        </Grid.RowDefinitions>
-
-
-                        <Label Grid.Row="0" Grid.Column="0" Content="Nome da Oficina:" 
-                           FontSize="16" FontFamily="Cascadia Code" 
-                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
-
-                        <TextBox x:Name="AddNomeText" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"
-                             HorizontalAlignment="Stretch" TextAlignment="Left" 
-                                 Margin="10" VerticalContentAlignment="Center"
-                                 FontSize="15" FontFamily="Cascadia Code Light" />
-
-                        <Label Grid.Row="1" Grid.Column="0" Content="Descrição:" 
-                           FontSize="16" FontWeight="Bold" FontFamily="Cascadia Code" 
-                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
-
-                        <TextBox x:Name="AddDescricaoText" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2"
-                             HorizontalAlignment="Stretch" TextAlignment="Left" Margin="10" 
-                                 AcceptsReturn="True" TextWrapping="WrapWithOverflow"
-                                 FontSize="15" FontFamily="Cascadia Code Light" />
-
-                        <Button x:Name="ConfirmarAdicaoButton" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2"
-                                Content="ADICIONAR" Margin="20,0,20,0"
-                                FontSize="20" FontFamily="Cascadia Code"></Button>
-
-                        <Button x:Name="CancelarAdicaoButton" Grid.Row="4" Grid.Column="1"
-                                Content="Cancelar" Margin="20,5,20,5"
-                                FontSize="20" FontFamily="Cascadia Code Light"></Button>
-
-                    </Grid>
-                </GroupBox>
-            </StackPanel>
         </Grid>
     </Grid>
 </Page>
