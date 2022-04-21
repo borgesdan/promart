@@ -29,7 +29,8 @@ namespace Promart
     /// </summary>
     public partial class MainWindow : Window
     {        
-        public static MainWindow? Instance { get; private set; }              
+        public static MainWindow? Instance { get; private set; }
+        bool imgFundoCarregado = false;
 
         public MainWindow()
         {
@@ -57,16 +58,105 @@ namespace Promart
             RestaurarBackupMenu.Click += async (object sender, RoutedEventArgs e) => await RestaurarBackup();
             AbrirPastaBackupMenu.Click += (object sender, RoutedEventArgs e) => AbrirPastaBackups();
 
+            DefinirFundoMenu.Click += (object sender, RoutedEventArgs e) => DefinirFundo();
+            TabConteudo.SelectionChanged += TabConteudo_SelectionChanged;
+
+            this.Loaded += MainWindow_Loaded;
+        }
+
+        private void TabConteudo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TabConteudo.Visibility = TabConteudo.Items.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+            RetanguloFundo.Visibility = TabConteudo.Items.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            CarregarFundo();
+        }
+
+        private void DefinirFundo()
+        {
+            DefinirFundoWindow definirFundoWindow = new DefinirFundoWindow();
+            definirFundoWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            
+            if(definirFundoWindow.ShowDialog() == true)
+            {
+                try
+                {
+                    imgFundoCarregado = false;
+                    FileInfo arquivo = new FileInfo(definirFundoWindow.Arquivo);
+                    string extensao = Helper.Util.ObterExtensaoArquivo(arquivo.Name);
+
+                    string txt = $"{arquivo.FullName};{definirFundoWindow.OpacidadeValor};{definirFundoWindow.RedimensionamentoValor}";
+                    File.WriteAllText($"{Helper.Diretorios.SALVOS}\\fundo.txt", txt);
+
+                    CarregarFundo();
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show($"Ocorreu um erro ao tentar carregar a imagem. \n\n {ex.Message}", "Erro", MessageBoxButton.OK);
+                    imgFundoCarregado = true;
+                }                
+            }
+        }
+
+        private void CarregarFundo()
+        {
+            if (!imgFundoCarregado)
+            {
+                imgFundoCarregado = true;
+
+                try
+                {
+                    if (File.Exists($"{Helper.Diretorios.SALVOS}\\fundo.txt"))
+                    {
+                        string txt = File.ReadAllText($"{Helper.Diretorios.SALVOS}\\fundo.txt");
+                        string[] valores = txt.Split(";");
+
+                        if (valores.Length == 3)
+                        {
+
+                            if (!File.Exists(valores[0]))
+                                return;
+
+                            BitmapImage bmpFundo = new BitmapImage();
+                            bmpFundo.BeginInit();
+                            bmpFundo.UriSource = new Uri($"{valores[0]}");
+                            bmpFundo.CacheOption = BitmapCacheOption.OnLoad;
+                            bmpFundo.EndInit();
+
+                            ImagemFundo.ImageSource = bmpFundo;
+
+                            double imgOpacidade;
+                            double.TryParse(valores[1], out imgOpacidade);
+                            ImagemFundo.Opacity = imgOpacidade;
+
+                            int imgStretch;
+                            int.TryParse(valores[2], out imgStretch);
+                            ImagemFundo.Stretch = (Stretch)imgStretch;
+                        }
+                    }
+                    else
+                    {
+                        ImagemFundo.ImageSource = null;
+                    }
+                }
+                catch
+                {
+                    File.Delete($"{Helper.Diretorios.SALVOS}\\fundo.txt");
+                }            
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            //var result = MessageBox.Show("O programa será encerrado e toda alteração não salva será perdida. Deseja fechar o programa?", "Aviso", MessageBoxButton.YesNo, MessageBoxImage.Warning) ;
+            var result = MessageBox.Show("Deseja fechar o programa?", "Aviso", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-            //if (result == MessageBoxResult.No)
-            //{
-            //    e.Cancel = true;
-            //}
+            if (result == MessageBoxResult.No)
+            {
+                e.Cancel = true;
+            }
 
             base.OnClosing(e);
         }

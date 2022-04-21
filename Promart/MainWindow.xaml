@@ -30,6 +30,9 @@
                 <MenuItem x:Name="RestaurarBackupMenu" Header="Restaurar Backup" />
                 <MenuItem x:Name="AbrirPastaBackupMenu" Header="Abrir Pasta" />
             </MenuItem>
+            <MenuItem Header="Configurações">
+                <MenuItem x:Name="DefinirFundoMenu" Header="Definir Imagem de Fundo" />
+            </MenuItem>
         </Menu>
         
         <ToolBar x:Name="MenuFerramentas" Grid.Row="1" FontSize="14">           
@@ -71,7 +74,12 @@
                 </Button.Content>
             </Button>            
         </ToolBar>
-        <TabControl x:Name="TabConteudo" Grid.Row="2">
+        <Rectangle x:Name="RetanguloFundo" Grid.Row="2">
+            <Rectangle.Fill>
+                <ImageBrush x:Name="ImagemFundo" />
+            </Rectangle.Fill>
+        </Rectangle>
+        <TabControl x:Name="TabConteudo" Grid.Row="2" Visibility="Collapsed">
         </TabControl>
     </Grid>
 </Window>

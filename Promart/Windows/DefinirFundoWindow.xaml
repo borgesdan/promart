@@ -1,0 +1,84 @@
+﻿<Window x:Class="Promart.Windows.DefinirFundoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Promart.Windows"
+        mc:Ignorable="d"
+        Title="DefinirFundoWindow" Height="450" Width="800">
+    <Grid>
+        <GroupBox Margin="20,20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Label Content="Buscar Imagem:" HorizontalAlignment="Right"
+                       FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBox x:Name="CaminhoImagem"
+                    Grid.Column="1" Grid.ColumnSpan="2" 
+                    VerticalAlignment="Center" IsReadOnly="True"></TextBox>
+                <Button x:Name="AbrirArquivos"
+                    Grid.Column="3" Background="Transparent" BorderBrush="Transparent"
+                        Margin="0,0,80,0">
+                    <Button.Content>
+                        <Image Source="/assets/images/icons/folder.png" />
+                    </Button.Content>
+                </Button>
+                
+                <Label Content="Opacidade:"
+                       Grid.Row="6" Grid.Column="2"
+                       HorizontalAlignment="Right" FontWeight="Bold"
+                       VerticalAlignment="Center" />
+                <Slider x:Name="Opacidade" IsEnabled="false" Value="1"
+                    Grid.Row="6" Grid.Column="3" Maximum="1" Minimum="0"
+                    VerticalAlignment="Center"></Slider>
+                
+                <Label Content="Redimensionar:"
+                       Grid.Row="7"
+                       Grid.Column="2"
+                       HorizontalAlignment="Right" FontWeight="Bold"
+                       VerticalAlignment="Center" />
+                <ComboBox x:Name="Redimensionamento"
+                    Grid.Row="7" Grid.Column="3"  IsEnabled="false"
+                    VerticalAlignment="Center" SelectedIndex="2">
+                    <ComboBoxItem Content="Nenhum" />
+                    <ComboBoxItem Content="Preenchido" />
+                    <ComboBoxItem Content="Uniforme" />
+                    <ComboBoxItem Content="Preenchido e Uniforme" />
+                </ComboBox>
+
+                <Button x:Name="Definir" IsEnabled="false"
+                    Grid.Row="9" Grid.Column="2" 
+                    Grid.ColumnSpan="2"
+                    Margin="60,0,20,0"
+                    Content="DEFINIR"
+                    FontWeight="SemiBold"
+                    Background="#FF0087FD" Foreground="White" 
+                    BorderBrush="DarkBlue" BorderThickness="2"></Button>
+
+                <GroupBox Grid.Row="2" Grid.Column="0" 
+                          Grid.ColumnSpan="2" 
+                          Grid.RowSpan="7"
+                          Header="Prévia">
+                    <Image x:Name="Previa"></Image>
+                </GroupBox>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

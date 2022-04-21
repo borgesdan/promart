@@ -301,7 +301,13 @@ namespace Promart.Pages
 
                 if (File.Exists(arquivo))
                 {
-                    FotoImage.ImageSource = new BitmapImage(new Uri(arquivo));
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.UriSource = new Uri(arquivo);
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+
+                    FotoImage.ImageSource = bitmap;
                 }
             }
         }
