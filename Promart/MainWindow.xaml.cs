@@ -20,6 +20,7 @@ using Promart.Data;
 using System.ComponentModel;
 using System.IO;
 using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace Promart
 {
@@ -40,13 +41,22 @@ namespace Promart
 
             CadastrarAlunoButton.Click += (object sender, RoutedEventArgs e) => CadastrarAluno();
             CadastrarAlunoMenu.Click += (object sender, RoutedEventArgs e) => CadastrarAluno();
+
             CadastrarVoluntarioBtn.Click += (object sender, RoutedEventArgs e) => CadastrarVoluntario();
             CadastrarVoluntarioMenu.Click += (object sender, RoutedEventArgs e) => CadastrarVoluntario();
-            RelatoriosButton.Click += (object sender, RoutedEventArgs e) => AbrirRelatorios();
-            BuscarAlunoButton.Click += (object sender, RoutedEventArgs e) => AbrirRelatoriosComNome();
-            BackupButton.Click += async (object sender, RoutedEventArgs e) => await CriarBackup();
-            RestaurarButton.Click += async (object sender, RoutedEventArgs e) => await RestaurarBackup();
+            
             AbrirOficinasButton.Click += (object sender, RoutedEventArgs e) => AbrirOficinas();
+            AbrirOficinasMenu.Click += (object sender, RoutedEventArgs e) => AbrirOficinas();
+
+            RelatoriosButton.Click += (object sender, RoutedEventArgs e) => AbrirRelatorios();
+            AbrirRelatoriosMenu.Click += (object sender, RoutedEventArgs e) => AbrirRelatorios();
+            BuscarAlunoButton.Click += (object sender, RoutedEventArgs e) => AbrirRelatoriosComNome();
+            
+            BackupButton.Click += async (object sender, RoutedEventArgs e) => await CriarBackup();
+            CriarBackupMenu.Click += async (object sender, RoutedEventArgs e) => await CriarBackup();
+            RestaurarBackupMenu.Click += async (object sender, RoutedEventArgs e) => await RestaurarBackup();
+            AbrirPastaBackupMenu.Click += (object sender, RoutedEventArgs e) => AbrirPastaBackups();
+
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -105,7 +115,8 @@ namespace Promart
             string dia = data.Day < 10 ? $"0{data.Day}" : data.Day.ToString();
             string hora = data.Hour < 10 ? $"0{data.Hour}" : data.Hour.ToString();
             string minutos = data.Minute < 10 ? $"0{data.Minute}" : data.Minute.ToString();
-            string final = $"{ano}-{mes}-{dia}-{hora}-{minutos}-promartbd";
+            string segundos = data.Second < 10 ? $"0{data.Second}" : data.Second.ToString();
+            string final = $"{ano}-{mes}-{dia}-{hora}{minutos}{segundos}-promartbd";
             var retorno = await Backup.Criar($"{Helper.Diretorios.BACKUPS}\\{final}.bak");
 
             if (retorno)
@@ -131,6 +142,11 @@ namespace Promart
 
             if(result == true)
             {
+                var dialog = MessageBox.Show("Deseja realmente restaurar o banco de dados para o arquivo selecionado? Essa ação não pode ser desfeita.", "Restaurar", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                if (dialog == MessageBoxResult.No)
+                    return;
+
                 string backup = openFileDialog.FileName;
 
                 var retorno = await Backup.Restaurar($"{backup}");
@@ -140,6 +156,16 @@ namespace Promart
                     MessageBox.Show("A restauração foi feita com sucesso.");
                 }
             }
+        }
+
+        public void AbrirPastaBackups()
+        {
+            if (!Directory.Exists(Helper.Diretorios.BACKUPS))
+            {
+                Directory.CreateDirectory(Helper.Diretorios.BACKUPS);
+            }
+
+            Process.Start("Explorer", $"{Helper.Diretorios.BACKUPS}");
         }
 
         public TabItem AbrirNovaAba(string nome, Page page)

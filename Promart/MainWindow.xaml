@@ -20,11 +20,14 @@
             <MenuItem Header="Cadastro">
                 <MenuItem x:Name="CadastrarAlunoMenu" Header="Alunos" />
                 <MenuItem x:Name="CadastrarVoluntarioMenu" Header="Voluntários" />
-                <MenuItem x:Name="CadastrarOficinaMenu" Header="Oficinas" />                
+                <MenuItem x:Name="AbrirOficinasMenu" Header="Oficinas" />                
             </MenuItem>
-            <MenuItem Header="Backup">
-                <MenuItem x:Name="CriarBackupMenu" Header="Criar" />
-                <MenuItem x:Name="RestaurarBackupMenu" Header="Restaurar" />
+            <MenuItem Header="Relatórios">
+                <MenuItem x:Name="AbrirRelatoriosMenu" Header="Abrir Relatórios" />
+            </MenuItem>
+            <MenuItem Header="Banco de Dados">
+                <MenuItem x:Name="CriarBackupMenu" Header="Criar Backup" />
+                <MenuItem x:Name="RestaurarBackupMenu" Header="Restaurar Backup" />
                 <MenuItem x:Name="AbrirPastaBackupMenu" Header="Abrir Pasta" />
             </MenuItem>
         </Menu>
@@ -66,12 +69,7 @@
                 <Button.Content>
                     <Image Source="/assets/images/icons/database2.png" Width="35"  />
                 </Button.Content>
-            </Button>
-            <Button x:Name="RestaurarButton" Width="60" VerticalAlignment="Stretch" ToolTip="Restaurar Backup">
-                <Button.Content>
-                    <Image Source="/assets/images/icons/database.png" Width="35"  />
-                </Button.Content>
-            </Button>
+            </Button>            
         </ToolBar>
         <TabControl x:Name="TabConteudo" Grid.Row="2">
         </TabControl>

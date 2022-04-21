@@ -76,6 +76,11 @@ namespace Promart.Pages
                 txt.BorderThickness = new Thickness(0);
                 Composicao.Children.Add(txt);
             }
+            
+            if(Composicao.Children.Count > 10)
+            {
+                ComposicaoFamiliarGroup.FontSize = 10;
+            }
 
             Observacoes.Text = aluno.ObservacoesText.Text;
         }

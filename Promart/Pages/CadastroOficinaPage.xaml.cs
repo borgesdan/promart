@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using Promart.Models;
 using Promart.Codes;
 using Promart.Data;
+using Promart.Windows;
 
 namespace Promart.Pages
 {
@@ -29,7 +30,8 @@ namespace Promart.Pages
             this.Loaded += async (object sender, RoutedEventArgs e) => await Carregar();
             Adicionar.Click += async (object sender, RoutedEventArgs e) => await Add();
             OficinasList.PreviewKeyDown += async (object sender, KeyEventArgs e) => await DeletarOficina(e);
-        }
+            OficinasList.MouseDoubleClick += async (object sender, MouseButtonEventArgs e) => await ModificarOficina();
+        }        
 
         private async Task DeletarOficina(KeyEventArgs e)
         {
@@ -52,7 +54,7 @@ namespace Promart.Pages
                     OficinasList.Items.Add(item);
                 }
             }
-        }
+        }        
 
         private async Task Add()
         {
@@ -60,7 +62,6 @@ namespace Promart.Pages
 
             if (!string.IsNullOrWhiteSpace(Nome.Text))
             {
-                
                 Oficina oficina = new Oficina();
                 oficina.Nome = Nome.Text;
 
@@ -78,12 +79,18 @@ namespace Promart.Pages
 
         private async Task Remover()
         {
+            var result = MessageBox.Show("Deseja realmente excluir essa oficina? Essa operação não pode ser desfeita.", "Excluir Oficina", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.No)
+                return;
+
             Adicionar.IsEnabled = false;
             OficinasList.IsEnabled = false;
 
             if(OficinasList.SelectedIndex != -1)
             {
                 Oficina oficina = (Oficina)OficinasList.SelectedValue;
+
                 await SqlAccess.TAlunoOficinas.RemoverAlunosDaOficina(oficina);
                 await SqlAccess.TVoluntarioOficinas.RemoverVoluntariosDaOficina(oficina);
                 await SqlAccess.DeletarAsync(oficina);
@@ -94,10 +101,24 @@ namespace Promart.Pages
             Adicionar.IsEnabled = true;
         }
 
-        private async Task EditarNome()
+        private async Task ModificarOficina()
         {
             Adicionar.IsEnabled = false;
             OficinasList.IsEnabled = false;
+
+            if (OficinasList.SelectedIndex != -1)
+            {
+                NovoCadastroWindow novo = new NovoCadastroWindow("Editar Oficina", "Digite o nome da Oficina");                
+                var result = novo.ShowDialog();
+
+                if(result == true) 
+                {
+                    Oficina oficina = (Oficina)OficinasList.SelectedValue;
+                    oficina.Nome = novo.NomeRecebido;
+                    await SqlAccess.AtualizarAsync(oficina);
+                    await Carregar();
+                }
+            }
 
             OficinasList.IsEnabled = true;
             Adicionar.IsEnabled = true;
