@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Promart"
         mc:Ignorable="d"
-        Title="MainWindow" MinWidth="1280" MinHeight="720" WindowState="Maximized" >
+        Title="MainWindow" MinWidth="1280" MinHeight="720" WindowState="Maximized"
+        Background="#FF252525">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"  />
@@ -13,7 +14,9 @@
             <RowDefinition Height="*"  />
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0" VerticalAlignment="Center" FontSize="14">
+        <Menu Grid.Row="0" 
+              VerticalAlignment="Stretch"               
+              FontSize="14">                       
             <MenuItem Header="Arquivo">
                 <MenuItem x:Name="FecharProgramaMenu" Header="Fechar Programa" />
             </MenuItem>

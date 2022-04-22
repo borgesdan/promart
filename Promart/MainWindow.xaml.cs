@@ -88,7 +88,11 @@ namespace Promart
                     FileInfo arquivo = new FileInfo(definirFundoWindow.Arquivo);
                     string extensao = Helper.Util.ObterExtensaoArquivo(arquivo.Name);
 
-                    string txt = $"{arquivo.FullName};{definirFundoWindow.OpacidadeValor};{definirFundoWindow.RedimensionamentoValor}";
+                    Guid guidName = Guid.NewGuid();
+                    string nomeFinal = $"{Helper.Diretorios.SALVOS}\\{guidName}.{extensao}";
+                    File.Copy(arquivo.FullName, nomeFinal, true);
+
+                    string txt = $"{guidName}.{extensao};{definirFundoWindow.OpacidadeValor};{definirFundoWindow.RedimensionamentoValor}";
                     File.WriteAllText($"{Helper.Diretorios.SALVOS}\\fundo.txt", txt);
 
                     CarregarFundo();
@@ -116,12 +120,12 @@ namespace Promart
 
                         if (valores.Length == 3)
                         {
-                            if (!File.Exists(valores[0]))
+                            if (!File.Exists($"{Helper.Diretorios.SALVOS}\\{valores[0]}"))
                                 return;
 
                             BitmapImage bmpFundo = new BitmapImage();
                             bmpFundo.BeginInit();
-                            bmpFundo.UriSource = new Uri($"{valores[0]}");
+                            bmpFundo.UriSource = new Uri($"{Helper.Diretorios.SALVOS}\\{valores[0]}");
                             bmpFundo.CacheOption = BitmapCacheOption.OnLoad;
                             bmpFundo.EndInit();
 

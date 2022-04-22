@@ -182,6 +182,7 @@ namespace Promart.Pages
 
         private void PopularDataGrid(IEnumerable<Aluno> alunos)
         {            
+            DadosDataGrid.Columns.Clear();
             DadosDataGrid.Items.Clear();
             foreach(var a in alunos)
             {
@@ -192,7 +193,7 @@ namespace Promart.Pages
 
         private void PopularDataGrid(IEnumerable<Voluntario> voluntarios)
         {
-            DadosDataGrid.Items.Clear();
+            DadosDataGrid.Columns.Clear();
             foreach (var v in voluntarios)
             {
                 DadosDataGrid.Items.Add(v);
