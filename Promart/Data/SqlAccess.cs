@@ -22,7 +22,7 @@ namespace Promart.Data
         }
 
         public static string GetConnectionString(string id = "Default")
-        {
+        {   
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;
         }
 

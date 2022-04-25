@@ -48,6 +48,7 @@
                       SelectedIndex="0" FontSize="16">
                 <ComboBoxItem Content="0 - Alunos" />
                 <ComboBoxItem Content="1 - Voluntários" />
+                <ComboBoxItem Content="2 - Oficinas" />
             </ComboBox>            
             <Button x:Name="SelecionarButton" Grid.Row="0" Grid.Column="2" 
                     Content="Selecionar" VerticalContentAlignment="Center" 

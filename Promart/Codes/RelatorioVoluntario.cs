@@ -19,6 +19,7 @@ namespace Promart.Codes
             "Escolaridade",
             "Rua",
             "Bairro",
+            "Observações",
             //Combobox
             "Sexo",
         };
@@ -47,6 +48,9 @@ namespace Promart.Codes
                 case "Bairro":
                     return voluntarios.Where(a => a.EnderecoBairro != null
                     && a.EnderecoBairro.Contains(valor));
+                case "Observações":
+                    return voluntarios.Where(a => a.Observacoes != null
+                    && a.Observacoes.Contains(valor));
                 case "Idade":
                     int idade;
                     if (int.TryParse(valor, out idade))
@@ -80,6 +84,7 @@ namespace Promart.Codes
                 case "Escolaridade":
                 case "Rua":
                 case "Bairro":
+                case "Observações":
                     return FiltroControleType.Texto;
 
                 case "Sexo":
@@ -105,6 +110,7 @@ namespace Promart.Codes
             dataGrid.Columns.Add(new DataGridTextColumn()
             {
                 Header = "Nome",
+                Width = 200,
                 Binding = new Binding("NomeCompleto")
             });
             dataGrid.Columns.Add(new DataGridTextColumn()
@@ -165,6 +171,7 @@ namespace Promart.Codes
             dataGrid.Columns.Add(new DataGridTextColumn()
             {
                 Header = "Rua",
+                Width = 200,
                 Binding = new Binding("EnderecoRua")
             });
             dataGrid.Columns.Add(new DataGridTextColumn()
@@ -196,7 +203,13 @@ namespace Promart.Codes
             {
                 Header = "CEP",
                 Binding = new Binding("EnderecoCEP")
-            });                        
+            });
+            dataGrid.Columns.Add(new DataGridTextColumn()
+            {
+                Header = "Observacões",
+                Width = 200,
+                Binding = new Binding("Observacoes")
+            });
         }
     }
 }

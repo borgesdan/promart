@@ -34,6 +34,7 @@ namespace Promart.Pages
 
         RelatorioAluno relatorioAluno = new RelatorioAluno(new List<Aluno>());
         RelatorioVoluntario relatorioVoluntario = new RelatorioVoluntario(new List<Voluntario>());
+        RelatorioOficinas relatorioOficinas = new RelatorioOficinas(new List<Aluno>(), new List<Oficina>(), new List<AlunoOficina>());
 
         public TabelaDadosPage() : this(null) { }
 
@@ -137,11 +138,15 @@ namespace Promart.Pages
         {
             SelecionarButton.IsEnabled = false;
             selectedIndex = TipoTabelaCombo.SelectedIndex;
+            IEnumerable<Aluno>? alunos;
+            IEnumerable<Voluntario>? voluntarios;
+            IEnumerable<Oficina>? oficinas;
+            IEnumerable<AlunoOficina>? alunoOficinas;
 
             switch (selectedIndex)
             {
                 case 0:                    
-                    var alunos = await SqlAccess.GetDadosAsync<Aluno>();
+                    alunos = await SqlAccess.GetDadosAsync<Aluno>();
 
                     if (alunos != null)
                     {
@@ -151,7 +156,7 @@ namespace Promart.Pages
                     }
                     break;
                 case 1:
-                    var voluntarios = await SqlAccess.GetDadosAsync<Voluntario>();
+                    voluntarios = await SqlAccess.GetDadosAsync<Voluntario>();
 
                     if (voluntarios != null)
                     {
@@ -159,6 +164,16 @@ namespace Promart.Pages
                         DefinirRelatorio(voluntarios);                        
                         HabilitarControles();
                     }
+                    break;
+                case 2:
+                    alunos = await SqlAccess.GetDadosAsync<Aluno>();
+                    oficinas = await SqlAccess.GetDadosAsync<Oficina>();
+                    alunoOficinas = await SqlAccess.GetDadosAsync<AlunoOficina>();
+
+                    if(alunos != null && oficinas != null && alunoOficinas != null)
+                    {
+                        relatorioOficinas = new RelatorioOficinas(alunos, oficinas, alunoOficinas);
+                    }                    
                     break;
             }
 

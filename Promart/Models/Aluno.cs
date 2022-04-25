@@ -1,5 +1,6 @@
 ﻿using Promart.Codes;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Promart.Models
@@ -164,6 +165,10 @@ namespace Promart.Models
         [NotMapped]
         [Dapper.Contrib.Extensions.Write(false)]
         public DateOnly? DataMatriculaValue { get => DataMatricula.HasValue ? DateOnly.FromDateTime(DataMatricula.Value) : null; }
+
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public List<Oficina>? Oficinas { get; set; }
 
         public override string ToString()
         {

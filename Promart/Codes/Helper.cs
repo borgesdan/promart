@@ -26,6 +26,14 @@ namespace Promart.Codes
             public static string FOTOS_ALUNOS = SALVOS + "\\Fotos\\Alunos";
             public static string FOTOS_VOLUNTARIOS = SALVOS + "\\Fotos\\Voluntarios";
             public static string BACKUPS = ATUAL + "\\Backups";
+
+            public static void CriarPasta(string caminhoPasta)
+            {
+                if (!Directory.Exists($"{caminhoPasta}"))
+                {
+                    Directory.CreateDirectory(caminhoPasta);
+                }
+            }
         }
 
         public static class Controles

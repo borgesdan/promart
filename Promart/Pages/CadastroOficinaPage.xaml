@@ -58,10 +58,10 @@
                                     BorderBrush="DarkBlue" BorderThickness="2" />                
             </ToolBar>
             <GroupBox Header="Oficinas" FontSize="18" 
-                          Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="10"
+                          Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="8"
                       Padding="10">
                 <ListBox x:Name="OficinasList"></ListBox>
-            </GroupBox>
+            </GroupBox>            
         </Grid>
     </Grid>
 </Page>

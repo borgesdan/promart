@@ -10,20 +10,20 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"  />
-            <RowDefinition Height="60"  />
+            <RowDefinition Height="100"  />
             <RowDefinition Height="*"  />
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" 
               VerticalAlignment="Stretch"               
-              FontSize="14">                       
+              FontSize="14">
             <MenuItem Header="Arquivo">
                 <MenuItem x:Name="FecharProgramaMenu" Header="Fechar Programa" />
             </MenuItem>
             <MenuItem Header="Cadastro">
                 <MenuItem x:Name="CadastrarAlunoMenu" Header="Alunos" />
                 <MenuItem x:Name="CadastrarVoluntarioMenu" Header="Voluntários" />
-                <MenuItem x:Name="AbrirOficinasMenu" Header="Oficinas" />                
+                <MenuItem x:Name="AbrirOficinasMenu" Header="Oficinas" />
             </MenuItem>
             <MenuItem Header="Relatórios">
                 <MenuItem x:Name="AbrirRelatoriosMenu" Header="Abrir Relatórios" />
@@ -37,45 +37,64 @@
                 <MenuItem x:Name="DefinirFundoMenu" Header="Definir Imagem de Fundo" />
             </MenuItem>
         </Menu>
-        
-        <ToolBar x:Name="MenuFerramentas" Grid.Row="1" FontSize="14">           
-            <Button x:Name="CadastrarAlunoButton" VerticalAlignment="Stretch" Width="60"
-                   ToolTip="Cadastrar Aluno">
+
+        <ToolBar x:Name="MenuFerramentas" Grid.Row="1" FontSize="14" >
+            <Button x:Name="CadastrarAlunoButton" VerticalAlignment="Stretch"
+                   ToolTip="Cadastrar Aluno" Width="80">
                 <Button.Content>
-                    <Image Source="/assets/images/avatars/png-128/add-128x128-1410058.png" Stretch="Fill" />
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/assets/images/avatars/png-128/add-128x128-1410058.png" Height="50" />
+                        <Label Content="Aluno" VerticalAlignment="Center" />
+                    </StackPanel>
                 </Button.Content>
             </Button>
-            <Button x:Name="CadastrarVoluntarioBtn" VerticalAlignment="Stretch" Width="60"
-                    ToolTip="Cadastrar Voluntário" >
+
+            <Button x:Name="CadastrarVoluntarioBtn" VerticalAlignment="Stretch"
+                    ToolTip="Cadastrar Voluntário" Width="80">
                 <Button.Content>
-                    <Image Source="/assets/images/avatars/png-128/agreement-128x128-1410057.png" />
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/assets/images/avatars/png-128/agreement-128x128-1410057.png" Height="50" />
+                        <Label Content="Voluntários" VerticalAlignment="Center" />
+                    </StackPanel>
                 </Button.Content>
             </Button>
-            <Button x:Name="AbrirOficinasButton" VerticalAlignment="Stretch" Width="60"
-                    ToolTip="Abrir Oficinas" >
+
+            <Button x:Name="AbrirOficinasButton" VerticalAlignment="Stretch" 
+                    ToolTip="Abrir Oficinas" Width="80">
                 <Button.Content>
-                    <Image Source="/assets/images/icons/notebook.png" Width="35" />
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/assets/images/avatars/png-128/music-128x128-1410013.png" Height="50" />
+                        <Label Content="Oficinas" VerticalAlignment="Center"  />
+                    </StackPanel>
                 </Button.Content>
             </Button>
             <Separator  Width="2" Margin="20,0" />
-            <Label Content="Pesquisa Rápida" VerticalAlignment="Center" Margin="0,0"/>
-            <TextBox x:Name="NomeAlunoBusca" Width="250" TextAlignment="Left" VerticalContentAlignment="Center" />
+            <Label Content="Pesquisar" VerticalAlignment="Center" Margin="0,0"/>
+            <TextBox x:Name="NomeAlunoBusca" Width="300" 
+                     TextAlignment="Left" VerticalContentAlignment="Center" 
+                     BorderBrush="Black" />
             <Button x:Name="BuscarAlunoButton" VerticalAlignment="Stretch" ToolTip="Buscar" Width="60" >
                 <Button.Content>
                     <Image Source="/assets/images/icons/search.png" Width="25" />
                 </Button.Content>
-            </Button>            
-            <Button x:Name="RelatoriosButton" Width="60" VerticalAlignment="Stretch" ToolTip="Relatórios">
+            </Button>
+            <Button x:Name="RelatoriosButton"  VerticalAlignment="Stretch" ToolTip="Relatórios" Width="80">
                 <Button.Content>
-                    <Image Source="/assets/images/icons/folder2.png" Width="35"  />
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/assets/images/icons/folder2.png" Width="40"  />
+                        <Label Content="Relatórios" VerticalAlignment="Center" />
+                    </StackPanel>
                 </Button.Content>
             </Button>
             <Separator Width="2" Margin="20,0" />
-            <Button x:Name="BackupButton" Width="60" VerticalAlignment="Stretch" ToolTip="Criar Backup">
+            <Button x:Name="BackupButton" VerticalAlignment="Stretch" ToolTip="Criar Backup" Width="80">
                 <Button.Content>
-                    <Image Source="/assets/images/icons/database2.png" Width="35"  />
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/assets/images/icons/database2.png" Width="40"  />
+                        <Label Content="Backup" VerticalAlignment="Center" />
+                    </StackPanel>
                 </Button.Content>
-            </Button>            
+            </Button>
         </ToolBar>
         <Rectangle x:Name="RetanguloFundo" Grid.Row="2">
             <Rectangle.Fill>

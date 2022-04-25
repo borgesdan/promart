@@ -90,6 +90,8 @@ namespace Promart
 
                     Guid guidName = Guid.NewGuid();
                     string nomeFinal = $"{Helper.Diretorios.SALVOS}\\{guidName}.{extensao}";
+
+                    Helper.Diretorios.CriarPasta($"{Helper.Diretorios.SALVOS}");
                     File.Copy(arquivo.FullName, nomeFinal, true);
 
                     string txt = $"{guidName}.{extensao};{definirFundoWindow.OpacidadeValor};{definirFundoWindow.RedimensionamentoValor}";
@@ -143,10 +145,6 @@ namespace Promart
                         {
                             File.Delete($"{Helper.Diretorios.SALVOS}\\fundo.txt");
                         }
-                    }
-                    else
-                    {
-                        ImagemFundo.ImageSource = null;
                     }
                 }
                 catch

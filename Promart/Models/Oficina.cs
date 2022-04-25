@@ -16,6 +16,10 @@ namespace Promart.Models
 
         public override string ToString() => Nome ?? "";
 
+        [NotMapped]
+        [Dapper.Contrib.Extensions.Write(false)]
+        public List<Aluno>? Alunos { get; set; }
+
         //Reforço Escolar
         //Balé
         //Informática
