@@ -25,8 +25,6 @@ namespace Promart.Windows
         // 0 - alunos
         // 1 - voluntários
         byte modoRelacao = 0;
-        List<Voluntario> voluntarioList = new List<Voluntario>();
-        List<Aluno> alunoList = new List<Aluno>();
         List<Voluntario> exclusaoVoluntarioList = new List<Voluntario>();
         List<Aluno> exclusaoAlunoList = new List<Aluno>();
 
@@ -57,23 +55,39 @@ namespace Promart.Windows
 
         private void FinalizarTarefa()
         {
-            if(modoRelacao == 1)
+            foreach (var item in RelacionadosDataGrid.SelectedItems)
             {
-                foreach(var item in RelacionadosList.SelectedItems)
+                if (item != null)
                 {
-                    if(item != null)
-                    {
+                    if (modoRelacao == 0)
+                        AlunosSelecionados.Add((Aluno)item);
+                    else if (modoRelacao == 1)
                         VoluntariosSelecionados.Add((Voluntario)item);
-                    }
                 }
-
-                DialogResult = true;
             }
+
+            DialogResult = true;
         }
 
         private async void CarregarDados()
         {
-            if(modoRelacao == 1)
+            RelacionadosDataGrid.Items.Clear();
+
+            if(modoRelacao == 0)
+            {
+                var alunos = await SqlAccess.GetAllAsync<Aluno>();
+
+                if(alunos != null)
+                {
+                    var list = alunos.ToList();
+                    list.RemoveAll(x => exclusaoAlunoList.Where(e => e.Id == x.Id).Any());
+
+                    RelatorioAluno relatorioAluno = new RelatorioAluno(alunos);
+                    relatorioAluno.PopularColunasDataGrid(RelacionadosDataGrid);
+                    list.ForEach(i => RelacionadosDataGrid.Items.Add(i));
+                }
+            }
+            else if(modoRelacao == 1)
             {
                 var voluntarios = await SqlAccess.GetAllAsync<Voluntario>();
 
@@ -81,10 +95,18 @@ namespace Promart.Windows
                 {
                     var list = voluntarios.ToList();
                     list.RemoveAll(x => exclusaoVoluntarioList.Where(e => e.Id == x.Id).Any());
-
-                    RelacionadosList.ItemsSource = list;
+                    
+                    RelatorioVoluntario relatorioVoluntario = new RelatorioVoluntario(voluntarios);
+                    relatorioVoluntario.PopularColunasDataGrid(RelacionadosDataGrid);                    
+                    list.ForEach(i => RelacionadosDataGrid.Items.Add(i));       
                 }
-            }            
+            }    
+            
+            if(RelacionadosDataGrid.Items.Count <= 0)
+            {
+                MessageBox.Show("Não há opções a serem selecionadas.", "Sobre", MessageBoxButton.OK, MessageBoxImage.Information);
+                DialogResult = false;
+            }
         }
     }
 }

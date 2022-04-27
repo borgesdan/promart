@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Promart.Windows"
-        mc:Ignorable="d" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        mc:Ignorable="d" Height="450" Width="800" WindowStartupLocation="CenterScreen"
+        Title="Relacionados" ResizeMode="NoResize">
     <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>     
@@ -37,18 +38,19 @@
             <ColumnDefinition Width="50" />
         </Grid.ColumnDefinitions>
 
-        <ListBox x:Name="RelacionadosList"
-                 Grid.Row="0" Grid.Column="1"
-                 Grid.ColumnSpan="14" Grid.RowSpan="7"
-                 Margin="10"
-                 FontSize="16"
-                 SelectionMode="Multiple"></ListBox>
+        <DataGrid x:Name="RelacionadosDataGrid"
+                  Grid.Row="0" Grid.Column="1"
+                  Grid.ColumnSpan="14" Grid.RowSpan="7"
+                  Margin="10"
+                  FontSize="16"
+                  AutoGenerateColumns="False"></DataGrid>
         
         <Button x:Name="AddButton"
                 Grid.Row="7" Grid.Column="10"
                 Grid.ColumnSpan="5"
-                Content="ADICIONAR"
-                FontSize="14"  FontWeight="Bold" 
+                Content="Definir Selecionados"
+                Margin="10,0"
+                FontSize="16"  FontWeight="Bold" 
                 Background="DarkBlue" Foreground="White"
                 BorderBrush="DarkBlue" BorderThickness="2"></Button>
     </Grid>
