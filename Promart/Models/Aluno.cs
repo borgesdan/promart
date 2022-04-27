@@ -9,6 +9,7 @@ namespace Promart.Models
 
 
     [Table(name: "Alunos")]
+    [Dapper.Contrib.Extensions.Table("Alunos")]
     public class Aluno
     {
         public int Id { get; set; }

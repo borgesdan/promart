@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Promart.Models
 {
     [Table(name: "Oficinas")]
+    [Dapper.Contrib.Extensions.Table("Oficinas")]
     public class Oficina
     {
         public int Id { get; set; }

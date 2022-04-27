@@ -78,7 +78,7 @@ namespace Promart.Codes
 
             public static async Task<IEnumerable<Oficina>?> PopularOficinasListBoxAsync(ListBox listBox)
             {
-                var oficinas = await SqlAccess.GetDadosAsync<Oficina>();
+                var oficinas = await SqlAccess.GetAllAsync<Oficina>();
                 listBox.ItemsSource = oficinas;
 
                 return oficinas;
@@ -86,7 +86,7 @@ namespace Promart.Codes
 
             public static async Task PopularOficinasListComCheckBoxAsync(ListBox listBox, Action<object, RoutedEventArgs> checkBoxClickEventoComum)
             {
-                var oficinas = await SqlAccess.GetDadosAsync<Oficina>();
+                var oficinas = await SqlAccess.GetAllAsync<Oficina>();
 
                 if (oficinas == null)
                     return;

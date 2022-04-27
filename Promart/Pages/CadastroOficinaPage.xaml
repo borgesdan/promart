@@ -46,22 +46,44 @@
             </Grid.RowDefinitions>
             <ToolBar Grid.ColumnSpan="3">
                 <Label Content="Nome da Oficina:" FontSize="16" VerticalContentAlignment="Center" />
-                <TextBox x:Name="Nome" Width="300" VerticalAlignment="Stretch" Margin="10"
+                <TextBox x:Name="NomeText"
+                         Width="300" 
+                         VerticalAlignment="Stretch" Margin="10"
                          BorderBrush="DarkBlue" BorderThickness="1.5"
-                         FontSize="14"></TextBox>
-                <Button x:Name="Adicionar" Width="200" 
-                                    Content="Adicionar" 
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    FontSize="14"  FontWeight="SemiBold" 
-                                    Background="#FF0087FD" Foreground="White"
-                                    BorderBrush="DarkBlue" BorderThickness="2" />                
+                         FontSize="14" />
+                <Button x:Name="AdicionarButton" Width="200" 
+                        Content="Adicionar"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Left"
+                        FontSize="14"  FontWeight="SemiBold" 
+                        Background="#FF0087FD" Foreground="White"
+                        BorderBrush="DarkBlue" BorderThickness="2" />                
             </ToolBar>
             <GroupBox Header="Oficinas" FontSize="18" 
-                          Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="8"
+                          Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="8"
                       Padding="10">
                 <ListBox x:Name="OficinasList"></ListBox>
-            </GroupBox>            
+            </GroupBox>
+
+            <Button x:Name="DadosButton" Width="200" 
+                    Grid.Row="7"
+                    Grid.Column="2"
+                    Content="Ver Dados" 
+                    Margin="10,10"
+                    HorizontalAlignment="Left"
+                    FontSize="14"  FontWeight="SemiBold" 
+                    Background="DarkGreen" Foreground="White"
+                    BorderBrush="Black" BorderThickness="2" />
+
+            <Button x:Name="RemoverButton" Width="200" 
+                    Grid.Row="8"
+                    Grid.Column="2"
+                    Content="Remover" 
+                    Margin="10,10"
+                    HorizontalAlignment="Left"
+                    FontSize="14"  FontWeight="SemiBold" 
+                    Background="DarkRed" Foreground="White"
+                    BorderBrush="Black" BorderThickness="2" />
         </Grid>
     </Grid>
 </Page>

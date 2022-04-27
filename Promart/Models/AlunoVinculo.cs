@@ -9,8 +9,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Promart.Models
 {
     [Table("AlunoVinculos")]
+    [Dapper.Contrib.Extensions.Table("AlunoVinculos")]
     public class AlunoVinculo
     {
+        [Dapper.Contrib.Extensions.ExplicitKey()]
         public int IdAluno { get; set; }
         public string? NomeFamiliar { get; set; }
         public int Idade { get; set; }
@@ -18,5 +20,19 @@ namespace Promart.Models
         public string? Ocupacao { get; set; }
         public string? Escolaridade { get; set; }          
         public int Renda { get; set; }
+
+        public static AlunoVinculo DynamicConverter(dynamic obj)
+        {
+            return new AlunoVinculo()
+            {
+                IdAluno = obj.IdAluno,
+                NomeFamiliar = obj.NomeFamiliar,
+                Idade = obj.Idade,
+                Parentesco = obj.Parentesco,
+                Ocupacao = obj.Ocupacao,
+                Escolaridade = obj.Escolaridade,
+                Renda = obj.Renda,
+            };
+        }
     }
 }

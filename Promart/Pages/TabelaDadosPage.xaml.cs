@@ -77,7 +77,7 @@ namespace Promart.Pages
 
             if (alunoSelecionado != null)
             {
-                alunoAtualizado = await SqlAccess.GetDadoAsync<Aluno>(alunoSelecionado.Id);
+                alunoAtualizado = await SqlAccess.GetAsync<Aluno>(alunoSelecionado.Id);
             }
 
             if (alunoAtualizado != null)
@@ -92,7 +92,7 @@ namespace Promart.Pages
 
             if (voluntarioSelecionado != null)
             {
-                voluntarioAtualizado = await SqlAccess.GetDadoAsync<Voluntario>(voluntarioSelecionado.Id);
+                voluntarioAtualizado = await SqlAccess.GetAsync<Voluntario>(voluntarioSelecionado.Id);
             }
 
             if (voluntarioAtualizado != null)
@@ -146,7 +146,7 @@ namespace Promart.Pages
             switch (selectedIndex)
             {
                 case 0:                    
-                    alunos = await SqlAccess.GetDadosAsync<Aluno>();
+                    alunos = await SqlAccess.GetAllAsync<Aluno>();
 
                     if (alunos != null)
                     {
@@ -156,7 +156,7 @@ namespace Promart.Pages
                     }
                     break;
                 case 1:
-                    voluntarios = await SqlAccess.GetDadosAsync<Voluntario>();
+                    voluntarios = await SqlAccess.GetAllAsync<Voluntario>();
 
                     if (voluntarios != null)
                     {
@@ -166,9 +166,9 @@ namespace Promart.Pages
                     }
                     break;
                 case 2:
-                    alunos = await SqlAccess.GetDadosAsync<Aluno>();
-                    oficinas = await SqlAccess.GetDadosAsync<Oficina>();
-                    alunoOficinas = await SqlAccess.GetDadosAsync<AlunoOficina>();
+                    alunos = await SqlAccess.GetAllAsync<Aluno>();
+                    oficinas = await SqlAccess.GetAllAsync<Oficina>();
+                    alunoOficinas = await SqlAccess.GetAllAsync<AlunoOficina>();
 
                     if(alunos != null && oficinas != null && alunoOficinas != null)
                     {
@@ -199,22 +199,24 @@ namespace Promart.Pages
         {            
             DadosDataGrid.Columns.Clear();
             DadosDataGrid.Items.Clear();
+            relatorioAluno.PopularColunasDataGrid(DadosDataGrid);
+            
             foreach(var a in alunos)
             {
                 DadosDataGrid.Items.Add(a);
             }
-            relatorioAluno.PopularColunasDataGrid(DadosDataGrid);
         }
 
         private void PopularDataGrid(IEnumerable<Voluntario> voluntarios)
         {
             DadosDataGrid.Columns.Clear();
+            DadosDataGrid.Items.Clear();
+            relatorioVoluntario.PopularColunasDataGrid(DadosDataGrid);
+
             foreach (var v in voluntarios)
             {
                 DadosDataGrid.Items.Add(v);
-            }
-
-            relatorioVoluntario.PopularColunasDataGrid(DadosDataGrid);
+            }            
         }
 
         private void DefinirControleValor()

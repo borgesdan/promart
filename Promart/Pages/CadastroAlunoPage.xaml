@@ -8,7 +8,7 @@
       d:DesignHeight="1500" d:DesignWidth="1280"
       Title="CadastrarAlunoPage" Loaded="Page_Loaded">
     
-    <Grid Background="White" >
+    <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition />
@@ -42,9 +42,9 @@
                  VerticalContentAlignment="Center" TextAlignment="Center" Margin="0,10"
                  FontSize="18" FontWeight="Bold"/>
         </StackPanel>
-        
 
-        <Grid x:Name="MainGrid" Grid.Row="1" Grid.Column="1" >
+
+        <Grid x:Name="MainGrid" Grid.Row="1" Grid.Column="1" Background="White" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />

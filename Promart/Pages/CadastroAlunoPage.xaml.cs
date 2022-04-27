@@ -1,26 +1,15 @@
-﻿using System;
+﻿using Promart.Codes;
+using Promart.Controls;
+using Promart.Data;
+using Promart.Models;
+using Promart.Windows;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Promart.Models;
-using Promart.Data;
-using Promart.Codes;
-using Promart.Windows;
-using System.Text.RegularExpressions;
-using Promart.Controls;
-using Microsoft.Win32;
-using System.IO;
-using System.Printing;
 
 namespace Promart.Pages
 {
@@ -207,7 +196,7 @@ namespace Promart.Pages
                 Aluno.Matricula = GeradorMatricula.Get(Aluno.NomeCompleto);
                 Aluno.DataMatricula = DateTime.Now;
 
-                long result = await SqlAccess.InserirAsync(Aluno);
+                long result = await SqlAccess.InsertAsync(Aluno);
 
                 if (result != -1)
                 {
@@ -224,7 +213,7 @@ namespace Promart.Pages
             }
             else
             {
-                bool result = await SqlAccess.AtualizarAsync(Aluno);
+                bool result = await SqlAccess.UpdateAsync(Aluno);
 
                 if (result)
                 {
@@ -244,7 +233,7 @@ namespace Promart.Pages
         {
             if (atualizar)
             {
-                var result = await SqlAccess.TAlunoOficinas.DeletarAsync(Aluno);
+                var result = await SqlAccess.DeleteAllAsync<AlunoOficina, Aluno>(Aluno, nameof(Aluno.Id), "IdAluno");
 
                 if (result == null)
                 {
@@ -269,7 +258,7 @@ namespace Promart.Pages
                         alunoOficina.IdAluno = Aluno.Id;
                         alunoOficina.IdOficina = oficina.Id;
 
-                        var result = await SqlAccess.InserirAsync(alunoOficina);
+                        var result = await SqlAccess.InsertAsync(alunoOficina);
 
                         if (result == -1)
                         {
@@ -287,7 +276,7 @@ namespace Promart.Pages
         {
             if (atualizar)
             {
-                var result = await SqlAccess.TAlunoVinculos.DeletarAsync(Aluno);
+                var result = await SqlAccess.DeleteAllAsync<AlunoVinculo, Aluno>(Aluno, nameof(Aluno.Id), "IdAluno");
 
                 if (result == null)
                 {
@@ -301,7 +290,7 @@ namespace Promart.Pages
                 AlunoVinculo alunoVinculo = vinculos[i];
                 alunoVinculo.IdAluno = Aluno.Id;
 
-                var result = await SqlAccess.InserirAsync(alunoVinculo);
+                var result = await SqlAccess.InsertAsync(alunoVinculo);
 
                 if (result == -1)
                 {
@@ -476,11 +465,18 @@ namespace Promart.Pages
 
         private async Task ObterVinculos()
         {
-            var resultado = await SqlAccess.TAlunoVinculos.GetAsync(Aluno);
+            //var resultado = await SqlAccess.TAlunoVinculos.GetAsync(Aluno);
+            var resultado = await SqlAccess.GetAllAsync<AlunoVinculo, Aluno>(Aluno, nameof(Aluno.Id), "IdAluno");
 
             if (resultado != null)
             {
-                vinculos = new List<AlunoVinculo>(resultado);
+                vinculos = new List<AlunoVinculo>();
+
+                foreach (var item in resultado)
+                {
+                    vinculos.Add(AlunoVinculo.DynamicConverter(item));
+                }
+
                 ComposicaoDataGrid.ItemsSource = vinculos;
             }
             else
@@ -496,12 +492,15 @@ namespace Promart.Pages
 
         private async Task ObterOficinas()
         {
-            var resultado = await SqlAccess.TAlunoOficinas.GetAsync(Aluno);
+            //var resultado = await SqlAccess.TAlunoOficinas.GetAsync(Aluno);
+            var resultado = await SqlAccess.GetAllAsync<AlunoOficina, Aluno>(Aluno, nameof(Aluno.Id), "IdAluno");
 
             if (resultado != null)
             {
-                foreach (var alunoOficina in resultado)
+                foreach (var item in resultado)
                 {
+                    AlunoOficina alunoOficina = AlunoOficina.DynamicConvert(item);
+
                     foreach (var boxes in OficinasList.ItemsSource)
                     {
                         CheckBox checkBox = (CheckBox)boxes;
@@ -516,6 +515,20 @@ namespace Promart.Pages
             }
         }
 
+        private async Task ExcluirCadastro()
+        {
+            var result = MessageBox.Show("Deseja realmente excluir esse cadastro? Essa alteração não pode ser desfeita.", "Excluir Cadastro", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                await SqlAccess.DeleteAllAsync<AlunoOficina, Aluno>(Aluno, nameof(Aluno.Id), "IdAluno");
+                await SqlAccess.DeleteAllAsync<AlunoVinculo, Aluno>(Aluno, nameof(Aluno.Id), "IdAluno");
+                await SqlAccess.DeleteAsync(Aluno);                
+
+                MainWindow.Instance?.FecharAbaAtual();
+            }            
+        }
+        
         private void Imprimir()
         {
             PrintDialog printDialog = new PrintDialog();
@@ -528,20 +541,6 @@ namespace Promart.Pages
             {
                 printDialog.PrintVisual(cadastroAlunoPage, "Cadastro do Aluno");
             }                
-        }
-
-        private async Task ExcluirCadastro()
-        {
-            var result = MessageBox.Show("Deseja realmente excluir esse cadastro? Essa alteração não pode ser desfeita.", "Excluir Cadastro", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                await SqlAccess.TAlunoOficinas.DeletarAsync(Aluno);
-                await SqlAccess.TAlunoVinculos.DeletarAsync(Aluno);
-                await SqlAccess.DeletarAsync(Aluno);
-
-                MainWindow.Instance?.FecharAbaAtual();
-            }            
         }
     }
 }

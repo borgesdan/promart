@@ -62,6 +62,10 @@ namespace Promart
             TabConteudo.SelectionChanged += TabConteudo_SelectionChanged;
 
             this.Loaded += MainWindow_Loaded;
+
+            LogFile.WriteLine("programa iniciado");
+            LogFile.WriteLine("programa iniciado 2"); 
+            LogFile.WriteLine("programa iniciado 3"); 
         }
 
         private void TabConteudo_SelectionChanged(object sender, SelectionChangedEventArgs e)

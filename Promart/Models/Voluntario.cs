@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Promart.Models
 {
     [Table("Voluntarios")]
+    [Dapper.Contrib.Extensions.Table("Voluntarios")]
     public class Voluntario
     {
         public int Id { get; set; }
@@ -68,6 +69,34 @@ namespace Promart.Models
         public override string ToString()
         {
             return NomeCompleto ?? string.Empty;
+        }
+
+        public static Voluntario DynamicConverter(dynamic obj)
+        {
+            return new Voluntario()
+            {
+                Contato1 = obj.Contato1,
+                Contato2 = obj.Contato2,
+                CPF = obj.CPF,
+                DataCadastro = obj.DataCadastro,
+                DataNascimento = obj.DataNascimento,
+                Email = obj.Email,
+                EnderecoBairro = obj.EnderecoBairro,
+                EnderecoCEP = obj.EnderecoCEP,
+                EnderecoCidade = obj.EnderecoCidade,
+                EnderecoComplemento = obj.EnderecoComplemento,
+                EnderecoEstado = obj.EnderecoEstado,
+                EnderecoNumero = obj.EnderecoNumero,
+                EnderecoRua = obj.EnderecoRua,
+                Escolaridade = obj.Escolaridade,
+                FotoUrl = obj.FotoUrl,
+                Id = obj.Id,
+                NomeCompleto = obj.NomeCompleto,
+                Observacoes = obj.Observacoes,
+                Profissao = obj.Profissao,
+                RG = obj.RG,
+                Sexo = obj.Sexo,                
+            };
         }
     }
 }

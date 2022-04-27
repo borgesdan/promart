@@ -166,7 +166,7 @@ namespace Promart.Pages
 
             if (Voluntario.Id == 0)
             {
-                var result = await SqlAccess.InserirAsync(Voluntario);
+                var result = await SqlAccess.InsertAsync(Voluntario);
 
                 if (result != -1)
                 {
@@ -181,7 +181,7 @@ namespace Promart.Pages
             }
             else
             {
-                bool result = await SqlAccess.AtualizarAsync(Voluntario);
+                bool result = await SqlAccess.UpdateAsync(Voluntario);
 
                 if (result)
                 {
@@ -200,7 +200,7 @@ namespace Promart.Pages
         {
             if (atualizar)
             {
-                var result = await SqlAccess.TVoluntarioOficinas.DeletarAsync(Voluntario);
+                var result = await SqlAccess.DeleteAllAsync<VoluntarioOficina, Voluntario>(Voluntario, nameof(Voluntario.Id), "IdVoluntario");
 
                 if (result == null)
                 {
@@ -226,7 +226,7 @@ namespace Promart.Pages
                         alunoOficina.IdVoluntario = Voluntario.Id;
                         alunoOficina.IdOficina = oficina.Id;
 
-                        var result = await SqlAccess.InserirAsync(alunoOficina);
+                        var result = await SqlAccess.InsertAsync(alunoOficina);
 
                         if (result == -1)
                         {
@@ -313,8 +313,8 @@ namespace Promart.Pages
         }
 
         private async Task ObterOficinas()
-        {
-            var resultado = await SqlAccess.TVoluntarioOficinas.GetAsync(Voluntario);
+        {            
+            var resultado = await SqlAccess.GetAllAsync<VoluntarioOficina, Voluntario>(Voluntario, nameof(Voluntario.Id), "IdVoluntario");
 
             if (resultado != null)
             {
@@ -340,8 +340,8 @@ namespace Promart.Pages
 
             if (result == MessageBoxResult.Yes)
             {
-                await SqlAccess.TVoluntarioOficinas.DeletarAsync(Voluntario);
-                await SqlAccess.DeletarAsync(Voluntario);
+                await SqlAccess.DeleteAllAsync<VoluntarioOficina, Voluntario>(Voluntario, nameof(Voluntario.Id), "IdVoluntario");
+                await SqlAccess.DeleteAsync(Voluntario);
 
                 MainWindow.Instance?.FecharAbaAtual();
             }

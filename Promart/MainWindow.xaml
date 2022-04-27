@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Promart"
         mc:Ignorable="d"
-        Title="MainWindow" MinWidth="1280" MinHeight="720" WindowState="Maximized"
+        Title="Promart BD" MinWidth="1280" MinHeight="720" WindowState="Maximized"
         Background="#FF252525">
     <Grid>
         <Grid.RowDefinitions>
