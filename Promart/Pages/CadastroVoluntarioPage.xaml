@@ -66,7 +66,7 @@
             <Button Grid.Row="4" Grid.Column="3" Margin="80,0,0,0" Width="60"
                     Background="Transparent" BorderBrush="Transparent"
                     ToolTip="Abrir câmera"  IsEnabled="False">
-                <Image Source="/assets/images/icons/photo-camera.png"/>
+                <Image Source="/assets/images/icons/photo-camera.png" Opacity="0.5"/>
             </Button>
 
 
@@ -79,14 +79,13 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
@@ -162,11 +161,10 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
@@ -211,11 +209,11 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
                         <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Grid.Column="0" Content="Rua:" 
@@ -282,14 +280,14 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />                        
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
@@ -311,27 +309,43 @@
                 </Grid>
             </GroupBox>
 
-            <Button x:Name="ConfirmarButton" Grid.Row="17" Grid.Column="2"
-                    Content="Confirmar"
-                    HorizontalAlignment="Right" Width="200" Margin="0,0,20,0"
-                    FontSize="24"  FontWeight="SemiBold"
-                    Background="#FF0087FD" Foreground="White" BorderBrush="DarkBlue" BorderThickness="2"/>
+            <Button 
+                x:Name="ConfirmarButton"
+                Grid.Row="17" Grid.Column="2"
+                Content="CONFIRMAR"
+                HorizontalAlignment="Right"
+                Width="200" Margin="0,0,20,0"
+                FontSize="24"  FontWeight="SemiBold"
+                Background="#FF0087FD" Foreground="White"
+                BorderBrush="DarkBlue" BorderThickness="4"
+                FontFamily="Bahnschrift Condensed" />
 
-            <Button x:Name="CancelarButton" Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="2"
-                    Content="Fechar" HorizontalAlignment="Right"
-                    Width="200" Margin="0,0, 250,0"
-                    FontSize="24"  FontWeight="SemiBold" 
-                    Background="DarkRed" Foreground="White" BorderBrush="DarkRed" BorderThickness="2"
-                             />
-            <Button x:Name="ExcluirButton" Grid.Row="17" Grid.Column="0"
-                    HorizontalAlignment="Left" IsEnabled="False"
-                    Width="200" Margin="20,0, 0, 0"
-                    FontSize="24"  FontWeight="SemiBold">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="/assets/images/icons/error.png" Width="50" />
-                    <Label Content="Excluir" />
-                </StackPanel>
-            </Button>
+            <Button 
+                x:Name="CancelarButton"
+                Grid.Row="17" Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Content="FECHAR" 
+                HorizontalAlignment="Right"
+                Width="200" 
+                Margin="0,0, 250,0"
+                FontSize="24"  FontWeight="SemiBold" 
+                Background="DarkRed" Foreground="White" 
+                BorderBrush="Black" BorderThickness="4"
+                FontFamily="Bahnschrift Condensed"/>
+            
+            <Button 
+                x:Name="ExcluirButton" 
+                Grid.Row="17" Grid.Column="0"
+                Content="EXCLUIR"
+                HorizontalAlignment="Left"
+                IsEnabled="False"
+                Width="200"
+                Margin="20,0, 0, 0"
+                FontSize="24" 
+                Background="#FF313131" Foreground="LightGray" 
+                BorderBrush="Black" BorderThickness="4"
+                FontFamily="Bahnschrift SemiBold Condensed"
+                />
         </Grid>
     </Grid>
 </Page>

@@ -61,7 +61,7 @@
             </ToolBar>
             <GroupBox Header="Oficinas" FontSize="18" 
                           Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="8"
-                      Padding="10">
+                      Padding="10" Background="GhostWhite">
                 <ListBox x:Name="OficinasList"></ListBox>
             </GroupBox>
 

@@ -5,10 +5,10 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Promart.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="1500" d:DesignWidth="1280"
+      d:DesignHeight="2000" d:DesignWidth="1280"
       Title="CadastrarAlunoPage" Loaded="Page_Loaded">
-    
-    <Grid Background="White">
+
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition />
@@ -20,31 +20,11 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="1" Content="CADASTRO DO ALUNO"
-               FontSize="24" FontWeight="Bold" />
+        <Grid 
+            x:Name="MainGrid" 
+            Grid.Row="1" Grid.Column="1" 
+            Background="White" >
 
-        <StackPanel x:Name="MatriculaPanel" Orientation="Horizontal" 
-                    Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" >
-            <Label
-            Content="Matrícula:"            
-            VerticalContentAlignment="Center"
-            FontSize="16" />
-            <TextBox x:Name="MatriculaText"
-                 Width="250" Text="2022A001" IsReadOnly="True"                 
-                 VerticalContentAlignment="Center" TextAlignment="Center" Margin="0,10"
-                 FontSize="18" FontWeight="Bold"/>
-            <Label
-            Content="Data:"            
-            VerticalContentAlignment="Center"
-            FontSize="16" />
-            <TextBox x:Name="DataMatriculaText"
-                 Width="200" Text="2022A001" IsReadOnly="True"                 
-                 VerticalContentAlignment="Center" TextAlignment="Center" Margin="0,10"
-                 FontSize="18" FontWeight="Bold"/>
-        </StackPanel>
-
-
-        <Grid x:Name="MainGrid" Grid.Row="1" Grid.Column="1" Background="White" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -80,47 +60,106 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
             </Grid.RowDefinitions>
 
             <ToolBar Grid.ColumnSpan="3">
-                <Button Name="ImprimirButton" Width="40" VerticalAlignment="Stretch" ToolTip="Imprimir">
+                <Button 
+                    Name="ImprimirButton"
+                    Width="40"
+                    VerticalAlignment="Stretch"
+                    ToolTip="Imprimir">
                     <Image Source="/assets/images/icons/print.png" />
                 </Button>
-                <Separator Margin="20,0,20,0" />                
             </ToolBar>
-            <Ellipse x:Name="FotoElipse" Grid.Row="1" Grid.Column="3" Grid.RowSpan="4" Width="200">
+
+            <Label 
+                Grid.Row="1" Grid.Column="0"                     
+                Content="CADASTRO DO ALUNO"
+                FontSize="24" FontWeight="Bold" />
+
+            <StackPanel
+                x:Name="MatriculaPanel"
+                Orientation="Horizontal" 
+                Grid.Row="1" Grid.Column="1" 
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Right">
+
+                <Label                    
+                    VerticalContentAlignment="Center"
+                    FontSize="16" />
+                <TextBox
+                    x:Name="MatriculaText"                    
+                    IsReadOnly="True"            
+                    Width="250" 
+                    VerticalContentAlignment="Center"
+                    TextAlignment="Center"
+                    Margin="0,10"
+                    FontSize="18" FontWeight="Bold"/>
+                <Label
+                    Content="Data:"
+                    VerticalContentAlignment="Center"
+                    FontSize="16" />
+                <TextBox 
+                    x:Name="DataMatriculaText"
+                    IsReadOnly="True"                    
+                    Width="200" 
+                    VerticalContentAlignment="Center" 
+                    TextAlignment="Center" 
+                    Margin="0,10"
+                    FontSize="18" FontWeight="Bold"/>
+            </StackPanel>
+
+            <Ellipse 
+                x:Name="FotoElipse" 
+                Grid.Row="3" Grid.Column="3" 
+                Grid.RowSpan="4" Width="200">
                 <Ellipse.Fill>
                     <ImageBrush x:Name="FotoImage" ImageSource="/assets/images/avatars/png-128/asian-128x128-1410051.png" />
                 </Ellipse.Fill>
             </Ellipse>
 
-            <Button x:Name="AbrirImagemButton"  Grid.Row="5" Grid.Column="3"
-                        Width="60" Margin="-80,0,0,0"
-                    Background="Transparent" BorderBrush="Transparent"
-                    ToolTip="Abrir imagem do computador">
+            <Button 
+                x:Name="AbrirImagemButton"
+                Grid.Row="7" Grid.Column="3"
+                Width="60" 
+                Margin="-80,0,0,0"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                ToolTip="Abrir imagem do computador">
                 <Image Source="/assets/images/icons/folder.png" />
             </Button>
-            <Button Grid.Row="5" Grid.Column="3" Margin="80,0,0,0" Width="60"
-                    Background="Transparent" BorderBrush="Transparent"
-                    ToolTip="Abrir câmera"  IsEnabled="False">
-                <Image Source="/assets/images/icons/photo-camera.png"/>
+            <Button 
+                Grid.Row="7" Grid.Column="3"
+                Margin="80,0,0,0" 
+                Width="60"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                ToolTip="Abrir câmera"  IsEnabled="False">
+                <Image Source="/assets/images/icons/photo-camera.png" Opacity="0.5"/>
             </Button>
 
-            <GroupBox x:Name="DadosPessoaisGroup" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="5"
-                      Margin="10,0,10,0" Padding="5" Header="Dados Pessoais"
-                      FontSize="20"  >
+            <GroupBox 
+                Header="Dados Pessoais"
+                Grid.Row="3" Grid.Column="0" 
+                Grid.ColumnSpan="2" Grid.RowSpan="5"
+                Padding="5" 
+                Margin="10,0,10,0" 
+                FontSize="20"
+                BorderThickness="2">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="250" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
@@ -137,7 +176,7 @@
                            FontSize="16" HorizontalAlignment="Right" FontWeight="SemiBold" />
                     <DatePicker x:Name="NascimentoData" Grid.Row="1" Grid.Column="1"
                                 Width="220" HorizontalAlignment="Left" 
-                                FontSize="16"  />
+                                FontSize="16" />
                     <Label x:Name="IdadeLabel" Grid.Row="1" Grid.Column="1" Content="10 anos"
                            FontSize="14" Visibility="Hidden"
                            HorizontalAlignment="Left" Margin="230,0,0,0" />
@@ -176,9 +215,13 @@
                 </Grid>
             </GroupBox>
 
-            <GroupBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="9"
-                       Margin="10,0,10,0" Padding="5" Header="Família"
-                      FontSize="20" >
+            <GroupBox 
+                Header="Família"
+                Grid.Row="8" Grid.Column="0"
+                Grid.ColumnSpan="3" Grid.RowSpan="9"
+                Margin="10,0,10,0" Padding="5"
+                FontSize="20"
+                BorderThickness="2">
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -188,147 +231,231 @@
                         <ColumnDefinition Width="250" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
                     <!-- Vínculo familiar -->
 
-                    <Label Grid.Row="0" Grid.Column="0" Content="Nome do Responsável" 
-                           FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Right" />
-                    <TextBox x:Name="NomeResponsavelText" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
-                             HorizontalAlignment="Stretch"  VerticalContentAlignment="Center"
-                             TextAlignment="Left" VerticalAlignment="Stretch"
-                             FontSize="16" MaxLength="148"  />
+                    <Label 
+                        Grid.Row="0" Grid.Column="0"
+                        Content="Nome do Responsável" 
+                        FontSize="16" FontWeight="SemiBold"
+                        HorizontalAlignment="Right" />
+                    <TextBox 
+                        x:Name="NomeResponsavelText"
+                        Grid.Row="0" Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                        VerticalContentAlignment="Center"
+                        TextAlignment="Left" 
+                        FontSize="16" MaxLength="148"  />
 
-                    <Label Grid.Row="1" Grid.Column="0" Content="Vínculo Familiar" 
-                           FontSize="16" FontWeight="SemiBold"
-                           HorizontalAlignment="Right" />
-                    <ComboBox x:Name="VinculoCombo" Grid.Row="1" Grid.Column="1" 
-                              Width="250" MaxWidth="250" HorizontalAlignment="Left"
-                              SelectedIndex="0"
-                              FontSize="16"  >
-                    </ComboBox>
-                    
-                    <Label Grid.Row="2" Grid.Column="0" Content="Tipo de Moradia" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
-                    <ComboBox x:Name="MoradiaCombo" Grid.Row="2" Grid.Column="1" Width="250" MaxWidth="250"
-                              HorizontalAlignment="Left"
-                              SelectedIndex="0"
-                              FontSize="16"  >
-                    </ComboBox>
-
-                    <Label Grid.Row="3" Grid.Column="0" Content="Renda Familiar" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
-                    <ComboBox x:Name="RendaCombo" Grid.Row="3" Grid.Column="1"  HorizontalAlignment="Left"
-                              SelectedIndex="0"  Width="250" MaxWidth="250"
-                              FontSize="16"  >
+                    <Label 
+                        Grid.Row="1" Grid.Column="0"
+                        Content="Vínculo Familiar" 
+                        FontSize="16" FontWeight="SemiBold"
+                        HorizontalAlignment="Right" />
+                    <ComboBox 
+                        x:Name="VinculoCombo"
+                        Grid.Row="1" Grid.Column="1" 
+                        Width="250" MaxWidth="250"
+                        HorizontalAlignment="Left"
+                        SelectedIndex="0"
+                        FontSize="16"  >
                     </ComboBox>
 
-                    <Label Grid.Row="1" Grid.Column="2" Content="Recebe Bolsa Família?" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Left" />
-                    <CheckBox x:Name="BeneficiarioCheck" 
-                              Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
-                              Content="Sim, o aluno é beneficiário." 
-                              VerticalContentAlignment="Center"
-                              Margin="180,0,0,0"
-                              VerticalAlignment="Stretch" FontSize="16"  />
+                    <Label 
+                        Grid.Row="2" Grid.Column="0"
+                        Content="Tipo de Moradia" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+                    <ComboBox 
+                        x:Name="MoradiaCombo"
+                        Grid.Row="2" Grid.Column="1"
+                        Width="250" MaxWidth="250"
+                        HorizontalAlignment="Left"
+                        SelectedIndex="0"
+                        FontSize="16"  >
+                    </ComboBox>
 
+                    <Label 
+                        Grid.Row="3" Grid.Column="0"
+                        Content="Renda Familiar" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+                    <ComboBox 
+                        x:Name="RendaCombo" 
+                        Grid.Row="3" Grid.Column="1" 
+                        HorizontalAlignment="Left"
+                        Width="250" MaxWidth="250"
+                        FontSize="16"
+                        SelectedIndex="0" >
+                    </ComboBox>
 
-                    <Label Grid.Row="2" Grid.Column="2" Content="Telefone 1:" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           Margin="80,00,0,0"
-                           HorizontalAlignment="Left" />
+                    <Label 
+                        Grid.Row="1" Grid.Column="2"
+                        Content="Recebe Bolsa Família?" 
+                        FontSize="16"  FontWeight="SemiBold"
+                        HorizontalAlignment="Left" />
+                    <CheckBox 
+                        x:Name="BeneficiarioCheck"
+                        Grid.Row="1" Grid.Column="2"
+                        Grid.ColumnSpan="2"
+                        Content="Sim, o aluno é beneficiário." 
+                        VerticalContentAlignment="Center"
+                        Margin="180,0,0,0"
+                        VerticalAlignment="Stretch" FontSize="16"  />
 
-                    <!-- Telefone para contato -->
+                    <Label 
+                        Grid.Row="2" Grid.Column="2"
+                        Content="Telefone 1:" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        Margin="80,00,0,0"
+                        HorizontalAlignment="Left" />
+                    <TextBox 
+                        x:Name="Telefone1Text"
+                        Grid.Row="2" Grid.Column="2"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Stretch"
+                        VerticalContentAlignment="Center"
+                        TextAlignment="Left" 
+                        Margin="180,0,100,0" 
+                        FontSize="16" MaxLength="20" />
 
-                    <TextBox x:Name="Telefone1Text" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2"
-                             HorizontalAlignment="Stretch" TextAlignment="Left" 
-                             VerticalContentAlignment="Center"
-                             FontSize="16" MaxLength="20" Margin="180,0,100,0" />
+                    <Label 
+                        Grid.Row="3" Grid.Column="2"
+                        Content="Telefone 2:" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        HorizontalAlignment="Left"
+                        Margin="80,0,0,0"/>
+                    <TextBox 
+                        x:Name="Telefone2Text" 
+                        Grid.Row="3" Grid.Column="2" 
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Stretch"
+                        TextAlignment="Left" 
+                        VerticalContentAlignment="Center"
+                        Margin="180,0,100,0"
+                        FontSize="16" MaxLength="20" />
 
-                    <Label  Grid.Row="3" Grid.Column="2" Content="Telefone 2:" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Left"
-                            Margin="80,0,0,0"/>
+                    <GroupBox 
+                        Header="Composição Familiar"
+                        Grid.Row="5" Grid.Column="0"
+                        Grid.RowSpan="9" Grid.ColumnSpan="4" 
+                        Margin="10,0,10,0" 
+                        Padding="10" 
+                        FontSize="20">
 
-                    <TextBox x:Name="Telefone2Text" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2"
-                             HorizontalAlignment="Stretch" TextAlignment="Left" 
-                             VerticalContentAlignment="Center"
-                             FontSize="16" MaxLength="20" Margin="180,0,100,0"/>
-
-                    <GroupBox Header="Composição Familiar" Grid.Row="5" Grid.Column="0" Grid.RowSpan="8" Grid.ColumnSpan="4" 
-                              Margin="10,0,10,0" Padding="10" FontSize="20">                        
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition />
                             </Grid.RowDefinitions>
-                            <Button x:Name="AddMembroButton" Width="200" 
-                                    Content="Adicionar" 
-                                    Margin="0,0,0,5"
-                                    HorizontalAlignment="Left"
-                                    FontSize="14"  FontWeight="SemiBold" 
-                                    Background="#FF0087FD" Foreground="White"
-                                    BorderBrush="DarkBlue" BorderThickness="2"/>
-                            <Button x:Name="EditarMembroButton" Width="200" 
-                                    Content="Editar" 
-                                    Margin="210,0,0,5"
-                                    HorizontalAlignment="Left"
-                                    FontSize="14"  FontWeight="SemiBold" 
-                                    Background="Green" Foreground="White"
-                                    BorderBrush="DarkGreen" BorderThickness="2"/>
-                            <Button x:Name="ExcluirMembroButton" Width="200" 
-                                    Content="Excluir" 
-                                    Margin="420,0,0,5"
-                                    HorizontalAlignment="Left"
-                                    FontSize="14"  FontWeight="SemiBold" 
-                                    Background="DarkRed" Foreground="White"
-                                    BorderBrush="DarkRed" BorderThickness="2"/>
-                            <DataGrid x:Name="ComposicaoDataGrid" Grid.Row="1"
-                                      FontSize="16"
-                                      RowHeaderWidth="10"
-                                      AutoGenerateColumns="False" 
-                                      CanUserDeleteRows="True" 
-                                      CanUserReorderColumns="True"
-                                      CanUserResizeColumns="True" 
-                                      CanUserSortColumns="True"
-                                      CanUserAddRows="False"
-                                      IsReadOnly="True"
-                                      >
+
+                            <Button 
+                                x:Name="AddMembroButton" 
+                                Content="ADICIONAR" 
+                                Width="200" 
+                                Margin="0,0,0,5"
+                                HorizontalAlignment="Left"
+                                FontSize="14"  FontWeight="SemiBold" 
+                                Background="#FF0087FD" Foreground="White"
+                                BorderBrush="DarkBlue" BorderThickness="2"
+                                FontFamily="Bahnschrift Condensed"/>
+                            <Button 
+                                x:Name="EditarMembroButton"
+                                Width="200" 
+                                Content="EDITAR" 
+                                Margin="210,0,0,5"
+                                HorizontalAlignment="Left"
+                                IsEnabled="False"
+                                FontSize="14"  FontWeight="SemiBold" 
+                                Background="Green" Foreground="White"
+                                BorderBrush="DarkGreen" BorderThickness="2"
+                                FontFamily="Bahnschrift Condensed"/>
+                            <Button 
+                                x:Name="ExcluirMembroButton"
+                                Width="200" 
+                                Content="EXCLUIR" 
+                                Margin="420,0,0,5"
+                                HorizontalAlignment="Left"
+                                IsEnabled="False"
+                                FontSize="14"  FontWeight="SemiBold" 
+                                Background="DarkRed" Foreground="White"
+                                BorderBrush="DarkRed" BorderThickness="2"
+                                FontFamily="Bahnschrift Condensed"/>
+                            <DataGrid 
+                                x:Name="ComposicaoDataGrid" Grid.Row="1"
+                                FontSize="16"
+                                RowHeaderWidth="10"
+                                AutoGenerateColumns="False" 
+                                CanUserDeleteRows="False" 
+                                CanUserReorderColumns="True"
+                                CanUserResizeColumns="True" 
+                                CanUserSortColumns="True"
+                                CanUserAddRows="False"
+                                IsReadOnly="True"
+                                SelectionMode="Single">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn x:Name="NomeColumnDataGrid" Binding="{Binding NomeFamiliar}" Header="Nome" Width="350" FontWeight="Bold" />
-                                    <DataGridTextColumn x:Name="IdadeColumnDataGrid" Binding="{Binding Idade}" Header="Idade" Width="70"/>
-                                    <DataGridTextColumn x:Name="ParentescoColumnDataGrid" Binding="{Binding Parentesco}" Header="Parentesco" Width="*" />
-                                    <DataGridTextColumn x:Name="OcupacaoColumnDataGrid" Binding="{Binding Ocupacao}" Header="Ocupação" Width="*"/>
-                                    <DataGridTextColumn x:Name="EscolaridadeColumnDataGrid" Binding="{Binding Escolaridade}" Header="Escolaridade" Width="*"/>
-                                    <DataGridTextColumn x:Name="RendaColumnDataGrid" Binding="{Binding Renda}" Header="Renda" Width="120" />
+                                    <DataGridTextColumn 
+                                        x:Name="NomeColumnDataGrid" 
+                                        Binding="{Binding NomeFamiliar}" 
+                                        Header="Nome"
+                                        Width="350"
+                                        FontWeight="Bold" />
+                                    <DataGridTextColumn 
+                                        x:Name="IdadeColumnDataGrid" 
+                                        Binding="{Binding Idade}" 
+                                        Header="Idade"
+                                        Width="70"/>
+                                    <DataGridTextColumn 
+                                        x:Name="ParentescoColumnDataGrid" 
+                                        Binding="{Binding Parentesco}"
+                                        Header="Parentesco" 
+                                        Width="*" />
+                                    <DataGridTextColumn 
+                                        x:Name="OcupacaoColumnDataGrid"
+                                        Binding="{Binding Ocupacao}"
+                                        Header="Ocupação"
+                                        Width="*"/>
+                                    <DataGridTextColumn 
+                                        x:Name="EscolaridadeColumnDataGrid"
+                                        Binding="{Binding Escolaridade}"
+                                        Header="Escolaridade" 
+                                        Width="*"/>
+                                    <DataGridTextColumn
+                                        x:Name="RendaColumnDataGrid"
+                                        Binding="{Binding Renda}"
+                                        Header="Renda"
+                                        Width="120" />
                                 </DataGrid.Columns>
-                            </DataGrid>                            
+                            </DataGrid>
                         </Grid>
                     </GroupBox>
                 </Grid>
 
             </GroupBox>
 
-            <GroupBox Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="3"
-                       Margin="10,0,220,0" Padding="5" Header="Dados Escolares"
-                      FontSize="20" >
+            <GroupBox 
+                Grid.Row="17" Grid.Column="0"
+                Grid.ColumnSpan="2" Grid.RowSpan="3"
+                Header="Dados Escolares"
+                Margin="10,0,220,0" Padding="5"
+                FontSize="20"
+                BorderThickness="2">
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -337,90 +464,61 @@
 
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
+                        <RowDefinition />
+                        <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="0" Content="Nome da Escola:" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
-                    <TextBox x:Name="NomeEscolaText" Grid.Row="0" Grid.Column="1"
-                             HorizontalAlignment="Stretch" TextAlignment="Left" 
-                             VerticalAlignment="Stretch"
-                             FontSize="16"  />
+                    <Label 
+                        Grid.Row="0" Grid.Column="0"
+                        Content="Nome da Escola:" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+                    <TextBox 
+                        x:Name="NomeEscolaText" 
+                        Grid.Row="0" Grid.Column="1"
+                        HorizontalAlignment="Stretch" 
+                        TextAlignment="Left" 
+                        VerticalAlignment="Stretch"
+                        FontSize="16"  />
 
-                    <Label Grid.Row="1" Grid.Column="0" Content="Turno Escolar:" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
-                    <ComboBox x:Name="TurnoEscolarCombo" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"
-                              SelectedIndex="0" Width="200" MaxWidth="200"
-                              FontSize="16"  >
+                    <Label 
+                        Grid.Row="1" Grid.Column="0"
+                        Content="Turno Escolar:" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+                    <ComboBox 
+                        x:Name="TurnoEscolarCombo" 
+                        Grid.Row="1" Grid.Column="1"
+                        HorizontalAlignment="Left"
+                        Width="200" MaxWidth="200"
+                        SelectedIndex="0"
+                        FontSize="16"  >
                     </ComboBox>
 
-                    <Label Grid.Row="2" Grid.Column="0" Content="Ano Escolar:" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
-                    <ComboBox x:Name="AnoEscolarCombo" Grid.Row="2" Grid.Column="2" 
-                              Width="200" MaxWidth="200" HorizontalAlignment="Left"
-                              SelectedIndex="0"
-                              FontSize="16"  >
+                    <Label 
+                        Grid.Row="2" Grid.Column="0"
+                        Content="Ano Escolar:" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+                    <ComboBox 
+                        x:Name="AnoEscolarCombo"
+                        Grid.Row="2" Grid.Column="2" 
+                        Width="200" MaxWidth="200"
+                        HorizontalAlignment="Left"
+                        SelectedIndex="0"
+                        FontSize="16"  >
                     </ComboBox>
                 </Grid>
             </GroupBox>
 
-            <GroupBox Grid.Row="15" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="3"
-                       Margin="200,0,10,0" Padding="5" Header="Endereço"
-                      FontSize="20" >
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-
-                    <Label Grid.Row="0" Grid.Column="0" Content="Rua:" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
-                    <TextBox x:Name="RuaText" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"
-                             HorizontalAlignment="Stretch" TextAlignment="Left" VerticalContentAlignment="Center"
-                             FontSize="16"  MaxLength="100" />
-
-                    <Label Grid.Row="1" Grid.Column="0" Content="Bairro:" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
-                    <TextBox x:Name="BairroText" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" 
-                             HorizontalAlignment="Stretch" VerticalContentAlignment="Center"
-                              FontSize="16" MaxLength="50" />
-
-                    <Label Grid.Row="2" Grid.Column="0" Content="Número:" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
-                    <TextBox x:Name="NumeroText" Grid.Row="2" Grid.Column="1" Width="100"
-                             HorizontalAlignment="Left" TextAlignment="Left" VerticalContentAlignment="Center"
-                             FontSize="16" MaxLength="10" />
-
-                    <Label Grid.Row="2" Grid.Column="2" Content="Complemento:" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
-                    <TextBox x:Name="ComplementoText" Grid.Row="2" Grid.Column="3" 
-                             HorizontalAlignment="Stretch" TextAlignment="Left" VerticalContentAlignment="Center"
-                             FontSize="16" MaxLength="100" />
-                </Grid>
-            </GroupBox>
-
-            <GroupBox Grid.Row="18" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="8"
-                       Margin="10,0,10,0" Padding="5" Header="Dados do Projeto"
-                      FontSize="20"  >
+            <GroupBox 
+                Header="Endereço"
+                Grid.Row="17" Grid.Column="1"
+                Grid.ColumnSpan="2" Grid.RowSpan="3"
+                Margin="200,0,10,0" Padding="5"
+                FontSize="20"
+                BorderThickness="2">
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -430,85 +528,210 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
+                        <RowDefinition />
+                        <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="0" Content="Situação:" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
+                    <Label 
+                        Grid.Row="0" Grid.Column="0"
+                        Content="Rua:" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+                    <TextBox 
+                        x:Name="RuaText"
+                        Grid.Row="0" Grid.Column="1"
+                        Grid.ColumnSpan="3"
+                        HorizontalAlignment="Stretch" 
+                        VerticalContentAlignment="Center"
+                        TextAlignment="Left" 
+                        FontSize="16"  MaxLength="100" />
 
-                    <ComboBox x:Name="SituacaoProjetoCombo" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="220" MaxWidth="220"
-                               SelectedIndex="0"
-                              FontSize="16"  >
-                    </ComboBox>
+                    <Label
+                        Grid.Row="1" Grid.Column="0"
+                        Content="Bairro:" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+                    <TextBox 
+                        x:Name="BairroText"
+                        Grid.Row="1" Grid.Column="1"
+                        Grid.ColumnSpan="2" 
+                        HorizontalAlignment="Stretch" 
+                        VerticalContentAlignment="Center"
+                        FontSize="16" 
+                        MaxLength="50" />
 
-                    <Label x:Name="SituacaoExpLabel" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                           Margin="60,0"
-                           Content="O aluno está inscrito e solicita aprovação." 
-                           FontSize="12" HorizontalAlignment="Left"/>
+                    <Label 
+                        Grid.Row="2" Grid.Column="0"
+                        Content="Número:" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+                    <TextBox 
+                        x:Name="NumeroText" 
+                        Grid.Row="2" Grid.Column="1"
+                        Width="100"
+                        HorizontalAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        TextAlignment="Left"
+                        FontSize="16" 
+                        MaxLength="10" />
 
-                    <Label Grid.Row="3" Grid.Column="0" Content="Turno:" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
-
-                    <ComboBox x:Name="TurnoProjetoCombo" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"
-                               SelectedIndex="2"
-                              FontSize="16"  Width="220" MaxWidth="220" >                        
-                    </ComboBox>
-
-                    <Label Grid.Row="5" Grid.Column="0" Content="Oficinas:" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
-                    <ListBox x:Name="OficinasList" Grid.Row="5" Grid.Column="1" Grid.RowSpan="6"
-                             FontSize="16">
-                    </ListBox>                    
-
-                    <Label Grid.Row="0" Grid.Column="2" Content="Observações:" 
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
-
-                    <TextBox x:Name="ObservacoesText" Grid.Row="1" Grid.Column="2" Grid.RowSpan="10" Grid.ColumnSpan="2"
-                               Margin="10,10,10,0" FontSize="16"  
-                             AcceptsReturn="True" TextWrapping="WrapWithOverflow" MaxLength="1000"/>
-
-
+                    <Label 
+                        Grid.Row="2" Grid.Column="2"
+                        Content="Complemento:" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+                    <TextBox 
+                        x:Name="ComplementoText" 
+                        Grid.Row="2" Grid.Column="3" 
+                        HorizontalAlignment="Stretch"
+                        VerticalContentAlignment="Center"
+                        TextAlignment="Left" 
+                        FontSize="16"
+                        MaxLength="100" />
                 </Grid>
             </GroupBox>
 
-            <Button x:Name="ConfirmarButton" Grid.Row="27" Grid.Column="2"
-                    Content="Confirmar"
-                    HorizontalAlignment="Right" Width="200" Margin="0,0,20,0"
-                    FontSize="24"  FontWeight="SemiBold"
-                    Background="#FF0087FD" Foreground="White" BorderBrush="DarkBlue" BorderThickness="2"/>
+            <GroupBox 
+                Header="Dados do Projeto"
+                Grid.Row="20" Grid.Column="0"
+                Grid.ColumnSpan="3" Grid.RowSpan="8"
+                Margin="10,0,10,0" Padding="5"
+                FontSize="20" 
+                BorderThickness="2">
 
-            <Button x:Name="CancelarButton" Grid.Row="27" Grid.Column="1" Grid.ColumnSpan="2"
-                    Content="Fechar" HorizontalAlignment="Right"
-                    Width="200" Margin="0,0, 250,0"
-                    FontSize="24"  FontWeight="SemiBold" 
-                    Background="DarkRed" Foreground="White" BorderBrush="DarkRed" BorderThickness="2"
-                             />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
 
-            <Button x:Name="ExcluirButton" Grid.Row="27" Grid.Column="0"
-                    HorizontalAlignment="Left" IsEnabled="False"
-                    Width="200" Margin="20,0, 0, 0"
-                    FontSize="24"  FontWeight="SemiBold">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="/assets/images/icons/error.png" Width="50" />
-                    <Label Content="Excluir" />
-                </StackPanel>
-            </Button>
+                    <Label 
+                        Grid.Row="0" Grid.Column="0"
+                        Content="Situação:" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+
+                    <ComboBox
+                        x:Name="SituacaoProjetoCombo"
+                        Grid.Row="0" Grid.Column="1"
+                        HorizontalAlignment="Left" 
+                        Width="220" MaxWidth="220"
+                        SelectedIndex="0"
+                        FontSize="16"  >
+                    </ComboBox>
+
+                    <GroupBox Header="Informação"
+                              Grid.Row="1" 
+                              Grid.ColumnSpan="2"
+                              Grid.RowSpan="3"
+                              FontSize="12"
+                              Margin="10">
+                        <TextBox 
+                            x:Name="SituacaoExpText" 
+                            Grid.Row="1" Grid.Column="0"
+                            Grid.ColumnSpan="2"                            
+                            FontSize="12"                             
+                            HorizontalAlignment="Stretch"
+                            IsReadOnly="True"
+                            TextWrapping="WrapWithOverflow"
+                            BorderThickness="0"/>
+                    </GroupBox>
+
+                    <Label 
+                        Grid.Row="4" Grid.Column="0" 
+                        Content="Turno:" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+
+                    <ComboBox 
+                        x:Name="TurnoProjetoCombo" 
+                        Grid.Row="4" Grid.Column="1"
+                        HorizontalAlignment="Left"
+                        SelectedIndex="0"
+                        FontSize="16"  
+                        Width="220" MaxWidth="220" >
+                    </ComboBox>
+
+                    <Label 
+                        Grid.Row="5" Grid.Column="0"
+                        Content="Oficinas:" 
+                        FontSize="16"  FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+                    <ListBox
+                        x:Name="OficinasList" 
+                        Grid.Row="5" Grid.Column="1" 
+                        Grid.RowSpan="6"
+                        Margin="0,5"
+                        FontSize="16">
+                    </ListBox>
+
+                    <Label
+                        Grid.Row="0" Grid.Column="2"
+                        Content="Observações:" 
+                        FontSize="16"  FontWeight="SemiBold" />
+
+                    <TextBox 
+                        x:Name="ObservacoesText"
+                        Grid.Row="1" Grid.Column="2" 
+                        Grid.RowSpan="10" Grid.ColumnSpan="2"
+                        Margin="10,10,10,0" FontSize="16"  
+                        AcceptsReturn="True" TextWrapping="WrapWithOverflow"
+                        MaxLength="1000"/>
+                </Grid>
+            </GroupBox>
+
+            <Button 
+                x:Name="ConfirmarButton" 
+                Grid.Row="30" Grid.Column="2"
+                Content="CONFIRMAR"
+                HorizontalAlignment="Right" 
+                Width="200" Margin="0,0,20,0"
+                FontSize="24"  FontWeight="SemiBold"
+                Background="#FF0087FD" Foreground="White"
+                BorderBrush="DarkBlue" BorderThickness="4"
+                FontFamily="Bahnschrift Condensed"/>
+
+            <Button 
+                x:Name="CancelarButton" 
+                Grid.Row="30" Grid.Column="1" Grid.ColumnSpan="2"                    
+                Content="FECHAR" HorizontalAlignment="Right"
+                Width="200" Margin="0,0, 250,0"
+                FontSize="24"  FontWeight="SemiBold" 
+                Background="DarkRed" Foreground="White" 
+                BorderBrush="Black" BorderThickness="4"
+                FontFamily="Bahnschrift Condensed"
+                />
+
+            <Button 
+                x:Name="ExcluirButton" 
+                Grid.Row="30" Grid.Column="0"
+                Content="EXCLUIR"
+                IsEnabled="False"
+                HorizontalAlignment="Left" 
+                Width="200" Margin="20,0, 0, 0"
+                FontSize="24" 
+                Background="#FF313131" Foreground="LightGray" 
+                BorderBrush="Black" BorderThickness="4"
+                FontFamily="Bahnschrift SemiBold Condensed"
+                />
         </Grid>
-    </Grid>    
+    </Grid>
 </Page>

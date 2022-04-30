@@ -72,40 +72,56 @@ namespace Promart.Windows
         private async void CarregarDados()
         {
             RelacionadosDataGrid.Items.Clear();
-
-            if(modoRelacao == 0)
+            if (modoRelacao == 0)
             {
-                var alunos = await SqlAccess.GetAllAsync<Aluno>();
-
-                if(alunos != null)
-                {
-                    var list = alunos.ToList();
-                    list.RemoveAll(x => exclusaoAlunoList.Where(e => e.Id == x.Id).Any());
-
-                    RelatorioAluno relatorioAluno = new RelatorioAluno(alunos);
-                    relatorioAluno.PopularColunasDataGrid(RelacionadosDataGrid);
-                    list.ForEach(i => RelacionadosDataGrid.Items.Add(i));
-                }
+                await CarregarAlunos();
+            }          
+            else if (modoRelacao == 1)
+            {
+               await CarregarVoluntarios();
             }
-            else if(modoRelacao == 1)
-            {
-                var voluntarios = await SqlAccess.GetAllAsync<Voluntario>();
-
-                if (voluntarios != null)
-                {
-                    var list = voluntarios.ToList();
-                    list.RemoveAll(x => exclusaoVoluntarioList.Where(e => e.Id == x.Id).Any());
-                    
-                    RelatorioVoluntario relatorioVoluntario = new RelatorioVoluntario(voluntarios);
-                    relatorioVoluntario.PopularColunasDataGrid(RelacionadosDataGrid);                    
-                    list.ForEach(i => RelacionadosDataGrid.Items.Add(i));       
-                }
-            }    
             
             if(RelacionadosDataGrid.Items.Count <= 0)
             {
                 MessageBox.Show("Não há opções a serem selecionadas.", "Sobre", MessageBoxButton.OK, MessageBoxImage.Information);
                 DialogResult = false;
+            }
+        }
+
+        private async Task CarregarAlunos()
+        {
+            var alunos = await SqlAccess.GetAllAsync<Aluno>();
+
+            if (alunos != null)
+            {
+                var list = alunos.ToList();
+                list.RemoveAll(x => exclusaoAlunoList.Where(e => e.Id == x.Id).Any());
+
+                RelatorioAluno relatorioAluno = new RelatorioAluno(alunos);
+                relatorioAluno.PopularColunasDataGrid(RelacionadosDataGrid);
+
+                foreach(var aluno in list)
+                {
+                    if(aluno.SituacaoProjeto == 3)
+                    {
+                        RelacionadosDataGrid.Items.Add(aluno);
+                    }
+                }                
+            }
+        }
+
+        private async Task CarregarVoluntarios()
+        {
+            var voluntarios = await SqlAccess.GetAllAsync<Voluntario>();
+
+            if (voluntarios != null)
+            {
+                var list = voluntarios.ToList();
+                list.RemoveAll(x => exclusaoVoluntarioList.Where(e => e.Id == x.Id).Any());
+
+                RelatorioVoluntario relatorioVoluntario = new RelatorioVoluntario(voluntarios);
+                relatorioVoluntario.PopularColunasDataGrid(RelacionadosDataGrid);
+                list.ForEach(i => RelacionadosDataGrid.Items.Add(i));
             }
         }
     }

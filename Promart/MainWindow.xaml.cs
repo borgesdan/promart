@@ -21,6 +21,7 @@ using System.ComponentModel;
 using System.IO;
 using Microsoft.Win32;
 using System.Diagnostics;
+using Promart.Controls;
 
 namespace Promart
 {
@@ -172,8 +173,8 @@ namespace Promart
 
         private void CadastrarAluno()
         {
-            CadastroAlunoPage page = new CadastroAlunoPage(new Aluno());
-            page.Tab = AbrirNovaAba("Novo Aluno", page);
+            CadastroAlunoPage page = new();
+            AbrirNovaAba(page);
         }
 
         private void CadastrarVoluntario()
@@ -267,14 +268,99 @@ namespace Promart
             Process.Start("Explorer", $"{Helper.Diretorios.BACKUPS}");
         }
 
-        public TabItem AbrirNovaAba(string nome, Page page)
+        public TabItem AbrirNovaAba(IMainWindowPage tabPage)
         {
-            return Helper.Controles.AbrirNovaAba(TabConteudo, nome, page);
+            TabItem tabItem = new();
+            tabItem.MinWidth = 300;
+            tabItem.MaxWidth = 300;
+            tabItem.MinHeight = 25;
+            tabItem.Header = new TabHeaderContentControl(tabPage.TitleHeader, 280, new RoutedEventHandler((o, t) =>
+            {
+                CloseCurrentTab();
+            }));
+
+            ScrollViewer scrollViewer = new();
+            Frame frame = new();
+
+            frame.Content = tabPage;
+            scrollViewer.Content = frame;
+            tabItem.Content = scrollViewer;
+            tabItem.IsSelected = true;
+
+            TabConteudo.Items.Add(tabItem);
+
+            return tabItem;
         }
 
-        public void FecharAbaAtual()
+        public TabItem AbrirNovaAba(string title, Page page)
         {
+            return Helper.Controles.AbrirNovaAba(TabConteudo, title, page);
+        }
+
+        /// <summary>
+        /// Fecha a aba que está sendo exibida ao usuário.
+        /// </summary>
+        public void CloseCurrentTab()
+        {
+            if (TabConteudo.Items.Count == 0)
+                return;
+
+            var content = (ScrollViewer)TabConteudo.SelectedContent;
+
+            if (content != null)
+            {
+                Frame frame = (Frame)content.Content;
+
+                if(frame != null && frame.Content is IMainWindowPage tPage)
+                {
+                    if(!tPage.CanClose)
+                    {
+                        var result = MessageBox.Show(tPage.CloseWarging, "Aviso", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                        if (result == MessageBoxResult.No)
+                            return;
+                    }
+                }
+            }
+
             TabConteudo.Items.RemoveAt(TabConteudo.SelectedIndex);
+        }
+
+        /// <summary>
+        /// Altera o nome da aba que está sendo exibida ao usuário
+        /// </summary>
+        public void SetCurrentHeaderTab(string header)
+        {
+            if (TabConteudo.Items.Count == 0)
+                return;
+
+            var tab = (TabItem)TabConteudo.Items[TabConteudo.SelectedIndex];
+
+            if(tab != null)
+            {
+                var headerValue = (TabHeaderContentControl)tab.Header;
+
+                if (headerValue != null)
+                {
+                    headerValue.HeaderText = header;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Fecha a aba que está sendo exibida ao usuário.
+        /// </summary>
+        public static void CloseTab()
+        {
+            Instance?.CloseCurrentTab();
+        }
+
+        /// <summary>
+        /// Altera o nome da aba que está sendo exibida ao usuário
+        /// </summary>
+        public static void SetHeaderTab(string header)
+        {
+            Instance?.SetCurrentHeaderTab(header);
         }
     }
 }

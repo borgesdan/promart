@@ -42,7 +42,7 @@ namespace Promart.Pages
             VoluntariosList.SelectionChanged += (object sender, SelectionChangedEventArgs e) => HabilitarRemoverVoluntarioButton();
             AtualizarNomeButton.Click += async (object sender, RoutedEventArgs e) => await Renomear();
             NomeText.TextChanged += (object sender, TextChangedEventArgs e) => HabilitarRenomear();
-            FecharButton.Click += (object sender, RoutedEventArgs e) => MainWindow.Instance?.FecharAbaAtual();
+            FecharButton.Click += (object sender, RoutedEventArgs e) => MainWindow.Instance?.CloseCurrentTab();
         }
 
         private void HabilitarRemoverAlunoButton()

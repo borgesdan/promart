@@ -23,13 +23,17 @@ namespace Promart.Pages
     /// <summary>
     /// Interaction logic for CadastroVoluntarioPage.xaml
     /// </summary>
-    public partial class CadastroVoluntarioPage : Page
+    public partial class CadastroVoluntarioPage : Page, IMainWindowPage
     {
         bool dadosCarregados = false;
         bool paginaCarregada = false;
         bool dadosAlterados = false;
         public Voluntario Voluntario { get; private set; }
         public TabItem? Tab { get; set; }
+
+        public string TitleHeader { get; set; } = "Cadastro de Voluntário";
+        public bool CanClose { get; private set; } = true;
+        public string CloseWarging => "Há dados alterados que não foram salvos. Deseja realmente fechar a página?";
 
         public CadastroVoluntarioPage() : this(new Voluntario())
         {
@@ -133,7 +137,7 @@ namespace Promart.Pages
                     return;
             }
 
-            MainWindow.Instance?.FecharAbaAtual();
+            MainWindow.Instance?.CloseCurrentTab();
         }
 
         private async Task ConfirmarPagina()
@@ -343,7 +347,7 @@ namespace Promart.Pages
                 await SqlAccess.DeleteAllAsync<VoluntarioOficina, Voluntario>(Voluntario, nameof(Voluntario.Id), "IdVoluntario");
                 await SqlAccess.DeleteAsync(Voluntario);
 
-                MainWindow.Instance?.FecharAbaAtual();
+                MainWindow.Instance?.CloseCurrentTab();
             }
         }
     }

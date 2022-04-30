@@ -10,24 +10,27 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Text;
 
 namespace Promart.Pages
 {
     /// <summary>
     /// Interaction logic for CadastrarAlunoPage.xaml
     /// </summary>
-    public partial class CadastroAlunoPage : Page
+    public partial class CadastroAlunoPage : Page, IMainWindowPage
     {
         bool dadosCarregados = false;
         bool paginaCarregada = false;
-        bool dadosAlterados = false;
+        int idade = 0;
         public Aluno Aluno { get; private set; }
-        public TabItem? Tab { get; set; }
-        List<AlunoVinculo> vinculos = new List<AlunoVinculo>();
 
-        public CadastroAlunoPage() : this(new Aluno())
-        {
-        }
+        public string TitleHeader { get; set; } = "Cadastro de Aluno";
+        public bool CanClose { get; private set; } = true;
+        public string CloseWarging => "Há dados alterados que não foram salvos. Deseja realmente fechar a página?";
+
+        List<AlunoVinculo> vinculos = new();
+
+        public CadastroAlunoPage() : this(new Aluno()) { }
 
         public CadastroAlunoPage(Aluno aluno)
         {
@@ -38,19 +41,31 @@ namespace Promart.Pages
             ComposicaoDataGrid.ItemsSource = vinculos;
             PreencherComboBoxes();
 
+            NomeText.Text = Aluno.NomeCompleto;
+            NomeText.Focus();
+            NomeText.CaretIndex = NomeText.Text != null ? NomeText.Text.Length : 0;
+
+            ExibirInfoSituacao();
+            DefinirEventos();
+        }
+
+        private void DefinirEventos()
+        {
             //Eventos necessários dos controles
             ConfirmarButton.Click += async (object sender, RoutedEventArgs e) => await ConfirmarPaginaAsync();
-            CancelarButton.Click += (object sender, RoutedEventArgs e) => CancelarPagina();
+            CancelarButton.Click += (object sender, RoutedEventArgs e) => MainWindow.CloseTab();
+            AbrirImagemButton.Click += (object sender, RoutedEventArgs e) => AbrirNovaImagem();
+            AddMembroButton.Click += (object sender, RoutedEventArgs e) => AbrirVinculo();
+            EditarMembroButton.Click += (object sender, RoutedEventArgs e) => EditarVinculo();
+            ExcluirMembroButton.Click += (object sender, RoutedEventArgs e) => ExcluirVinculo();
+            ExcluirButton.Click += async (object sender, RoutedEventArgs e) => await ExcluirCadastro();
+            ImprimirButton.Click += (object sender, RoutedEventArgs e) => Imprimir();
+            NascimentoData.SelectedDateChanged += (object? sender, SelectionChangedEventArgs e) => ValidarData();
             NascimentoData.SelectedDateChanged += (object? sender, SelectionChangedEventArgs e) => ExibirIdade();
             SituacaoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => ExibirInfoSituacao();
-            TurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => { TurnoProjetoCombo.SelectedIndex = TurnoEscolarCombo.SelectedIndex == 0 ? 1 : 0; };
-            NomeText.TextChanged += (object sender, TextChangedEventArgs e) => AlterarHeaderAba();
-            AbrirImagemButton.Click += (object sender, RoutedEventArgs e) => AbrirNovaImagem();
-            AddMembroButton.Click += (object sender, RoutedEventArgs e) => AbrirCadastroVinculo();
-            EditarMembroButton.Click += (object sender, RoutedEventArgs e) => EditarCadastroVinculo();
-            ExcluirMembroButton.Click += (object sender, RoutedEventArgs e) => ExcluirCadastroVinculo();
-            ImprimirButton.Click += (object sender, RoutedEventArgs e) => Imprimir();
-            ExcluirButton.Click += async (object sender, RoutedEventArgs e) => await ExcluirCadastro();
+            TurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => TurnoProjetoCombo.SelectedIndex = TurnoEscolarCombo.SelectedIndex == 0 ? 1 : 0;
+            NomeText.TextChanged += (object sender, TextChangedEventArgs e) => MainWindow.SetHeaderTab(NomeText.Text.Trim());
+            ComposicaoDataGrid.SelectionChanged += (object sender, SelectionChangedEventArgs e) => HabilitarEdicaoComposicao();
 
             //Eventos para confirmar alterações de dados ao sair da tela
             FotoImage.Changed += (object? sender, EventArgs e) => DefinirAlteracaoDados();
@@ -77,15 +92,17 @@ namespace Promart.Pages
             TurnoEscolarCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
             TurnoProjetoCombo.SelectionChanged += (object sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
             BeneficiarioCheck.Click += (object sender, RoutedEventArgs e) => DefinirAlteracaoDados();
-
-            NomeText.Text = Aluno.NomeCompleto;
-            NomeText.Focus();
-            NomeText.CaretIndex = NomeText.Text != null ? NomeText.Text.Length : 0;
         }
 
+        private void HabilitarEdicaoComposicao()
+        {
+            EditarMembroButton.IsEnabled = ComposicaoDataGrid.SelectedItem != null;
+            ExcluirMembroButton.IsEnabled = ComposicaoDataGrid.SelectedItem != null;
+        }
+        
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            await PopularOficinas();           
+            await PopularOficinas();
 
             if (!dadosCarregados && Aluno.Id != 0)
             {
@@ -93,13 +110,13 @@ namespace Promart.Pages
                 dadosCarregados = true;
             }
 
-            if(paginaCarregada)
+            if (paginaCarregada)
             {
                 await ObterOficinas();
             }
 
             paginaCarregada = true;
-        }        
+        }
 
         private async Task PreencherDados()
         {
@@ -139,57 +156,117 @@ namespace Promart.Pages
             await ObterVinculos();
             await ObterOficinas();
 
+            ExibirInfoSituacao();
             ConfirmarButton.IsEnabled = false;
             ExcluirButton.IsEnabled = true;
-            dadosAlterados = false;
+            CanClose = true;
         }
 
-        private void CancelarPagina()
+        private bool ValidarDados()
         {
-            if (dadosAlterados)
+            NomeText.Text = NomeText.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(NomeText.Text))
             {
-                if (!Helper.Controles.DadosAlteradosAviso())
-                    return;
+                MessageBox.Show("Digite o nome o aluno antes de confirmar os dados.",
+                    "Aviso", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+
+                return false;
+            }
+            
+            StringBuilder avisos = new StringBuilder();
+            int count = 1;
+
+            if (idade < Aluno.FaixaEtariaMin)
+            {
+                avisos.AppendLine($"{count}- O aluno tem uma idade de {idade} anos que é menor do que a faixa etária do projeto: {Aluno.FaixaEtariaMin} anos.");
+                avisos.AppendLine();
+                count++;
+            }
+            else if (idade > Aluno.FaixaEtariaMax)
+            {
+                avisos.AppendLine($"{count} - O aluno tem uma idade {idade} anos que é maior do que a faixa etária do projeto: {Aluno.FaixaEtariaMax} anos.");
+                avisos.AppendLine();
+                count++;
+            }           
+
+            if (SituacaoProjetoCombo.SelectedIndex != (int)SituacaoAlunoTipo.Matriculado)
+            {
+                foreach (var checkBox in OficinasList.ItemsSource)
+                {
+                    CheckBox? c = checkBox as CheckBox;
+
+                    if (c != null
+                        && c.IsChecked != null
+                        && c.IsChecked.Value)
+                    {
+                        avisos.AppendLine($"{count} - O aluno foi marcado nas oficinas mas ainda não está matriculado.");
+                        avisos.AppendLine();
+                        count++;
+                        break;
+                    }
+                }                        
             }
 
-            MainWindow.Instance?.FecharAbaAtual();
+            string relatorio = $"Foram verificadas algumas inconsistências:\n\n {avisos}";
+            var result = MessageBox.Show($"{relatorio}\n Deseja continuar o cadastro?",
+                "Aviso", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+
+            if (result == MessageBoxResult.No)
+                return false;
+
+            RGText.Text = RGText.Text.Trim();
+            CPFText.Text = CPFText.Text.Trim();
+            CertidaoText.Text = CertidaoText.Text.Trim();
+            NomeResponsavelText.Text = NomeResponsavelText.Text.Trim();
+            Telefone1Text.Text = Telefone1Text.Text.Trim();
+            Telefone2Text.Text = Telefone2Text.Text.Trim();
+            NomeEscolaText.Text = NomeEscolaText.Text.Trim();
+            RuaText.Text = RuaText.Text.Trim();
+            BairroText.Text = BairroText.Text.Trim();
+            NumeroText.Text = NumeroText.Text.Trim();
+            ComplementoText.Text = ComplementoText.Text.Trim();
+            ObservacoesText.Text = ObservacoesText.Text.Trim();
+
+            return true;
         }
 
-        private async Task ConfirmarPaginaAsync()
+        private void AtribuirDados()
         {
             Aluno.NomeCompleto = NomeText.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(Aluno.NomeCompleto))
-            {
-                MessageBox.Show("Digite o nome o aluno antes de confirmar os dados.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                return;
-            }
-
             Aluno.DataNascimento = NascimentoData.SelectedDate;
             Aluno.Sexo = SexoCombo.SelectedIndex;
-            Aluno.RG = RGText.Text.Trim();
-            Aluno.CPF = CPFText.Text.Trim();
-            Aluno.Certidao = CertidaoText.Text.Trim();
+            Aluno.RG = RGText.Text;
+            Aluno.CPF = CPFText.Text;
+            Aluno.Certidao = CertidaoText.Text;
             Aluno.VinculoFamiliar = VinculoCombo.SelectedIndex;
-            Aluno.NomeResponsavel = NomeResponsavelText.Text.Trim();
+            Aluno.NomeResponsavel = NomeResponsavelText.Text;
             Aluno.IsBeneficiario = BeneficiarioCheck.IsChecked ?? false;
             Aluno.TipoMoradia = MoradiaCombo.SelectedIndex;
             Aluno.Renda = RendaCombo.SelectedIndex;
-            Aluno.Contato1 = Telefone1Text.Text.Trim();
-            Aluno.Contato2 = Telefone2Text.Text.Trim();
-            Aluno.EscolaNome = NomeEscolaText.Text.Trim();
+            Aluno.Contato1 = Telefone1Text.Text;
+            Aluno.Contato2 = Telefone2Text.Text;
+            Aluno.EscolaNome = NomeEscolaText.Text;
             Aluno.TurnoEscolar = TurnoEscolarCombo.SelectedIndex;
             Aluno.AnoEscolar = AnoEscolarCombo.SelectedIndex;
-            Aluno.EnderecoRua = RuaText.Text.Trim();
-            Aluno.EnderecoBairro = BairroText.Text.Trim();
-            Aluno.EnderecoNumero = NumeroText.Text.Trim();
-            Aluno.EnderecoComplemento = ComplementoText.Text.Trim();
+            Aluno.EnderecoRua = RuaText.Text;
+            Aluno.EnderecoBairro = BairroText.Text;
+            Aluno.EnderecoNumero = NumeroText.Text;
+            Aluno.EnderecoComplemento = ComplementoText.Text;
             Aluno.EnderecoCidade = "Ipiaú";
             Aluno.EnderecoEstado = "Bahia";
             Aluno.EnderecoCEP = "45570-000";
             Aluno.SituacaoProjeto = SituacaoProjetoCombo.SelectedIndex;
             Aluno.TurnoProjeto = TurnoProjetoCombo.SelectedIndex;
-            Aluno.Observacoes = ObservacoesText.Text.Trim();
+            Aluno.Observacoes = ObservacoesText.Text;
+        }
+
+        private async Task ConfirmarPaginaAsync()
+        {
+            if (!ValidarDados())
+                return;
+
+            AtribuirDados();
 
             if (Aluno.Id == 0)
             {
@@ -201,10 +278,10 @@ namespace Promart.Pages
                 if (result != -1)
                 {
                     await InserirVinculosAsync();
-                    await InserirAlunoOficinaAsync();                    
+                    await InserirAlunoOficinaAsync();
                     ConfirmarButton.IsEnabled = false;
                     ExcluirButton.IsEnabled = true;
-                    dadosAlterados = false;
+                    CanClose = true;
                     MessageBox.Show("O cadastro do aluno foi realizado e um número de matrícula foi gerado.", "Aluno cadastrado", MessageBoxButton.OK, MessageBoxImage.Information);
                     MatriculaText.Text = Aluno.Matricula;
                     DataMatriculaText.Text = Aluno.DataMatriculaValue.ToString();
@@ -221,7 +298,7 @@ namespace Promart.Pages
                     await InserirAlunoOficinaAsync(true);
                     ConfirmarButton.IsEnabled = false;
                     ExcluirButton.IsEnabled = true;
-                    dadosAlterados = false;
+                    CanClose = true;
                     MessageBox.Show("O cadastro do aluno foi atualizado com sucesso", "Cadastro Atualizado", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -304,7 +381,7 @@ namespace Promart.Pages
 
         private void DefinirAlteracaoDados()
         {
-            dadosAlterados = true;
+            CanClose = false;
             ConfirmarButton.IsEnabled = true;
         }
 
@@ -325,7 +402,8 @@ namespace Promart.Pages
             if (NascimentoData.SelectedDate != null && NascimentoData.SelectedDate.HasValue)
             {
                 DateTime nascimento = NascimentoData.SelectedDate.Value;
-                IdadeLabel.Content = string.Concat(Helper.Util.ObterIdade(nascimento), " anos");
+                idade = Helper.Util.ObterIdade(nascimento);
+                IdadeLabel.Content = string.Concat(idade, " anos");
                 IdadeLabel.Visibility = Visibility.Visible;
             }
             else
@@ -338,49 +416,32 @@ namespace Promart.Pages
         {
             switch (SituacaoProjetoCombo.SelectedIndex)
             {
-                case 0:
-                    SituacaoExpLabel.Content = "O aluno está inscrito e solicita aprovação.";
+                case (int)SituacaoAlunoTipo.Inscrito:
+                    SituacaoExpText.Text = "O aluno está inscrito no projeto e espera o processo de aprovação.";
                     break;
-                case 1:
-                    SituacaoExpLabel.Content = "O aluno está aprovado para matrícula.";
+                case (int)SituacaoAlunoTipo.Aprovado:
+                    SituacaoExpText.Text = "O aluno está inscrito e aprovado para ser matriculado nas oficinas.";
                     break;
-                case 2:
-                    SituacaoExpLabel.Content = "O aluno está na lista de espera.";
+                case (int)SituacaoAlunoTipo.EmEspera:
+                    SituacaoExpText.Text = "O aluno está inscrito mas em situação de espera para uma possível oportunidade de matrícula.";
                     break;
-                case 3:
-                    SituacaoExpLabel.Content = "O aluno está matriculado no projeto.";
+                case (int)SituacaoAlunoTipo.Matriculado:
+                    SituacaoExpText.Text = "O aluno está matriculado e apto a participar das oficinas.";
                     break;
-                case 4:
-                    SituacaoExpLabel.Content = "O aluno foi inscrito mas não aprovado.";
+                case (int)SituacaoAlunoTipo.NaoAprovado:
+                    SituacaoExpText.Text = "O aluno foi inscrito mas não foi aprovado.";
                     break;
-                case 5:
-                    SituacaoExpLabel.Content = "O aluno estava matriculado mas desistiu.";
+                case (int)SituacaoAlunoTipo.Desistente:
+                    SituacaoExpText.Text = "O aluno estava matriculado, mas não frequentando e foi considerado desistente";
                     break;
-                default:
-                    SituacaoExpLabel.Content = "O aluno se encontra em outra situação.";
+                case (int)SituacaoAlunoTipo.Exaluno:
+                    SituacaoExpText.Text = "O aluno é um ex-participante do projeto.";
+                    break;
+                case (int)SituacaoAlunoTipo.NaoEspecificado:
+                    SituacaoExpText.Text = "O aluno se encontra em uma situação excepcional e não especificada.";
                     break;
             }
-        }
-
-        private void AlterarHeaderAba()
-        {
-            if (Tab != null)
-            {
-                if (Tab.Header is string)
-                {
-                    Tab.Header = NomeText.Text;
-                }
-                else if (Tab.Header is TabHeaderContentControl)
-                {
-                    var header = Tab.Header as TabHeaderContentControl;
-
-                    if (header != null)
-                    {
-                        header.HeaderText = NomeText.Text;
-                    }
-                }
-            }
-        }
+        }        
 
         private void AbrirNovaImagem()
         {
@@ -420,7 +481,7 @@ namespace Promart.Pages
             }
         }
 
-        private void AbrirCadastroVinculo()
+        private void AbrirVinculo()
         {
             NovoMembroComposicaoWindow novoMembro = new NovoMembroComposicaoWindow();
             var result = novoMembro.ShowDialog();
@@ -434,15 +495,15 @@ namespace Promart.Pages
             }
         }
 
-        private void EditarCadastroVinculo()
+        private void EditarVinculo()
         {
-            if (ComposicaoDataGrid.SelectedIndex != -1)
+            if (ComposicaoDataGrid.SelectedItem != null)
             {
                 AlunoVinculo vinculo = vinculos[ComposicaoDataGrid.SelectedIndex];
 
                 if (vinculo != null)
                 {
-                    NovoMembroComposicaoWindow novoMembro = new NovoMembroComposicaoWindow(vinculo);
+                    NovoMembroComposicaoWindow novoMembro = new(vinculo);
                     novoMembro.ShowDialog();
 
                     ComposicaoDataGrid.ItemsSource = null;
@@ -452,14 +513,44 @@ namespace Promart.Pages
             }
         }
 
-        private void ExcluirCadastroVinculo()
+        private void ExcluirVinculo()
         {
-            if (ComposicaoDataGrid.SelectedIndex != -1)
+            if (ComposicaoDataGrid.SelectedItem != null)
             {
+                AlunoVinculo vinculo = vinculos[ComposicaoDataGrid.SelectedIndex];
+
+                var result = MessageBox.Show($"Deseja realmente excluir {vinculo.NomeFamiliar}?", "Aviso", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.No)
+                    return;
+
                 vinculos.RemoveAt(ComposicaoDataGrid.SelectedIndex);
                 ComposicaoDataGrid.ItemsSource = null;
                 ComposicaoDataGrid.ItemsSource = vinculos;
                 DefinirAlteracaoDados();
+            }
+        }
+
+        private void Imprimir()
+        {
+            PrintDialog printDialog = new PrintDialog();
+
+            AlunoDadosPrintPage cadastroAlunoPage = new AlunoDadosPrintPage(this);
+
+            bool? result = printDialog.ShowDialog();
+
+            if (result == true)
+            {
+                printDialog.PrintVisual(cadastroAlunoPage, "Cadastro do Aluno");
+            }
+        }
+
+        private void ValidarData()
+        {
+            if(NascimentoData.SelectedDate != null && NascimentoData.SelectedDate > DateTime.Now)
+            {
+                MessageBox.Show("A data selecionada é maior do que a data de hoje.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Question);
+                NascimentoData.SelectedDate = null;
             }
         }
 
@@ -523,24 +614,12 @@ namespace Promart.Pages
             {
                 await SqlAccess.DeleteAllAsync<AlunoOficina, Aluno>(Aluno, nameof(Aluno.Id), "IdAluno");
                 await SqlAccess.DeleteAllAsync<AlunoVinculo, Aluno>(Aluno, nameof(Aluno.Id), "IdAluno");
-                await SqlAccess.DeleteAsync(Aluno);                
+                await SqlAccess.DeleteAsync(Aluno);
 
-                MainWindow.Instance?.FecharAbaAtual();
-            }            
+                MainWindow.Instance?.CloseCurrentTab();
+            }
         }
-        
-        private void Imprimir()
-        {
-            PrintDialog printDialog = new PrintDialog();
 
-            AlunoDadosPrintPage cadastroAlunoPage = new AlunoDadosPrintPage(this);
-            
-            bool? result = printDialog.ShowDialog();
 
-            if(result == true)
-            {
-                printDialog.PrintVisual(cadastroAlunoPage, "Cadastro do Aluno");
-            }                
-        }
     }
 }

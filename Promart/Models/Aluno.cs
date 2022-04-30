@@ -7,11 +7,19 @@ namespace Promart.Models
 {
     //TODO: Implementar controle de faltas
 
-
     [Table(name: "Alunos")]
     [Dapper.Contrib.Extensions.Table("Alunos")]
     public class Aluno
     {
+        /// <summary>
+        /// Obtém a menor idade comum dos alunos que iniciam no curso.
+        /// </summary>
+        public static readonly int FaixaEtariaMin = 7;
+        /// <summary>
+        /// Obtém a maior idade comum dos alunos que iniciam no curso.
+        /// </summary>
+        public static readonly int FaixaEtariaMax = 15;
+
         public int Id { get; set; }
         
         //------ Dados Pessoais ------//

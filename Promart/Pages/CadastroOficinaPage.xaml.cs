@@ -31,7 +31,7 @@ namespace Promart.Pages
             AdicionarButton.Click += async (object sender, RoutedEventArgs e) => await Adicionar();
             DadosButton.Click += (object sender, RoutedEventArgs e) => AbrirDados();
             RemoverButton.Click += async (object sender, RoutedEventArgs e) => await Remover();
-            OficinasList.MouseDoubleClick += async (object sender, MouseButtonEventArgs e) => await ModificarOficina();
+            OficinasList.MouseDoubleClick += (object sender, MouseButtonEventArgs e) => AbrirDados();
         }
 
         private async Task Carregar()
