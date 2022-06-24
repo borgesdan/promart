@@ -165,6 +165,18 @@ namespace Promart.Pages
         private bool ValidarDados()
         {
             NomeText.Text = NomeText.Text.Trim();
+            RGText.Text = RGText.Text.Trim();
+            CPFText.Text = CPFText.Text.Trim();
+            CertidaoText.Text = CertidaoText.Text.Trim();
+            NomeResponsavelText.Text = NomeResponsavelText.Text.Trim();
+            Telefone1Text.Text = Telefone1Text.Text.Trim();
+            Telefone2Text.Text = Telefone2Text.Text.Trim();
+            NomeEscolaText.Text = NomeEscolaText.Text.Trim();
+            RuaText.Text = RuaText.Text.Trim();
+            BairroText.Text = BairroText.Text.Trim();
+            NumeroText.Text = NumeroText.Text.Trim();
+            ComplementoText.Text = ComplementoText.Text.Trim();
+            ObservacoesText.Text = ObservacoesText.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(NomeText.Text))
             {
@@ -214,19 +226,6 @@ namespace Promart.Pages
 
             if (result == MessageBoxResult.No)
                 return false;
-
-            RGText.Text = RGText.Text.Trim();
-            CPFText.Text = CPFText.Text.Trim();
-            CertidaoText.Text = CertidaoText.Text.Trim();
-            NomeResponsavelText.Text = NomeResponsavelText.Text.Trim();
-            Telefone1Text.Text = Telefone1Text.Text.Trim();
-            Telefone2Text.Text = Telefone2Text.Text.Trim();
-            NomeEscolaText.Text = NomeEscolaText.Text.Trim();
-            RuaText.Text = RuaText.Text.Trim();
-            BairroText.Text = BairroText.Text.Trim();
-            NumeroText.Text = NumeroText.Text.Trim();
-            ComplementoText.Text = ComplementoText.Text.Trim();
-            ObservacoesText.Text = ObservacoesText.Text.Trim();
 
             return true;
         }

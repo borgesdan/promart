@@ -142,13 +142,17 @@
             </Button>
 
             <GroupBox 
-                Header="Dados Pessoais"
+                
                 Grid.Row="3" Grid.Column="0" 
                 Grid.ColumnSpan="2" Grid.RowSpan="5"
                 Padding="5" 
                 Margin="10,0,10,0" 
                 FontSize="20"
-                BorderThickness="2">
+                BorderThickness="2"
+                BorderBrush="CadetBlue">
+                <GroupBox.Header>
+                    <Label Content="Dados Pessoais" FontFamily="Bahnschrift Condensed" />
+                </GroupBox.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="250" />
@@ -216,12 +220,15 @@
             </GroupBox>
 
             <GroupBox 
-                Header="Família"
                 Grid.Row="8" Grid.Column="0"
                 Grid.ColumnSpan="3" Grid.RowSpan="9"
                 Margin="10,0,10,0" Padding="5"
                 FontSize="20"
-                BorderThickness="2">
+                BorderThickness="2"
+                BorderBrush="CadetBlue">
+                <GroupBox.Header>
+                    <Label Content="Famílias" FontFamily="Bahnschrift Condensed" />
+                </GroupBox.Header>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -452,10 +459,13 @@
             <GroupBox 
                 Grid.Row="17" Grid.Column="0"
                 Grid.ColumnSpan="2" Grid.RowSpan="3"
-                Header="Dados Escolares"
                 Margin="10,0,220,0" Padding="5"
                 FontSize="20"
-                BorderThickness="2">
+                BorderThickness="2"
+                BorderBrush="CadetBlue">
+                <GroupBox.Header>
+                    <Label Content="Dados Escolares" FontFamily="Bahnschrift Condensed" />
+                </GroupBox.Header>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -513,12 +523,15 @@
             </GroupBox>
 
             <GroupBox 
-                Header="Endereço"
                 Grid.Row="17" Grid.Column="1"
                 Grid.ColumnSpan="2" Grid.RowSpan="3"
                 Margin="200,0,10,0" Padding="5"
                 FontSize="20"
-                BorderThickness="2">
+                BorderThickness="2"
+                BorderBrush="CadetBlue">
+                <GroupBox.Header>
+                    <Label Content="Endereço" FontFamily="Bahnschrift Condensed" />
+                </GroupBox.Header>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -593,12 +606,15 @@
             </GroupBox>
 
             <GroupBox 
-                Header="Dados do Projeto"
                 Grid.Row="20" Grid.Column="0"
                 Grid.ColumnSpan="3" Grid.RowSpan="8"
                 Margin="10,0,10,0" Padding="5"
                 FontSize="20" 
-                BorderThickness="2">
+                BorderThickness="2"
+                BorderBrush="CadetBlue">
+                <GroupBox.Header>
+                    <Label Content="Dados do Projeto" FontFamily="Bahnschrift Condensed" />
+                </GroupBox.Header>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -711,8 +727,10 @@
 
             <Button 
                 x:Name="CancelarButton" 
-                Grid.Row="30" Grid.Column="1" Grid.ColumnSpan="2"                    
-                Content="FECHAR" HorizontalAlignment="Right"
+                Content="FECHAR" 
+                Grid.Row="30" Grid.Column="1" 
+                Grid.ColumnSpan="2"                    
+                HorizontalAlignment="Right"
                 Width="200" Margin="0,0, 250,0"
                 FontSize="24"  FontWeight="SemiBold" 
                 Background="DarkRed" Foreground="White" 

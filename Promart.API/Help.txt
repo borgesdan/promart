@@ -1,0 +1,77 @@
+﻿-----:: SINGLETON, SCOPED e TRANSIENT
+
+    Singleton: é criada uma única instância para todas requisições. 
+		Em outras palavras, é criada uma instância a primeira vez que é solicitada e 
+		todas as vezes seguintes a mesma instância é usada (design patter singleton);
+    
+	Scoped: é criada uma única instância por requisição.
+		Ou seja, usando o exemplo de uma aplicação Web, quando recebe uma nova requisição,
+		por exemplo, um click num botão do outro lado do navegador, é criada uma instância,
+		onde o escopo é essa requisição. Então se for necessária a dependência multiplas vezes
+		na mesma requisição a mesma instância será usada. 
+		Seria como um "Singleton para uma requisição";
+    
+	Transient: sempre é criada uma nova instância cada vez que for necessário,
+		independentede da requisição, basicamente new XXX cada vez que for necessário.
+
+
+-----::		MIGRATIONS
+
+Package Manager Console
+	-Criar migração
+	add-migration nomeDaMigracao [options]
+
+	-Aplicar migração
+	update-database [options]
+
+	-Remover migração
+	remove-migration
+
+	Update-Database -Migration:0
+
+Ferramenta NET CLI
+	dotnet tool install --global dotnet-ef
+
+	-Criar migração
+	dotnet ef migrations add nomeDaMigracao [options]
+
+	-Aplicar migração
+	dotnet ef database update [options]
+
+	-Remover migração
+	dotnet ef migrations remove
+
+
+-----::		VIEWBAG, VIEWDATA, VIEWTEMP
+
+	ViewData
+		ViewData["chave"] = valor;
+		Tempo de vida request
+
+	ViewBag
+		 ViewBag.Valor = valor;
+		 Tempo de vida request
+
+	ViewTemp
+		  TempData["chave"] = valor;
+		  Recupera o valor somente uma vez
+
+----::		PARTIAL VIEW
+
+	<partial name="_PartialName" for="Model" />
+		Partial na pasta Shared
+
+	<partial name="~/Pages/_PartialName.cshtml" for="Model" />
+		Partial na mesma pasta do arquivo
+
+	@await Html.PartialAsync("_PartialName")
+	@await Html.RenderPartialAsync("_PartialName")
+
+		com for="Model" a partial recebe uma cópia do dicionário Viewdata do pai,
+		que não são perstitidas na view pai e são perdidas quando a view retorna
+
+-----::		SESSÃO
+	Startup
+		Caches de memória IDributedCache
+		Chamada a AddSession em ConfigureServices()
+		Chamada UseSession em Configure()

@@ -27,9 +27,7 @@ namespace Promart.Pages
     {
         bool dadosCarregados = false;
         bool paginaCarregada = false;
-        bool dadosAlterados = false;
         public Voluntario Voluntario { get; private set; }
-        public TabItem? Tab { get; set; }
 
         public string TitleHeader { get; set; } = "Cadastro de Voluntário";
         public bool CanClose { get; private set; } = true;
@@ -45,12 +43,21 @@ namespace Promart.Pages
             Voluntario = voluntario;
             SexoCombo.ItemsSource = ComboBoxTipos.TipoSexoNumerado;
 
+            NomeText.Text = Voluntario.NomeCompleto;
+            NomeText.Focus();
+            NomeText.CaretIndex = NomeText.Text != null ? NomeText.Text.Length : 0;
+
+            DefinirEventos();
+        }
+
+        private void DefinirEventos()
+        {
             //Eventos necessários dos controles
             NascimentoData.SelectedDateChanged += (s, e) => ExibirIdade();
-            CancelarButton.Click += CancelarButton_Click;
+            CancelarButton.Click += (object sender, RoutedEventArgs e) => MainWindow.CloseTab();
             ConfirmarButton.Click += async (s, e) => await ConfirmarPagina();
             AbrirImagemButton.Click += (object sender, RoutedEventArgs e) => AbrirNovaImagem();
-            NomeText.TextChanged += (object sender, TextChangedEventArgs e) => AlterarHeaderAba();
+            NomeText.TextChanged += (object sender, TextChangedEventArgs e) => MainWindow.SetHeaderTab(NomeText.Text);
             ExcluirButton.Click += async (object sender, RoutedEventArgs e) => await ExcluirCadastro();
 
             //Eventos para confirmar alterações de dados ao sair da tela
@@ -70,10 +77,6 @@ namespace Promart.Pages
             ObservacoesText.TextChanged += (object sender, TextChangedEventArgs e) => DefinirAlteracaoDados();
             NascimentoData.SelectedDateChanged += (object? sender, SelectionChangedEventArgs e) => DefinirAlteracaoDados();
             FotoImage.Changed += (object? sender, EventArgs e) => DefinirAlteracaoDados();
-
-            NomeText.Text = Voluntario.NomeCompleto;
-            NomeText.Focus();
-            NomeText.CaretIndex = NomeText.Text != null ? NomeText.Text.Length : 0;
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -119,54 +122,70 @@ namespace Promart.Pages
 
             ConfirmarButton.IsEnabled = false;
             ExcluirButton.IsEnabled = true;
-            dadosAlterados = false;
+            CanClose = true;
 
         }
 
         private void DefinirAlteracaoDados()
         {
-            dadosAlterados = true;
+            CanClose = false;
             ConfirmarButton.IsEnabled = true;
         }
-
-        private void CancelarButton_Click(object sender, RoutedEventArgs e)
+        
+        private bool ValidarDados()
         {
-            if (dadosAlterados)
-            {
-                if (!Helper.Controles.DadosAlteradosAviso())
-                    return;
-            }
+            NomeText.Text = NomeText.Text.Trim();
+            ProfissaoText.Text = ProfissaoText.Text.Trim();
+            RGText.Text = RGText.Text.Trim();
+            CPFText.Text = CPFText.Text.Trim();
+            Telefone1Text.Text = Telefone1Text.Text.Trim();
+            Telefone2Text.Text = Telefone2Text.Text.Trim();
+            EmailText.Text = EmailText.Text.Trim();
+            RuaText.Text = RuaText.Text.Trim();
+            BairroText.Text = BairroText.Text.Trim();
+            NumeroText.Text = NumeroText.Text.Trim();
+            ComplementoText.Text = ComplementoText.Text.Trim();
+            CidadeText.Text = CidadeText.Text.Trim();
+            CEPText.Text = CEPText.Text.Trim();
+            ObservacoesText.Text = ObservacoesText.Text.Trim();
+            EscolaridadeText.Text = EscolaridadeText.Text.Trim();
 
-            MainWindow.Instance?.CloseCurrentTab();
+            if (string.IsNullOrWhiteSpace(NomeText.Text))
+            {
+                MessageBox.Show("Digite o nome o voluntário antes de confirmar os dados.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return false;
+            }
+            return true;
+        }
+
+        private void AtribuirDados()
+        {
+            Voluntario.NomeCompleto = NomeText.Text;
+            Voluntario.DataNascimento = NascimentoData.SelectedDate;
+            Voluntario.Sexo = SexoCombo.SelectedIndex;
+            Voluntario.Profissao = ProfissaoText.Text;
+            Voluntario.RG = RGText.Text;
+            Voluntario.CPF = CPFText.Text;
+            Voluntario.Contato1 = Telefone1Text.Text;
+            Voluntario.Contato2 = Telefone2Text.Text;
+            Voluntario.Email = EmailText.Text;
+            Voluntario.EnderecoRua = RuaText.Text;
+            Voluntario.EnderecoBairro = BairroText.Text;
+            Voluntario.EnderecoNumero = NumeroText.Text;
+            Voluntario.EnderecoComplemento = ComplementoText.Text;
+            Voluntario.EnderecoCidade = CidadeText.Text;
+            Voluntario.EnderecoEstado = "Bahia";
+            Voluntario.EnderecoCEP = CEPText.Text;
+            Voluntario.Observacoes = ObservacoesText.Text;
+            Voluntario.Escolaridade = EscolaridadeText.Text;
         }
 
         private async Task ConfirmarPagina()
         {
-            Voluntario.NomeCompleto = NomeText.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(Voluntario.NomeCompleto))
-            {
-                MessageBox.Show("Digite o nome o voluntário antes de confirmar os dados.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            if (!ValidarDados())
                 return;
-            }
 
-            Voluntario.DataNascimento = NascimentoData.SelectedDate;
-            Voluntario.Sexo = SexoCombo.SelectedIndex;
-            Voluntario.Profissao = ProfissaoText.Text.Trim();
-            Voluntario.RG = RGText.Text.Trim();
-            Voluntario.CPF = CPFText.Text.Trim();
-            Voluntario.Contato1 = Telefone1Text.Text.Trim();
-            Voluntario.Contato2 = Telefone2Text.Text.Trim();
-            Voluntario.Email = EmailText.Text.Trim();
-            Voluntario.EnderecoRua = RuaText.Text.Trim();
-            Voluntario.EnderecoBairro = BairroText.Text.Trim();
-            Voluntario.EnderecoNumero = NumeroText.Text.Trim();
-            Voluntario.EnderecoComplemento = ComplementoText.Text.Trim();
-            Voluntario.EnderecoCidade = CidadeText.Text.Trim();
-            Voluntario.EnderecoEstado = "Bahia";
-            Voluntario.EnderecoCEP = CEPText.Text.Trim();
-            Voluntario.Observacoes = ObservacoesText.Text.Trim();            
-            Voluntario.Escolaridade = EscolaridadeText.Text.Trim();
+            AtribuirDados();
 
             if (Voluntario.Id == 0)
             {
@@ -179,7 +198,7 @@ namespace Promart.Pages
                     ConfirmarButton.IsEnabled = false;
                     ExcluirButton.IsEnabled = true;
                     Voluntario.DataCadastro = DateTime.Now;
-                    dadosAlterados = false;
+                    CanClose = true;
                     MessageBox.Show("O cadastro do voluntário foi realizado.", "Voluntário Cadastrado", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -192,7 +211,7 @@ namespace Promart.Pages
                     await InserirVoluntarioOficinaAsync(true);
                     ConfirmarButton.IsEnabled = false;
                     ExcluirButton.IsEnabled = true;
-                    dadosAlterados = false;
+                    CanClose = true;
                     MessageBox.Show("O cadastro do voluntário foi atualizado.", "Voluntário Atualizado", MessageBoxButton.OK, MessageBoxImage.Information);
                 }                
             }
@@ -256,27 +275,7 @@ namespace Promart.Pages
             {
                 IdadeLabel.Visibility = Visibility.Hidden;
             }
-        }
-
-        private void AlterarHeaderAba()
-        {
-            if (Tab != null)
-            {
-                if (Tab.Header is string)
-                {
-                    Tab.Header = NomeText.Text;
-                }
-                else if (Tab.Header is TabHeaderContentControl)
-                {
-                    var header = Tab.Header as TabHeaderContentControl;
-
-                    if (header != null)
-                    {
-                        header.HeaderText = NomeText.Text;
-                    }
-                }
-            }
-        }
+        }        
 
         private void AbrirNovaImagem()
         {

@@ -179,8 +179,8 @@ namespace Promart
 
         private void CadastrarVoluntario()
         {
-            CadastroVoluntarioPage page = new CadastroVoluntarioPage(new Voluntario());
-            page.Tab = AbrirNovaAba("Novo Voluntário", page);
+            CadastroVoluntarioPage page = new();
+            AbrirNovaAba("Novo Voluntário", page);
         }
 
         private void AbrirOficinas()

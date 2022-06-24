@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Promart.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="1000" d:DesignWidth="1280"
+      d:DesignHeight="1200" d:DesignWidth="1280"
       Title="CadastroVoluntarioPage" Loaded="Page_Loaded" >
 
     <Grid Background="White">
@@ -19,9 +19,6 @@
             <ColumnDefinition Width="1200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-
-        <Label x:Name="TituloPaginaLabel" Grid.Row="0" Grid.Column="1" Content="CADASTRO DO VOLUNTÁRIO"
-               FontSize="24" FontWeight="Bold" />
 
         <Grid Grid.Row="1" Grid.Column="1" >
             <Grid.ColumnDefinitions>
@@ -49,30 +46,72 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
             </Grid.RowDefinitions>
 
-            <Ellipse x:Name="FotoElipse" Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" Width="200">
+            <Label 
+                x:Name="TituloPaginaLabel" 
+                Grid.Row="1" Grid.Column="0"
+                Content="CADASTRO DO VOLUNTÁRIO"
+                FontSize="24" FontWeight="Bold" />
+
+            <ToolBar Grid.ColumnSpan="3">
+                <Button 
+                    Name="ImprimirButton"
+                    Width="40"
+                    VerticalAlignment="Stretch"
+                    ToolTip="Imprimir">
+                    <Image Source="/assets/images/icons/print.png" />
+                </Button>
+            </ToolBar>
+
+            <Ellipse 
+                x:Name="FotoElipse"
+                Grid.Row="3" Grid.Column="3" Grid.RowSpan="4" 
+                Width="200">
                 <Ellipse.Fill>
-                    <ImageBrush x:Name="FotoImage" ImageSource="/assets/images/avatars/png-128/asian-128x128-1410051.png" />
+                    <ImageBrush 
+                        x:Name="FotoImage"
+                        ImageSource="/assets/images/avatars/png-128/teacher-128x128-1409980.png" />
                 </Ellipse.Fill>
             </Ellipse>
 
-            <Button x:Name="AbrirImagemButton"  Grid.Row="4" Grid.Column="3"
-                        Width="60" Margin="-80,0,0,0"
-                    Background="Transparent" BorderBrush="Transparent"
-                    ToolTip="Abrir imagem do computador">
+            <Button 
+                x:Name="AbrirImagemButton"
+                Grid.Row="7" Grid.Column="3"
+                Width="60" 
+                Margin="-80,0,0,0"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                ToolTip="Abrir imagem do computador">
                 <Image Source="/assets/images/icons/folder.png" />
             </Button>
-            <Button Grid.Row="4" Grid.Column="3" Margin="80,0,0,0" Width="60"
-                    Background="Transparent" BorderBrush="Transparent"
-                    ToolTip="Abrir câmera"  IsEnabled="False">
-                <Image Source="/assets/images/icons/photo-camera.png" Opacity="0.5"/>
+            <Button 
+                Grid.Row="7" Grid.Column="3"
+                Margin="80,0,0,0" Width="60"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                ToolTip="Abrir câmera"
+                IsEnabled="False">
+                <Image 
+                    Source="/assets/images/icons/photo-camera.png"
+                    Opacity="0.5"/>
             </Button>
 
 
-            <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="6"
-                      Margin="10,0,10,0" Padding="5" Header="Dados Pessoais"
-                      FontSize="20"  >
+            <GroupBox 
+                Grid.Row="3" Grid.Column="0"
+                Grid.ColumnSpan="2" Grid.RowSpan="6"
+                Margin="10,0,10,0" Padding="5"
+                FontSize="20"  
+                BorderThickness="2"
+                BorderBrush="CadetBlue">
+                <GroupBox.Header>
+                    <Label Content="Dados Pessoais" FontFamily="Bahnschrift Condensed" />
+                </GroupBox.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="250" />
@@ -89,71 +128,248 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="0" Content="Nome Completo:" 
-                           FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Right" />
-                    <TextBox x:Name="NomeText" Grid.Row="0" Grid.Column="1"
-                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                             TextAlignment="Left"  FontSize="20" FontWeight="Bold" 
-                             MaxLength="148" />
+                    <Label
+                        Grid.Row="0" Grid.Column="0"
+                        Content="Nome Completo:" 
+                        FontSize="16" FontWeight="SemiBold"
+                        HorizontalAlignment="Right" />
+                    <TextBox
+                        x:Name="NomeText"
+                        Grid.Row="0" Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        VerticalContentAlignment="Center"
+                        TextAlignment="Left"
+                        FontSize="20" FontWeight="Bold" 
+                        MaxLength="148" />
 
-                    <Label Grid.Row="1" Grid.Column="0" Content="Data Nascimento:"
-                           FontSize="16" HorizontalAlignment="Right" FontWeight="SemiBold" />
-                    <DatePicker x:Name="NascimentoData" Grid.Row="1" Grid.Column="1"
-                                Width="220" HorizontalAlignment="Left" 
-                                FontSize="16"  />
-                    <Label x:Name="IdadeLabel" Grid.Row="1" Grid.Column="1" Content="10 anos"
-                           FontSize="14" Visibility="Hidden"
-                           HorizontalAlignment="Left" Margin="230,0,0,0" />
+                    <Label 
+                        Grid.Row="1" Grid.Column="0"
+                        Content="Data Nascimento:"
+                        FontSize="16" HorizontalAlignment="Right"
+                        FontWeight="SemiBold" />
+                    <DatePicker 
+                        x:Name="NascimentoData"
+                        Grid.Row="1" Grid.Column="1"
+                        Width="220"
+                        HorizontalAlignment="Left" 
+                        FontSize="16"  />
+                    <Label 
+                        x:Name="IdadeLabel"
+                        Grid.Row="1" Grid.Column="1"
+                        Content="10 anos"
+                        FontSize="14"
+                        Visibility="Hidden"
+                        HorizontalAlignment="Left"
+                        Margin="230,0,0,0" />
 
-                    <Label Grid.Row="2" Grid.Column="0" Content="Sexo:"
-                           FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Right" />
-                    <ComboBox x:Name="SexoCombo" Grid.Row="2" Grid.Column="1"
-                              FontSize="16" Width="300" HorizontalAlignment="Left" SelectedIndex="0">
+                    <Label 
+                        Grid.Row="2" Grid.Column="0"
+                        Content="Sexo:"
+                        FontSize="16" FontWeight="SemiBold"
+                        HorizontalAlignment="Right" />
+                    <ComboBox 
+                        x:Name="SexoCombo"
+                        Grid.Row="2" Grid.Column="1"
+                        FontSize="16" 
+                        Width="300" 
+                        HorizontalAlignment="Left"
+                        SelectedIndex="0">
                     </ComboBox>
 
-                    <Label Grid.Row="3" Grid.Column="0" Content="RG:"
+                    <Label 
+                        Grid.Row="3" Grid.Column="0"
+                        Content="RG:"
+                        FontSize="16" FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+                    <TextBox 
+                        x:Name="RGText"
+                        Grid.Row="3" Grid.Column="1"
+                        HorizontalAlignment="Left"
+                        MinWidth="300" MaxWidth="300"
+                        VerticalContentAlignment="Center"
+                        TextAlignment="Left"
+                        VerticalAlignment="Stretch"
+                        FontSize="16" MaxLength="20"/>
+
+                    <Label
+                        Grid.Row="4" Grid.Column="0"
+                        Content="CPF:"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Right" />
+                    <TextBox 
+                        x:Name="CPFText"
+                        Grid.Row="4" Grid.Column="1"
+                        Grid.ColumnSpan="3"
+                        MaxWidth="300"
+                        MinWidth="300"
+                        TextAlignment="Left"                        
+                        HorizontalAlignment="Left"                        
+                        VerticalContentAlignment="Center"
+                        FontSize="16" MaxLength="14" />
+
+                    <Label 
+                        Grid.Row="6" Grid.Column="0"
+                        Content="Profissão:"
+                        FontSize="16"
+                        FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+                    <TextBox 
+                        x:Name="ProfissaoText"
+                        Grid.Row="6" Grid.Column="1"
+                        Grid.ColumnSpan="3" 
+                        HorizontalAlignment="Left" 
+                        MinWidth="300" 
+                        MaxWidth="300"
+                        TextAlignment="Left"
+                        VerticalAlignment="Stretch"
+                        VerticalContentAlignment="Center"
+                        FontSize="16" MaxLength="42" />
+
+                    <Label 
+                        Grid.Row="7" Grid.Column="0"
+                        Content="Escolaridade:"
+                        FontSize="16"
+                        FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+                    <TextBox
+                        x:Name="EscolaridadeText"
+                        Grid.Row="7" Grid.Column="1"
+                        Grid.ColumnSpan="3"
+                        HorizontalAlignment="Left" 
+                        MinWidth="300"
+                        MaxWidth="300"
+                        TextAlignment="Left"
+                        VerticalAlignment="Stretch"
+                        VerticalContentAlignment="Center"
+                        FontSize="16" MaxLength="42" />
+                </Grid>
+            </GroupBox>           
+
+            <GroupBox 
+                Grid.Row="9" Grid.Column="0"
+                Grid.ColumnSpan="2" Grid.RowSpan="4"
+                Margin="10,0,10,0" Padding="5"
+                FontSize="20"  
+                BorderThickness="2"
+                BorderBrush="CadetBlue">
+                <GroupBox.Header>
+                    <Label Content="Endereço" FontFamily="Bahnschrift Condensed" />
+                </GroupBox.Header>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+
+                    </Grid.RowDefinitions>
+
+                    <Label 
+                        Grid.Row="0" Grid.Column="0"
+                        Content="Rua:" 
+                        FontSize="16" FontWeight="SemiBold"
+                        HorizontalAlignment="Right" />
+                    <TextBox 
+                        x:Name="RuaText"
+                        Grid.Row="0" Grid.Column="1"
+                        Grid.ColumnSpan="3"
+                        HorizontalAlignment="Stretch"
+                        TextAlignment="Left" 
+                        VerticalContentAlignment="Center"
+                        FontSize="16"  />
+
+                    <Label Grid.Row="1" Grid.Column="0"
+                           Content="Bairro:" 
                            FontSize="16" FontWeight="SemiBold" 
                            HorizontalAlignment="Right" />
-                    <TextBox x:Name="RGText" Grid.Row="3" Grid.Column="1"
-                             HorizontalAlignment="Left" MinWidth="300" MaxWidth="300"
-                             VerticalContentAlignment="Center" TextAlignment="Left" VerticalAlignment="Stretch"
-                             FontSize="16" MaxLength="20"/>
 
-                    <Label Grid.Row="4" Grid.Column="0" Content="CPF:"
-                           FontSize="16"  FontWeight="SemiBold"
-                           HorizontalAlignment="Right" />
-                    <TextBox x:Name="CPFText" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" MaxWidth="300"
-                             HorizontalAlignment="Left" MinWidth="300" TextAlignment="Left" VerticalAlignment="Stretch"
-                             VerticalContentAlignment="Center"
-                             FontSize="16" MaxLength="14" />
+                    <TextBox
+                        x:Name="BairroText"
+                        Grid.Row="1" Grid.Column="1"
+                        Grid.ColumnSpan="2" 
+                        HorizontalAlignment="Stretch" 
+                        VerticalContentAlignment="Center"
+                        FontSize="16"  >
+                    </TextBox>
 
-                    <Label Grid.Row="6" Grid.Column="0" Content="Profissão:"
-                           FontSize="16"  FontWeight="SemiBold" 
+                    <Label 
+                        Grid.Row="2" Grid.Column="0"
+                        Content="Número:" 
+                        FontSize="16" FontWeight="SemiBold" 
+                        HorizontalAlignment="Right" />
+
+                    <TextBox 
+                        x:Name="NumeroText"
+                        Grid.Row="2" Grid.Column="1"
+                        Width="100"
+                        MaxWidth="100"
+                        HorizontalAlignment="Left"
+                        TextAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        FontSize="16"  />
+
+                    <Label 
+                        Grid.Row="2" Grid.Column="2"
+                        Content="Complemento:" 
+                        FontSize="16" FontWeight="SemiBold"   
+                        HorizontalAlignment="Right" />
+
+                    <TextBox 
+                        x:Name="ComplementoText"
+                        Grid.Row="2" Grid.Column="3"
+                        HorizontalAlignment="Stretch"
+                        TextAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        FontSize="16"  />
+
+                    <Label Grid.Row="3" Grid.Column="0" Content="Cidade:" 
+                           FontSize="16" FontWeight="SemiBold"
                            HorizontalAlignment="Right" />
-                    <TextBox x:Name="ProfissaoText" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" 
-                             HorizontalAlignment="Left" 
-                             MinWidth="300" 
-                             MaxWidth="300"
-                             TextAlignment="Left" VerticalAlignment="Stretch"
-                             VerticalContentAlignment="Center"
-                             FontSize="16" MaxLength="42" />
-                    
-                    <Label Grid.Row="7" Grid.Column="0" Content="Escolaridade:"
-                           FontSize="16"  FontWeight="SemiBold" 
-                           HorizontalAlignment="Right" />
-                    <TextBox x:Name="EscolaridadeText"
-                             Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3"
-                             HorizontalAlignment="Left" 
-                             MinWidth="300" MaxWidth="300"
-                             TextAlignment="Left" VerticalAlignment="Stretch"
-                             VerticalContentAlignment="Center"
-                             FontSize="16" MaxLength="42" />
+
+                    <TextBox 
+                        x:Name="CidadeText"
+                        Grid.Row="3" Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        TextAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        FontSize="16"  />
+
+                    <Label 
+                        Grid.Row="3"
+                        Grid.Column="2"
+                        Content="CEP:" 
+                        FontSize="16" FontWeight="SemiBold"   
+                        HorizontalAlignment="Right" />
+
+                    <TextBox
+                        x:Name="CEPText"
+                        Grid.Row="3" Grid.Column="3"
+                        HorizontalAlignment="Stretch"
+                        TextAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        FontSize="16"  />
                 </Grid>
             </GroupBox>
 
-            <GroupBox Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="4"
-                       Margin="10,0,10,0" Padding="5" Header="Contatos"
-                      FontSize="20"  >
+            <GroupBox 
+                Grid.Row="9" Grid.Column="3"
+                Grid.ColumnSpan="2" Grid.RowSpan="4"
+                Margin="10,0,10,0"  Padding="0,20,10,20"
+                FontSize="20" 
+                BorderThickness="2"
+                BorderBrush="CadetBlue">
+                <GroupBox.Header>
+                    <Label Content="Contatos" FontFamily="Bahnschrift Condensed" />
+                </GroupBox.Header>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -164,114 +380,67 @@
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Row="1" Grid.Column="0" Content="Telefone 1:" 
-                           FontSize="16"   
-                           HorizontalAlignment="Right" />
+                    <Label 
+                        Grid.Row="0" Grid.Column="0"
+                        Content="Telefone 1:" 
+                        FontSize="16" FontWeight="SemiBold"   
+                        HorizontalAlignment="Right"
+                        VerticalContentAlignment="Center" />
 
-                    <TextBox x:Name="Telefone1Text" Grid.Row="1" Grid.Column="1" 
-                             HorizontalAlignment="Stretch"
-                             TextAlignment="Left"
-                             FontSize="15" Margin="0,0,50,0" />
+                    <TextBox 
+                        x:Name="Telefone1Text"
+                        Grid.Row="0" Grid.Column="1" 
+                        HorizontalAlignment="Stretch"
+                        TextAlignment="Left"                             
+                        VerticalContentAlignment="Center"
+                        FontSize="16"  />
 
-                    <Label Grid.Row="2" Grid.Column="0" Content="Telefone 2:" 
-                           FontSize="16"   
-                           HorizontalAlignment="Right" />
+                    <Label
+                        Grid.Row="1" Grid.Column="0"
+                        Content="Telefone 2:" 
+                        FontSize="16" FontWeight="SemiBold"   
+                        HorizontalAlignment="Right"
+                        VerticalContentAlignment="Center" />
 
-                    <TextBox x:Name="Telefone2Text" Grid.Row="2" Grid.Column="1"
-                             HorizontalAlignment="Stretch"
-                             TextAlignment="Left"
-                             FontSize="15" Margin="0,0,50,0"  />
+                    <TextBox 
+                        x:Name="Telefone2Text" 
+                        Grid.Row="1" Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        TextAlignment="Left"                             
+                        VerticalContentAlignment="Center"
+                        FontSize="16"  />
 
-                    <Label Grid.Row="3" Grid.Column="0" Content="Email:" 
-                           FontSize="16"   
-                           HorizontalAlignment="Right" />
+                    <Label 
+                        Grid.Row="2" Grid.Column="0" 
+                        Content="Email:" 
+                        FontSize="16" FontWeight="SemiBold"   
+                        HorizontalAlignment="Right"
+                        VerticalContentAlignment="Center" />
 
-                    <TextBox x:Name="EmailText" Grid.Row="3" Grid.Column="1"
-                             HorizontalAlignment="Stretch" TextAlignment="Left"
-                             FontSize="15"  />
+                    <TextBox 
+                        x:Name="EmailText" 
+                        Grid.Row="2" Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        TextAlignment="Left"                             
+                        VerticalContentAlignment="Center"
+                        FontSize="16"  />
 
                 </Grid>
             </GroupBox>
-
-            <GroupBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4"
-                       Margin="10,0,10,0" Padding="5" Header="Endereço"
-                      FontSize="20"  >
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        
-                    </Grid.RowDefinitions>
-
-                    <Label Grid.Row="0" Grid.Column="0" Content="Rua:" 
-                           FontSize="16"
-                           HorizontalAlignment="Right" />
-                    <TextBox x:Name="RuaText" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"
-                             HorizontalAlignment="Stretch" TextAlignment="Left" 
-                            
-                             FontSize="15"  />
-
-                    <Label Grid.Row="1" Grid.Column="0" Content="Bairro:" 
-                           FontSize="16" 
-                           HorizontalAlignment="Right" />
-
-                    <TextBox x:Name="BairroText" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" 
-                          HorizontalAlignment="Stretch" FontSize="15"  >
-                    </TextBox>
-
-                    <Label Grid.Row="2" Grid.Column="0" Content="Número:" 
-                           FontSize="16" 
-                           HorizontalAlignment="Right" />
-
-                    <TextBox x:Name="NumeroText"  Grid.Row="2" Grid.Column="1" Width="100"
-                             HorizontalAlignment="Left" TextAlignment="Left"
-                             FontSize="15"  />
-
-                    <Label Grid.Row="2" Grid.Column="2" Content="Complemento:" 
-                           FontSize="16"   
-                           HorizontalAlignment="Right" />
-
-                    <TextBox x:Name="ComplementoText" Grid.Row="2" Grid.Column="3"
-                             HorizontalAlignment="Stretch" TextAlignment="Left"
-                             FontSize="15"  />
-
-                    <Label Grid.Row="3" Grid.Column="0" Content="Cidade:" 
-                           FontSize="16"
-                           HorizontalAlignment="Right" />
-
-                    <TextBox x:Name="CidadeText" Grid.Row="3" Grid.Column="1"
-                             HorizontalAlignment="Stretch"
-                             TextAlignment="Left"
-                             FontSize="15"  />
-
-                    <Label Grid.Row="3" Grid.Column="2" Content="CEP:" 
-                           FontSize="16"   
-                           HorizontalAlignment="Right" />
-
-                    <TextBox x:Name="CEPText" Grid.Row="3" Grid.Column="3"
-                             HorizontalAlignment="Stretch"
-                             TextAlignment="Left"
-                             FontSize="15"  />
-                </Grid>
-            </GroupBox>
-
-            <GroupBox Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="6"
-                       Margin="10,0,10,0" Padding="5" Header="Dados do Projeto"
-                      FontSize="20"  >
-
+            
+            <GroupBox 
+                Grid.Row="13" Grid.Column="0"
+                Grid.ColumnSpan="3" Grid.RowSpan="6"
+                Margin="10,0,10,0"
+                Padding="5" 
+                FontSize="20"
+                BorderThickness="2"
+                BorderBrush="CadetBlue">
+                <GroupBox.Header>
+                    <Label Content="Dados do Projeto" FontFamily="Bahnschrift Condensed" />
+                </GroupBox.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150" />
@@ -291,29 +460,40 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Oficinas Lecionadas:" 
-                           FontSize="16"   
-                           Margin="20,0" />
-                    <ListBox x:Name="OficinasList" Grid.Row="1" Grid.Column="0" Grid.RowSpan="7" Grid.ColumnSpan="2"
-                             Margin="20,0"
-                             FontSize="15"  >
+                    <Label
+                        Grid.Row="0" Grid.Column="0"
+                        Grid.ColumnSpan="2" 
+                        Content="Oficinas Lecionadas:" 
+                        FontSize="16" FontWeight="SemiBold"   
+                        Margin="20,0" />
+                    <ListBox 
+                        x:Name="OficinasList"
+                        Grid.Row="1" Grid.Column="0"
+                        Grid.RowSpan="7" Grid.ColumnSpan="2"
+                        Margin="20,0"
+                        FontSize="16"  >
                     </ListBox>
-                    <Label Grid.Row="0" Grid.Column="2" Content="Observações:" 
-                           FontSize="16"   Margin="10,0,0,0"/>
+                    <Label
+                        Grid.Row="0" Grid.Column="2"
+                        Content="Observações:" 
+                        FontSize="16" FontWeight="SemiBold"
+                        Margin="10,0,0,0"/>
 
-                    <TextBox x:Name="ObservacoesText" Grid.Row="1" Grid.Column="2" Grid.RowSpan="7" Grid.ColumnSpan="2"
-                               Margin="10,0,10,0" FontSize="16"  
-                             AcceptsReturn="True" TextWrapping="WrapWithOverflow"/>
-
-
+                    <TextBox 
+                        x:Name="ObservacoesText"
+                        Grid.Row="1" Grid.Column="2"
+                        Grid.RowSpan="7" Grid.ColumnSpan="2"
+                        Margin="10,0,10,0" FontSize="16"  
+                        AcceptsReturn="True" 
+                        TextWrapping="WrapWithOverflow"/>
                 </Grid>
             </GroupBox>
 
             <Button 
                 x:Name="ConfirmarButton"
-                Grid.Row="17" Grid.Column="2"
+                Grid.Row="20" Grid.Column="2"
                 Content="CONFIRMAR"
-                HorizontalAlignment="Right"
+                HorizontalAlignment="Right" 
                 Width="200" Margin="0,0,20,0"
                 FontSize="24"  FontWeight="SemiBold"
                 Background="#FF0087FD" Foreground="White"
@@ -322,20 +502,19 @@
 
             <Button 
                 x:Name="CancelarButton"
-                Grid.Row="17" Grid.Column="1"
+                Grid.Row="20" Grid.Column="1"
                 Grid.ColumnSpan="2"
-                Content="FECHAR" 
+                Content="FECHAR"
                 HorizontalAlignment="Right"
-                Width="200" 
-                Margin="0,0, 250,0"
+                Width="200" Margin="0,0, 250,0"
                 FontSize="24"  FontWeight="SemiBold" 
                 Background="DarkRed" Foreground="White" 
                 BorderBrush="Black" BorderThickness="4"
                 FontFamily="Bahnschrift Condensed"/>
-            
+
             <Button 
                 x:Name="ExcluirButton" 
-                Grid.Row="17" Grid.Column="0"
+                Grid.Row="20" Grid.Column="0"
                 Content="EXCLUIR"
                 HorizontalAlignment="Left"
                 IsEnabled="False"
