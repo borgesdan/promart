@@ -75,3 +75,13 @@ Ferramenta NET CLI
 		Caches de memória IDributedCache
 		Chamada a AddSession em ConfigureServices()
 		Chamada UseSession em Configure()
+
+-----::		POST	
+	Retornar 
+		CreatedAtRouteResult("NomeDaRotaGet", new { id = obj.ItemId }, obj);
+
+
+-----::		PUT
+	Retornar 
+		200 sucesso
+		204 no content

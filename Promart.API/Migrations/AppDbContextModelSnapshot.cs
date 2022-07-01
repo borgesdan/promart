@@ -77,6 +77,10 @@ namespace Promart.API.Migrations
                     b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Allergy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2");
 
@@ -223,7 +227,7 @@ namespace Promart.API.Migrations
                     b.ToTable("StudentRelationship");
                 });
 
-            modelBuilder.Entity("Promart.API.Models.Voluntary", b =>
+            modelBuilder.Entity("Promart.API.Models.Volunteer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -354,19 +358,19 @@ namespace Promart.API.Migrations
                     b.ToTable("StudentWorkshop");
                 });
 
-            modelBuilder.Entity("VoluntaryWorkshop", b =>
+            modelBuilder.Entity("VolunteerWorkshop", b =>
                 {
-                    b.Property<int>("VoluntariesId")
+                    b.Property<int>("VolunteersId")
                         .HasColumnType("int");
 
                     b.Property<int>("WorkshopsId")
                         .HasColumnType("int");
 
-                    b.HasKey("VoluntariesId", "WorkshopsId");
+                    b.HasKey("VolunteersId", "WorkshopsId");
 
                     b.HasIndex("WorkshopsId");
 
-                    b.ToTable("VoluntaryWorkshop");
+                    b.ToTable("VolunteerWorkshop");
                 });
 
             modelBuilder.Entity("Promart.API.Models.Student", b =>
@@ -387,7 +391,7 @@ namespace Promart.API.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("Promart.API.Models.Voluntary", b =>
+            modelBuilder.Entity("Promart.API.Models.Volunteer", b =>
                 {
                     b.HasOne("Promart.API.Models.Address", "Address")
                         .WithMany("Volunteers")
@@ -411,11 +415,11 @@ namespace Promart.API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("VoluntaryWorkshop", b =>
+            modelBuilder.Entity("VolunteerWorkshop", b =>
                 {
-                    b.HasOne("Promart.API.Models.Voluntary", null)
+                    b.HasOne("Promart.API.Models.Volunteer", null)
                         .WithMany()
-                        .HasForeignKey("VoluntariesId")
+                        .HasForeignKey("VolunteersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

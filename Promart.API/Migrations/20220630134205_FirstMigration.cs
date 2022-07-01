@@ -175,23 +175,23 @@ namespace Promart.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "VoluntaryWorkshop",
+                name: "VolunteerWorkshop",
                 columns: table => new
                 {
-                    VoluntariesId = table.Column<int>(type: "int", nullable: false),
+                    VolunteersId = table.Column<int>(type: "int", nullable: false),
                     WorkshopsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_VoluntaryWorkshop", x => new { x.VoluntariesId, x.WorkshopsId });
+                    table.PrimaryKey("PK_VolunteerWorkshop", x => new { x.VolunteersId, x.WorkshopsId });
                     table.ForeignKey(
-                        name: "FK_VoluntaryWorkshop_Volunteers_VoluntariesId",
-                        column: x => x.VoluntariesId,
+                        name: "FK_VolunteerWorkshop_Volunteers_VolunteersId",
+                        column: x => x.VolunteersId,
                         principalTable: "Volunteers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_VoluntaryWorkshop_Workshops_WorkshopsId",
+                        name: "FK_VolunteerWorkshop_Workshops_WorkshopsId",
                         column: x => x.WorkshopsId,
                         principalTable: "Workshops",
                         principalColumn: "Id",
@@ -214,14 +214,14 @@ namespace Promart.API.Migrations
                 column: "WorkshopsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VoluntaryWorkshop_WorkshopsId",
-                table: "VoluntaryWorkshop",
-                column: "WorkshopsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Volunteers_AddressId",
                 table: "Volunteers",
                 column: "AddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VolunteerWorkshop_WorkshopsId",
+                table: "VolunteerWorkshop",
+                column: "WorkshopsId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -233,7 +233,7 @@ namespace Promart.API.Migrations
                 name: "StudentWorkshop");
 
             migrationBuilder.DropTable(
-                name: "VoluntaryWorkshop");
+                name: "VolunteerWorkshop");
 
             migrationBuilder.DropTable(
                 name: "Students");

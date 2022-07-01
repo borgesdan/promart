@@ -5,9 +5,9 @@ namespace Promart.API.Context
 {
     public class AppDbContext : DbContext
     {
-        DbSet<Student>? Students { get; set; }
-        DbSet<Voluntary>? Volunteers { get; set; }
-        DbSet<Workshop>? Workshops { get; set; }
+        public DbSet<Student>? Students { get; set; }
+        public DbSet<Volunteer>? Volunteers { get; set; }
+        public DbSet<Workshop>? Workshops { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

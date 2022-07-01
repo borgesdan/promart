@@ -17,13 +17,14 @@ namespace Promart.API.Models
         public string? Description { get; set; }        
 
         //------ Relacionamentos ------//
-        public ICollection<Student> Students { get; set; }
-        public ICollection<Voluntary> Voluntaries { get; set; }
+        public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<Volunteer> Volunteers { get; set; }
         
         public Workshop()
         {
+            Guid = Guid.NewGuid();
             Students = new HashSet<Student>();
-            Voluntaries = new HashSet<Voluntary>();
+            Volunteers = new HashSet<Volunteer>();
         }
 
         public override string ToString()

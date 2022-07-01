@@ -25,12 +25,12 @@ namespace Promart.API.Models
         public string? Person { get; set; }
 
         public ICollection<Student>? Students { get; set; }
-        public ICollection<Voluntary>? Volunteers { get; set; }
+        public ICollection<Volunteer>? Volunteers { get; set; }
 
         public Address()
         {
             Students = new HashSet<Student>();
-            Volunteers = new HashSet<Voluntary>();
+            Volunteers = new HashSet<Volunteer>();
         }
     }
 }
