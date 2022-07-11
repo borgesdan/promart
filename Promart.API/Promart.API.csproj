@@ -20,4 +20,8 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Promart.API.Models\Promart.API.Models.csproj" />
+  </ItemGroup>
+
 </Project>

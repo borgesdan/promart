@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Promart", "Promart\Promart.csproj", "{BE271317-ACA3-47DB-B264-879763A3AFC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Promart.API", "Promart.API\Promart.API.csproj", "{BDCDD60D-B516-4136-B69C-1237FB1445B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Promart.API", "Promart.API\Promart.API.csproj", "{BDCDD60D-B516-4136-B69C-1237FB1445B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Promart.Web", "Promart.Web\Promart.Web.csproj", "{99525EF3-4E7E-42E6-9ADE-373A7A031194}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Promart.API.Models", "Promart.API.Models\Promart.API.Models.csproj", "{593770A6-889F-416D-9655-665D9FB24968}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BE271317-ACA3-47DB-B264-879763A3AFC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE271317-ACA3-47DB-B264-879763A3AFC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE271317-ACA3-47DB-B264-879763A3AFC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE271317-ACA3-47DB-B264-879763A3AFC3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BDCDD60D-B516-4136-B69C-1237FB1445B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BDCDD60D-B516-4136-B69C-1237FB1445B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDCDD60D-B516-4136-B69C-1237FB1445B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDCDD60D-B516-4136-B69C-1237FB1445B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99525EF3-4E7E-42E6-9ADE-373A7A031194}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99525EF3-4E7E-42E6-9ADE-373A7A031194}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99525EF3-4E7E-42E6-9ADE-373A7A031194}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99525EF3-4E7E-42E6-9ADE-373A7A031194}.Release|Any CPU.Build.0 = Release|Any CPU
+		{593770A6-889F-416D-9655-665D9FB24968}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{593770A6-889F-416D-9655-665D9FB24968}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{593770A6-889F-416D-9655-665D9FB24968}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{593770A6-889F-416D-9655-665D9FB24968}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
